@@ -1,0 +1,38 @@
+{
+  "commands": [
+    {
+      "command": "query",
+      "args": {
+        "ontology": "HP",
+        "class-list": "",
+        "out": "./out/labels.txt",
+        "expand-labels": true
+      }
+    },
+    {
+      "command": "get_abstracts",
+      "args": {
+        "labels": "./out/labels.txt",
+        "out": "./out/abstracts/",
+        "group-by-query": true,
+        "conjunction": true
+      }
+    },
+    {
+      "command": "annotate",
+      "args": {
+        "text": "./out/abstracts/",
+        "labels": "./out/labels.txt",
+        "out": "./out/annotations.txt"
+      }
+    },
+    {
+      "command": "summarise_entity_pair",
+      "args": {
+        "class-list": "",
+        "labels": "./out/labels.txt",
+        "annotation-file": "./out/annotations.txt"
+      }
+    }
+  ]
+}

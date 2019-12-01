@@ -23,7 +23,7 @@ cliBuilder.with {
     // query options
 	o longOpt: 'ontology', 'Which ontology to query.', args: 1
 	q longOpt: 'query', 'A Manchester OWL Syntax query, the result of which will be the set of NER labels.', args: '+'
-    e longOpt: 'expand-labels', 'Expand the set of synonyms retrieved using syntactic methods.', args: 0
+    e longOpt: 'expand-labels', 'Expand the set of synonyms retrieved using syntactic methods.', args: '+'
     c longOpt: 'class-list', 'A list of classes to get subclasses of', args: 1
 
     // annotation options
@@ -126,12 +126,12 @@ def run(cliBuilder, args) {
 
         println "Received $labelCount labels from ${classes.size()} classes, for query \"$q\"."
 
-        if(o.e) {
-          theseLabels.each { c, l ->
+        theseLabels.each { c, l ->
+          if(o.e) {
             theseLabels[c] += Komentisto.getLemmas(l)
-            theseLabels[c].unique(true)
-          }          
-        }
+          }
+          theseLabels[c].unique(true)
+        }          
 
         labelOut += theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q" } }.flatten()
       })
@@ -180,7 +180,6 @@ def run(cliBuilder, args) {
     def aids = []
     if(o.conjunction) {
       def query = '(' + classLabels.collect { c, l -> '"' + l.join('" OR "') + '"' }.join(') AND (') + ')'
-      println query
       KomentLib.PMCSearch(query, { result -> aids << result })
     } else { // disjunction (default)
       classLabels.each { cls, labels ->

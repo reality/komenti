@@ -11,7 +11,7 @@ class KomentLib {
   }
 
   static def AOExtractNames(c) {
-    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term
+    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym
     names.removeAll([null])
     names.unique(true)
     names = names.collect { it.toLowerCase() }
@@ -19,6 +19,7 @@ class KomentLib {
   }
 
   static def PMCSearch(searchString, cb) {
+  println searchString
     def http = new HTTPBuilder('https://www.ebi.ac.uk/')
     def qs = [ format: 'json', query: searchString, synonym: 'TRUE', pageSize: 1000, resultType: 'idlist' ]
 
@@ -30,7 +31,7 @@ class KomentLib {
   }
 
   static def PMCSearchTerms(terms, cb) {
-    PMCSearch(terms.join(' OR '), cb)
+    PMCSearch('"'+terms.join('" OR "')+'"', cb)
   }
 
   static def PMCGetAbstracts(id, cb) {

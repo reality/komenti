@@ -23,7 +23,7 @@ cliBuilder.with {
     // query options
 	o longOpt: 'ontology', 'Which ontology to query.', args: 1
 	q longOpt: 'query', 'A Manchester OWL Syntax query, the result of which will be the set of NER labels.', args: '+'
-    e longOpt: 'expand-labels', 'Expand the set of synonyms retrieved using syntactic methods.', args: '+'
+    e longOpt: 'expand-labels', 'Expand the set of synonyms retrieved using syntactic methods.'
     c longOpt: 'class-list', 'A list of classes to get subclasses of', args: 1
 
     // annotation options
@@ -42,8 +42,8 @@ cliBuilder.with {
 
     // get_articles option
     _ longOpt: 'limit', 'Limit articles download', args: 1, type: Integer
-    _ longOpt: 'group-by-query', 'Group classes by query (rather than URI)', type: Boolean, args: '+'
-    _ longOpt: 'conjunction', 'Use a conjunctive query to obtain articles', type: Boolean, args: '+'
+    _ longOpt: 'group-by-query', 'Group classes by query (rather than URI)', type: Boolean
+    _ longOpt: 'conjunction', 'Use a conjunctive query to obtain articles', type: Boolean
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
@@ -53,6 +53,7 @@ run(cliBuilder, args)
 
 def run(cliBuilder, args) {
   if(!args) { println "Must provide command." ; cliBuilder.usage() ; System.exit(1) }
+
   def command = args[0]
   def o = cliBuilder.parse(args.drop(1))
 
@@ -62,6 +63,8 @@ def run(cliBuilder, args) {
     if(!o.q && !o.c) { println "You must provide a query or class-list" ; cliBuilder.usage() ; System.exit(1) }
     if(!o.out) { println "Must provide place to save roster" ; cliBuilder.usage() ; System.exit(1) }
     if(!o['with-abstracts-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
+    if(o['mine-relationship'] && !o.c || (o.c && o.c.split(',').size() != 2)) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
+    if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
 
     def templateFile = new File('templates/roster.json')
     if(o['with-abstracts-download']) {
@@ -102,7 +105,7 @@ def run(cliBuilder, args) {
 
         [k, v] 
       }.flatten()
-      newArgs.removeAll([true])
+      newArgs.removeAll("true")
 
       run(cliBuilder, newArgs)
     }

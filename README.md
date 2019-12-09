@@ -37,13 +37,13 @@ Get abstracts from EBI PMCSearch matching any class label.
 Queries can be grouped by the query used to receive them (the third column in the labels file):
 
 ```bash
-./Komenti get_abstracts -l labels.txt --group-by-query true --out abstracts/
+./Komenti get_abstracts -l labels.txt --group-by-query --out abstracts/
 ```
 
 Queries can be conjunctivised (articles must match at least one of every query group):
 
 ```bash
-./Komenti get_abstracts -l labels.txt --group-by-query true --conjunction true --out abstracts/
+./Komenti get_abstracts -l labels.txt --group-by-query --conjunction --out abstracts/
 ```
 
 ## Annotate

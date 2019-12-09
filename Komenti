@@ -142,6 +142,12 @@ def run(cliBuilder, args) {
   } else if(command == 'annotate') {
     if(!o.t || !o.l) { cliBuilder.usage() ; System.exit(1) }
 
+    def classLabels = [:]
+    new File(o.l).splitEachLine('\t') {
+      if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [] }
+      classLabels[it[1]] << it[0]
+    }
+
     def target = new File(o.t)
     def files = [ target ]
     if(target.isDirectory()) { files = [] ; target.eachFile { files << it } }
@@ -156,7 +162,7 @@ def run(cliBuilder, args) {
 
     println "Found ${annotations.size()} annotations"
 
-    new File(o.out).text = annotations.collect { a -> "$a.f\t$a.c\t${a.tags.join(',')}\t$a.sid\t$a.text" }.join('\n')
+    new File(o.out).text = annotations.collect { a -> "$a.f\t$a.c\t${classLabels[a.c][0]}\t${a.tags.join(',')}\t$a.sid\t${a.text.replaceAll('\n','')}" }.join('\n')
     println "Saved annotations to $o.out!"
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }

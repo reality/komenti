@@ -18,7 +18,7 @@ class Sentence {
   def rText
   def nWords
   def negated = null
-  def NEG_MODS = [ 'negative', 'exclude', 'without', 'no', 'excluded', 'not', 'denies' ]
+  def NEG_MODS = [ 'negative', 'exclude', 'without', 'no', 'excluded', 'not', 'denies', 'free', 'deny', 'denied' ]
 
   def Sentence(text, fileName) {
     this.text = text
@@ -59,6 +59,10 @@ class Sentence {
     } 
 
     if(tText.indexOf('no ' + replaceWith) != -1) {
+      tText = replaceWith + ' is excluded. '
+    }
+
+    if(tText.indexOf('not ' + replaceWith) != -1) {
       tText = replaceWith + ' is excluded. '
     }
 

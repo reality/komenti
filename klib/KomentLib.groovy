@@ -14,12 +14,12 @@ class KomentLib {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym
     names.removeAll([null])
     names.unique(true)
+    names = names.findAll { it.size() > 3 }
     names = names.collect { it.toLowerCase() }
     names
   }
 
   static def PMCSearch(searchString, cb) {
-  println searchString
     def http = new HTTPBuilder('https://www.ebi.ac.uk/')
     def qs = [ format: 'json', query: searchString, synonym: 'TRUE', pageSize: 1000, resultType: 'idlist' ]
 

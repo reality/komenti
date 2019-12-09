@@ -67,3 +67,23 @@ Summarise the co-occurence of two groups of concepts that have been annotated in
 ```
 
 ## Generating and Running Rosters
+
+Rosters are files that determine the parameters for series of commands in
+Komenti. Using them, we can create a specification for a pipeline that runs many
+Komenti commands, using any outputs in subsequent commands. Here are two
+examples, the first a general annotation pipeline, the second specifically for
+examining concept co-occurence:
+
+```bash
+./Komenti gen_roster --with-abstracts-download --query "toxicity" --ontology ENM --out roster.json
+```
+
+```bash
+./Komenti gen_roster --mine-relationship -c asbestos,toxicity -o ENM --out relationship_roster.json
+```
+
+The rosters can be executed with the following command:
+
+```bash
+./Komenti auto -r roster.json
+```

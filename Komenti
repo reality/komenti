@@ -48,6 +48,7 @@ cliBuilder.with {
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
+    _ longOpt: 'append', 'Append output file, instead of replacing it', type: Boolean
 }
 
 run(cliBuilder, args)
@@ -66,7 +67,7 @@ def run(cliBuilder, args) {
     if(!o['with-abstracts-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
     if(o['mine-relationship'] && !o.c || (o.c && o.c.split(',').size() != 2)) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
     if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
-    if(o['suggest-axiom']) && ((!o.c || o.c && oc.size() != 1) || !o.e || !o.eo)  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" }
+    if(o['suggest-axiom'] && (!o.c || o.c && oc.size() != 1) || !o.e || !o.eo)  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" }
 
     def templateFile = new File('templates/roster.json')
     if(o['with-abstracts-download']) {
@@ -152,8 +153,8 @@ def run(cliBuilder, args) {
       })
     }
 
-    new File(o.out).text = labelOut.join('\n')
-    println "Saved ${labelOut.size()} labels to $o.out!"
+    writeOutput(labelOut.join('\n'), o,
+                "Saved ${labelOut.size()} labels to $o.out!")
   } else if(command == 'annotate') {
     if(!o.t || !o.l) { cliBuilder.usage() ; System.exit(1) }
 
@@ -177,8 +178,8 @@ def run(cliBuilder, args) {
 
     println "Found ${annotations.size()} annotations"
 
-    new File(o.out).text = annotations.collect { a -> "$a.f\t$a.c\t${classLabels[a.c][0]}\t${a.tags.join(',')}\t$a.sid\t${a.text.replaceAll('\n','')}" }.join('\n')
-    println "Saved annotations to $o.out!"
+    def out = annotations.collect { a -> "$a.f\t$a.c\t${classLabels[a.c][0]}\t${a.tags.join(',')}\t$a.sid\t${a.text.replaceAll('\n','')}" }.join('\n')
+    writeOutput(out, o, "Saved annotations to $o.out!")
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 
@@ -307,4 +308,14 @@ def run(cliBuilder, args) {
       println "  $key ($c.count mentions, ${c.articles.size()} articles, $c.uncertain uncertain, $c.negated negated)"
     }
   }
+}
+
+def writeOutput(text, o, success) {
+  def oFile = new File(o.out)
+  if(o.append) { text = oFile.text + '\n' + text }
+
+  try {
+    oFile.text = text
+    println success
+  } catch(e) { println 'Error: ' + e.getMessage() }
 }

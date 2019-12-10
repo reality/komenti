@@ -5,7 +5,7 @@ import groovyx.net.http.HTTPBuilder
 class KomentLib {
   static def AOSemanticQuery(query, ontology, type, cb) {
     def http = new HTTPBuilder('http://aber-owl.net/')
-    http.get(path: '/api/dlquery/', query: [ labels: true, ontology: ontology, type: 'subeq', query: query ]) { r, json ->
+    http.get(path: '/api/dlquery/', query: [ labels: true, ontology: ontology, type: 'subeq', query: query.toLowerCase() ]) { r, json ->
       cb(json.result) 
     }
   }

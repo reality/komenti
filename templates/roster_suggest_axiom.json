@@ -7,7 +7,8 @@
         "ontology": "HP",
         "class-list": "",
         "out": "./out/labels.txt",
-        "expand-labels": true
+        "expand-labels": true,
+        "override-group": "class"
       }
     },
     {
@@ -19,7 +20,20 @@
         "out": "./out/labels.txt",
         "append": true,
         "expand-labels": true,
-        "query-type": "equivalent"
+        "query-type": "equivalent",
+        "override-group": "entity"
+      }
+    },
+    {
+      "id": "quality_query",
+      "command": "query",
+      "args": {
+        "ontology": "HP",
+        "class-list": "",
+        "out": "./out/labels.txt",
+        "append": true,
+        "expand-labels": true,
+        "override-group": "quality"
       }
     },
     {
@@ -30,7 +44,8 @@
         "object-properties": "true",
         "out": "./out/labels.txt",
         "append": true,
-        "expand-labels": true
+        "expand-labels": true,
+        "override-group": "relation"
       }
     }
  ]

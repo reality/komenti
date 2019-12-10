@@ -27,6 +27,7 @@ cliBuilder.with {
     c longOpt: 'class-list', 'A list of classes to get subclasses of', args: 1
     _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
     _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
+    _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
 
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
@@ -41,10 +42,15 @@ cliBuilder.with {
     // genroster
     _ longOpt: 'with-abstracts-download', 'Generate a roster that downloads abstracts from PubMed Central to annotate, instead of using the file/directory referred to by -t/--text.', type: Boolean
     _ longOpt: 'mine-relationship', 'Generate a roster that mines text for a relationship between entities.', type: Boolean
+
+    // genroster suggestaxiom options
+
     _ longOpt: 'suggest-axiom', 'Generate a roster that suggests an axiom for a class'
-    _ longOpt: 'entity', 'Entity to query for (class name).'
-    eo longOpt: 'entity-ontology', 'Ontology to query for entities (if not included will use same as class query)'
-    oo longOpt: 'object-property-ontology', 'Ontology to get object properties from (if not included will use the same as class query)'
+    _ longOpt: 'entity', 'Entity to query for (class name).', args: 1
+    _ longOpt: 'quality', 'Quality to query for (class name).', args: 1
+    eo longOpt: 'entity-ontology', 'Ontology to query for entities (if not included will use same as class query)', args: 1
+    qo longOpt: 'quality-ontology', 'Ontology to query for qualities (if not included will use the same as class query)', args: 1
+    oo longOpt: 'object-property-ontology', 'Ontology to get object properties from (if not included will use the same as class query)', args: 1
 
     // get_articles option
     _ longOpt: 'limit', 'Limit articles download', args: 1, type: Integer
@@ -64,17 +70,17 @@ def run(cliBuilder, args) {
   def command = args[0]
   def o = cliBuilder.parse(args.drop(1))
 
+  println args
+  
   if(o.h) { cliBuilder.usage() ; System.exit(0) }
 
   if(command == 'gen_roster') {
     if(!o.q && !o.c) { println "You must provide a query or class-list" ; cliBuilder.usage() ; System.exit(1) }
     if(!o.out) { println "Must provide place to save roster" ; cliBuilder.usage() ; System.exit(1) }
     if(!o['with-abstracts-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
-    if(o['mine-relationship'] && !o.c || (o.c && o.c.split(',').size() != 2)) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
+    if(o['mine-relationship'] && (!o.c || (o.c && o.c.split(',').size() != 2))) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
     if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
-    if(o['suggest-axiom'] && (!o.c || (o.c && oc.size() != 1) || !o.e || !o.eo))  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" ; System.exit(1) }
-    if(!o.eo) { o.eo = o.o }
-    if(!o.oo) { o.oo = o.o }
+    if(o['suggest-axiom'] && (!o.c || (o.c && o.c.split(',').size() != 1) || !o.entity || !o.quality))  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and exactly one entity with --entity and exactly one quality with --quality" ; System.exit(1) }
 
     def templateFile = new File('templates/roster.json')
     if(o['with-abstracts-download']) {
@@ -94,13 +100,16 @@ def run(cliBuilder, args) {
       roster.commands.find { it.id == 'class_query' }.args.query = o.q
     } else {
       roster.commands.find { it.id == 'class_query' }.args['class-list'] = o.c
-      roster.commands.find { it.command == 'summarise_entity_pair' }.args['class-list'] = o.c
     }
     if(o.o) { roster.commands.find { it.id == 'class_query' }.args.ontology = o.o }
     if(!o['with-abstracts-download'] && !o['mine-relationship']) {
       roster.commands.find { it.command = 'annotate' }.args.text = o.t
     } else {
       if(o.l) { roster.commands.find { it.command == 'get_abstracts' }.args.limit = o.l }
+    }
+
+    if(o['mine-relationship']) {
+      roster.commands.find { it.command == 'summarise_entity_pair' }.args['class-list'] = o.c
     }
 
     if(o['suggest-axiom']) {
@@ -110,13 +119,14 @@ def run(cliBuilder, args) {
 
       def eq = roster.commands.find { it.id == 'entity_query' }
       eq.args['class-list'] = o.entity
-      eq.args['ontology'] = o.eo
+      eq.args['ontology'] = o.eo ? o.eo : o.o
 
       def rq = roster.commands.find { it.id == 'relation_query' }
-      eq.args['ontology'] = o.oo
+      rq.args['ontology'] = o.oo ? o.oo : o.o
 
-    _ longOpt: 'entity', 'Entity to query for (class name).'
-    eo longOpt: 'entity-ontology', 'Ontology to query for entities (if not included will use same as class query)'
+      def qq = roster.commands.find { it.id == 'quality_query' }
+      qq.args['class-list'] = o.quality
+      qq.args['ontology'] = o.qo ? o.qo : o.o
     }
 
     new File(o.out).text = JsonOutput.prettyPrint(JsonOutput.toJson(roster))
@@ -158,6 +168,7 @@ def run(cliBuilder, args) {
         theseLabels[c].unique(true)
       }          
 
+      if(o['override-group']) { q = o['override-group'] }
       theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q" } }.flatten()
     }
 

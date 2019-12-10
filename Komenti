@@ -25,6 +25,7 @@ cliBuilder.with {
 	q longOpt: 'query', 'A Manchester OWL Syntax query, the result of which will be the set of NER labels.', args: '+'
     e longOpt: 'expand-labels', 'Expand the set of synonyms retrieved using syntactic methods.'
     c longOpt: 'class-list', 'A list of classes to get subclasses of', args: 1
+    _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
 
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
@@ -67,7 +68,7 @@ def run(cliBuilder, args) {
     if(!o['with-abstracts-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
     if(o['mine-relationship'] && !o.c || (o.c && o.c.split(',').size() != 2)) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
     if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
-    if(o['suggest-axiom'] && (!o.c || o.c && oc.size() != 1) || !o.e || !o.eo)  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" }
+    if(o['suggest-axiom'] && (!o.c || o.c && oc.size() != 1) || !o.e || !o.eo)  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" ; System.exit(1) }
 
     def templateFile = new File('templates/roster.json')
     if(o['with-abstracts-download']) {
@@ -123,34 +124,44 @@ def run(cliBuilder, args) {
       run(cliBuilder, newArgs)
     }
   } else if(command == 'query') {
-    if(!o.o || (!o.q && !o.c)) { cliBuilder.usage() ; System.exit(1) }
+    if(!o.o || (!o['object-properties'] && (!o.q && !o.c))) { cliBuilder.usage() ; System.exit(1) }
+    if(o['object-properties'] && (o.q || o.c)) { println "Cannot pass a query or class list for --object-properties query" ; System.exit(1) }
 
-    def queries = [o.q]
-    if(o.c) {
-      queries = o.c.split(',')
-      queries = queries.collect{ if(it.indexOf(' ') != -1) { it = "'" + it + "'" } ; it }
-    }
-    
     def labelOut = []
+    def processEntities = { q, entities ->
+      def theseLabels = [:]
+      entities.each { e -> theseLabels[e.class] = KomentLib.AOExtractNames(e) }
 
-    queries.each { q ->
-      KomentLib.AOSemanticQuery(q, o.o, 'subclass', { classes ->
-        def theseLabels = [:]
-        classes.each { c -> theseLabels[c.class] = KomentLib.AOExtractNames(c) }
+      def labelCount = entities.collect { e -> theseLabels[e.class].size() }.sum()
 
-        def labelCount = classes.collect { c -> theseLabels[c.class].size() }.sum()
+      println "Received $labelCount labels from ${entities.size()} classes, for query \"$q\"."
 
-        println "Received $labelCount labels from ${classes.size()} classes, for query \"$q\"."
+      theseLabels.each { c, l ->
+        if(o.e) {
+          theseLabels[c] += Komentisto.getLemmas(l)
+        }
+        theseLabels[c].unique(true)
+      }          
 
-        theseLabels.each { c, l ->
-          if(o.e) {
-            theseLabels[c] += Komentisto.getLemmas(l)
-          }
-          theseLabels[c].unique(true)
-        }          
+      theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q" } }.flatten()
+    }
 
-        labelOut += theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q" } }.flatten()
+    if(o['object-properties']) {
+      KomentLib.AOGetObjectProperties(o.o, { oProps ->
+        labelOut += processEntities('object-properties', oProps)
       })
+    } else { // regular class query
+      def queries = [o.q]
+      if(o.c) {
+        queries = o.c.split(',')
+        queries = queries.collect{ if(it.indexOf(' ') != -1) { it = "'" + it + "'" } ; it }
+      }
+      
+      queries.each { q ->
+        KomentLib.AOSemanticQuery(q, o.o, 'subeq', { classes ->
+          labelOut += processEntities(q, classes)
+        })
+      }
     }
 
     writeOutput(labelOut.join('\n'), o,

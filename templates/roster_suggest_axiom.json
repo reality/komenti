@@ -19,7 +19,7 @@
         "out": "./out/labels.txt",
         "append": true,
         "expand-labels": true,
-        "type": "equivalent"
+        "query-type": "equivalent"
       }
     },
     {

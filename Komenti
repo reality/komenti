@@ -26,6 +26,7 @@ cliBuilder.with {
     e longOpt: 'expand-labels', 'Expand the set of synonyms retrieved using syntactic methods.'
     c longOpt: 'class-list', 'A list of classes to get subclasses of', args: 1
     _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
+    _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
 
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
@@ -172,7 +173,7 @@ def run(cliBuilder, args) {
       }
       
       queries.each { q ->
-        KomentLib.AOSemanticQuery(q, o.o, 'subeq', { classes ->
+        KomentLib.AOSemanticQuery(q, o.o, o['query-type'], { classes ->
           labelOut += processEntities(q, classes)
         })
       }

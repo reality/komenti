@@ -68,7 +68,7 @@ def run(cliBuilder, args) {
     if(!o['with-abstracts-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
     if(o['mine-relationship'] && !o.c || (o.c && o.c.split(',').size() != 2)) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
     if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
-    if(o['suggest-axiom'] && (!o.c || o.c && oc.size() != 1) || !o.e || !o.eo)  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" ; System.exit(1) }
+    if(o['suggest-axiom'] && (!o.c || (o.c && oc.size() != 1) || !o.e || !o.eo))  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" ; System.exit(1) }
 
     def templateFile = new File('templates/roster.json')
     if(o['with-abstracts-download']) {
@@ -80,6 +80,7 @@ def run(cliBuilder, args) {
     if(o['suggest-axiom']) {
       templateFile = new File('templates/roster_suggest_axiom.json')
     }
+    print o['suggest-axiom']
 
     def roster = new JsonSlurper().parse(templateFile)
     
@@ -104,7 +105,7 @@ def run(cliBuilder, args) {
     }
     // TODO make the relation_query an object property?
 
-    new File(o.out).text = JsonOutput.toJson(roster)
+    new File(o.out).text = JsonOutput.prettyPrint(JsonOutput.toJson(roster))
     println "Roster file saved to $o.out, where you can edit it manually. You can run it with 'groovy Komenti auto -r $o.out'"
   } else if(command == 'auto') {
     if(!o.r) { cliBuilder.usage() ; System.exit(1) }

@@ -1,6 +1,7 @@
 {
   "commands": [
     {
+      "id": "class_query",
       "command": "query",
       "args": {
         "ontology": "HP",

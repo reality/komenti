@@ -7,7 +7,6 @@
         "ontology": "HP",
         "class-list": "",
         "out": "./out/labels.txt",
-        "expand-labels": true,
         "override-group": "class"
       }
     },
@@ -19,7 +18,6 @@
         "class-list": "",
         "out": "./out/labels.txt",
         "append": true,
-        "expand-labels": true,
         "query-type": "equivalent",
         "override-group": "entity"
       }
@@ -47,6 +45,31 @@
         "expand-labels": true,
         "override-group": "relation"
       }
+    },
+    {
+      "command": "get_abstracts",
+      "args": {
+        "labels": "./out/labels.txt",
+        "out": "./out/abstracts/",
+        "group-by-query": true,
+        "exclude-groups": "entity,quality,relation",
+        "conjunction": true
+      }
+    },
+    {
+      "command": "annotate",
+      "args": {
+        "text": "./out/abstracts/",
+        "labels": "./out/labels.txt",
+        "out": "./out/annotations.txt"
+      }
+    },
+    {
+      "command": "suggest_axiom",
+      "args": {
+        "annotation-file": "./out/annotations.txt",
+        "labels": "./out/labels.txt"
+      }
     }
- ]
+  ]
 }

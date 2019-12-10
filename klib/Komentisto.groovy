@@ -69,6 +69,23 @@ public class Komentisto {
     results
   }
 
+  def lemmatise(text) {
+    def aDocument = new Annotation(text.toLowerCase())
+    pipeline.annotate(aDocument)
+
+    def newText = ''
+    aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
+      newText += sentence.get(CoreAnnotations.TokensAnnotation.class).collect {
+        it.lemma()
+      }.join(' ') + ' '
+    }
+
+    newText = newText.replaceAll(' ,', ',')
+    newText = newText.replaceAll(' \\.', '.')
+
+    newText
+  }
+
   static def getLemmas(labels) {
     def m = new edu.stanford.nlp.process.Morphology()
     labels.collect { l ->

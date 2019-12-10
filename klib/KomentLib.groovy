@@ -28,11 +28,25 @@ class KomentLib {
     names.unique(true)
     names = names.findAll { it.size() > 3 }
     names = names.collect { it.toLowerCase() }
+    names = names.collect { it.replaceAll('\t', '') }
+    names = names.collect { it.replaceAll('\n', '') }
+
+    // java dot gif
+    names = names.collect { it.replaceAll('\\(', '\\\\(') }
+    names = names.collect { it.replaceAll('\\)', '\\\\)') }
+    names = names.collect { it.replaceAll('\\+', '\\\\+') }
+    names = names.collect { it.replaceAll('\\-', '\\\\-') }
+    names = names.collect { it.replaceAll('\\[', '\\\\[') }
+    names = names.collect { it.replaceAll('\\]', '\\\\]') }
+    names = names.collect { it.replaceAll('\\}', '\\\\}') }
+    names = names.collect { it.replaceAll('\\{', '\\\\{') }
+
     names
   }
 
   static def PMCSearch(searchString, cb) {
     def http = new HTTPBuilder('https://www.ebi.ac.uk/')
+    searchString = searchString.replaceAll('-', ' ')
     def qs = [ format: 'json', query: searchString, synonym: 'TRUE', pageSize: 1000, resultType: 'idlist' ]
 
     http.get(path: '/europepmc/webservices/rest/search', query: qs) { resp, json ->

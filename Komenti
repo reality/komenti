@@ -56,6 +56,7 @@ cliBuilder.with {
     _ longOpt: 'limit', 'Limit articles download', args: 1, type: Integer
     _ longOpt: 'group-by-query', 'Group classes by query (rather than URI)', type: Boolean
     _ longOpt: 'conjunction', 'Use a conjunctive query to obtain articles', type: Boolean
+    _ longOpt: 'exclude-groups', 'Comma delimited list of groups to ignore for download query', args: 1
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
@@ -127,6 +128,11 @@ def run(cliBuilder, args) {
       def qq = roster.commands.find { it.id == 'quality_query' }
       qq.args['class-list'] = o.quality
       qq.args['ontology'] = o.qo ? o.qo : o.o
+
+      if(!o['with-abstracts-download']) {
+        roster = roster.findAll { it.command != get_abstracts }
+        roster.find { it.command == 'annotate' }.text = o.t 
+      }
     }
 
     new File(o.out).text = JsonOutput.prettyPrint(JsonOutput.toJson(roster))
@@ -226,12 +232,16 @@ def run(cliBuilder, args) {
 
     def classLabels = [:]
     def gIndex = 1
+    def excludeGroups = o['exclude-groups'].split(',')
     if(o['group-by-query']) {
       gIndex = 2
     }
     new File(o.l).splitEachLine('\t') {
-      if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
-      classLabels[it[gIndex]] << it[0]
+      println it[2]
+      if(!excludeGroups.contains(it[2])) {
+        if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
+        classLabels[it[gIndex]] << it[0]
+      }
     }
 
     println "Finding articles for ${classLabels.size()} classes ..."
@@ -256,10 +266,15 @@ def run(cliBuilder, args) {
 
     println "Downloading abstracts for ${aids.size()} articles ..."
 
+    def komentisto = new Komentisto(o.l)
+
     def abstracts = []
     aids.each { pmcid ->
       KomentLib.PMCGetAbstracts(pmcid, { a -> 
-        if(a) { abstracts << [ id: pmcid, text: a ] }
+        if(a) { 
+          a = komentisto.lemmatise(a)
+          abstracts << [ id: pmcid, text: a ]
+        }
       })
     }
 
@@ -295,11 +310,11 @@ def run(cliBuilder, args) {
       annotations << [
         f: it[0],
         iri: it[1],
-        tags: it[2],
-        sid: it[3],
-        text: it[4],
-        group: classGroups[it[1]],
-        label: classLabels[it[1]][0]
+        label: it[2],
+        tags: it[3],
+        sid: it[4],
+        text: it[5],
+        group: classGroups[it[1]]
       ]
       fids << it[0]
     }
@@ -344,6 +359,68 @@ def run(cliBuilder, args) {
     bothCounts.each { key, c ->
       println "  $key ($c.count mentions, ${c.articles.size()} articles, $c.uncertain uncertain, $c.negated negated)"
     }
+  } else if(command == 'suggest_axiom') {
+    if(!o.l || !o.a) { println 'Must provide a --label file and a --annotations file to suggest_axiom' ; System.exit(1) }
+
+    def groupClasses = [:]
+    def entity
+    new File(o.l).splitEachLine('\t') {
+      groupClasses[it[1]] = it[2]
+      if(it[2] == 'entity') {
+        entity = [
+          iri: it[1],
+          label: it[0]
+        ]
+      }
+    }
+
+    def sentences = [:]
+    new File(o.a).splitEachLine('\t') {
+      def sid = it[0] + ':' + it[4]
+      if(!sentences.containsKey(sid)) { sentences[sid] = [] }
+      sentences[sid] << [
+        f: it[0],
+        iri: it[1],
+        label: it[2],
+        tags: it[3],
+        sid: it[4],
+        text: it[5],
+        group: groupClasses[it[1]],
+      ]
+    }
+
+    def qualityCounts = [:]
+    def relationCounts = [:]
+
+    sentences.each { id, annotations ->
+      def quality = annotations.find { it.group == 'quality' }
+      def relation = annotations.find { it.group == 'relation' }
+
+      if(quality) {
+        if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
+        qualityCounts[quality.iri].count++
+        qualityCounts[quality.iri].sids << id
+      }
+
+      if(relation) {
+        if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
+        relationCounts[relation.iri].count++
+        relationCounts[relation.iri].sids << id
+      }
+    }
+
+    def bestQuality
+    def bestQualityCount = 0
+    qualityCounts.each { iri, c -> if(!bestQuality || c.count > bestQualityCount) { bestQuality = c ; bestQualityCount = c.count }}
+    def bestRelation
+    def bestRelationCount = 0
+    relationCounts.each { iri, c -> if(!bestRelation || c.count > bestRelationCount) { bestRelation = c ; bestRelationCount = c.count }}
+
+    println 'Suggested axiom: '
+      println "  $entity.label AND ($bestRelation.label SOME $bestQuality.label)"
+      println "  <$entity.iri> AND (<$bestRelation.iri> SOME <$bestQuality.iri>)"
+    println 'Evidence:'
+    println '  ' + bestQuality.sids.join('\n  ')
   }
 }
 

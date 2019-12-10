@@ -71,8 +71,6 @@ def run(cliBuilder, args) {
   def command = args[0]
   def o = cliBuilder.parse(args.drop(1))
 
-  println args
-  
   if(o.h) { cliBuilder.usage() ; System.exit(0) }
 
   if(command == 'gen_roster') {
@@ -237,7 +235,6 @@ def run(cliBuilder, args) {
       gIndex = 2
     }
     new File(o.l).splitEachLine('\t') {
-      println it[2]
       if(!excludeGroups.contains(it[2])) {
         if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
         classLabels[it[gIndex]] << it[0]

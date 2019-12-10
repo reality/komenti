@@ -38,7 +38,8 @@ cliBuilder.with {
 
     // genroster
     _ longOpt: 'with-abstracts-download', 'Generate a roster that downloads abstracts from PubMed Central to annotate, instead of using the file/directory referred to by -t/--text.', type: Boolean
-    _ longOpt: 'mine-relationship', 'Generate a roster that mines text for a relationship between entities.'
+    _ longOpt: 'mine-relationship', 'Generate a roster that mines text for a relationship between entities.', type: Boolean
+    _ longOpt: 'suggest-axiom', 'Generate a roster that suggests an axiom for a class'
 
     // get_articles option
     _ longOpt: 'limit', 'Limit articles download', args: 1, type: Integer
@@ -65,6 +66,7 @@ def run(cliBuilder, args) {
     if(!o['with-abstracts-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
     if(o['mine-relationship'] && !o.c || (o.c && o.c.split(',').size() != 2)) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
     if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
+    if(o['suggest-axiom']) && ((!o.c || o.c && oc.size() != 1) || !o.e || !o.eo)  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and one entity with --entity/-e and an entity ontology with --entity-ontology/-eo" }
 
     def templateFile = new File('templates/roster.json')
     if(o['with-abstracts-download']) {
@@ -73,22 +75,32 @@ def run(cliBuilder, args) {
     if(o['mine-relationship']) {
       templateFile = new File('templates/roster_mine_relationship.json')
     }
+    if(o['suggest-axiom']) {
+      templateFile = new File('templates/roster_suggest_axiom.json')
+    }
 
     def roster = new JsonSlurper().parse(templateFile)
     
     // TODO this can probably mostly be automated
     if(o.q) {
-      roster.commands.find { it.command == 'query' }.args.query = o.q
+      roster.commands.find { it.id == 'class_query' }.args.query = o.q
     } else {
-      roster.commands.find { it.command == 'query' }.args['class-list'] = o.c
+      roster.commands.find { it.id == 'class_query' }.args['class-list'] = o.c
       roster.commands.find { it.command == 'summarise_entity_pair' }.args['class-list'] = o.c
     }
-    if(o.o) { roster.commands.find { it.command == 'query'}.args.ontology = o.o }
+    if(o.o) { roster.commands.find { it.id == 'class_query' }.args.ontology = o.o }
     if(!o['with-abstracts-download'] && !o['mine-relationship']) {
       roster.commands.find { it.command = 'annotate' }.args.text = o.t
     } else {
       if(o.l) { roster.commands.find { it.command == 'get_abstracts' }.args.limit = o.l }
     }
+
+    if(o['suggest-axiom']) {
+      def eq = roster.commands.find { it.id == 'entity_query' }
+      eq.args['class-list'] = o.c
+      eq.args['ontology'] = o.o
+    }
+    // TODO make the relation_query an object property?
 
     new File(o.out).text = JsonOutput.toJson(roster)
     println "Roster file saved to $o.out, where you can edit it manually. You can run it with 'groovy Komenti auto -r $o.out'"

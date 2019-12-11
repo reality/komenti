@@ -389,9 +389,16 @@ def run(cliBuilder, args) {
     def qualityCounts = [:]
     def relationCounts = [:]
 
+    def entityAndQualitySentence
+
     sentences.each { id, annotations ->
+      def tentity  = annotations.find { it.group == 'entity' }
       def quality = annotations.find { it.group == 'quality' }
       def relation = annotations.find { it.group == 'relation' }
+
+      if(tentity && quality) {
+        entityAndQualitySentence = quality
+      }
 
       if(quality) {
         if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
@@ -407,8 +414,13 @@ def run(cliBuilder, args) {
     }
 
     def bestQuality
-    def bestQualityCount = 0
-    qualityCounts.each { iri, c -> if(!bestQuality || c.count > bestQualityCount) { bestQuality = c ; bestQualityCount = c.count }}
+    if(entityAndQualitySentence) {
+      bestQuality = qualityCounts[entityAndQualitySentence.iri]
+    } else {
+      def bestQualityCount = 0
+      qualityCounts.each { iri, c -> if(!bestQuality || c.count > bestQualityCount) { bestQuality = c ; bestQualityCount = c.count }}
+    }
+
     def bestRelation
     def bestRelationCount = 0
     relationCounts.each { iri, c -> if(!bestRelation || c.count > bestRelationCount) { bestRelation = c ; bestRelationCount = c.count }}

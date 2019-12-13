@@ -5,8 +5,8 @@ Komenti is a tool for semantic query and annotation of text using ontologies.
 
 The following software is required: 
 * Groovy
-** http://groovy-lang.org/
-** Commands tested on Groovy Version: 2.5.8 JVM: 1.8.0_232 Vendor: Oracle Corporation OS: Linux
+  * http://groovy-lang.org/
+  * Commands tested on Groovy Version: 2.5.8 JVM: 1.8.0_232 Vendor: Oracle Corporation OS: Linux
 
 All other libraries will be automatically installed. The first time you run it, it may seem to hang for a long time. This is because it is downloading the libraries.
 

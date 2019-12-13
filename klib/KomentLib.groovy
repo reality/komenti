@@ -8,7 +8,7 @@ class KomentLib {
 
   static def AOSemanticQuery(query, ontology, type, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
-    http.get(path: '/api/dlquery/', query: [ labels: true, ontology: ontology, type: type, query: query.toLowerCase() ]) { r, json ->
+    http.get(path: '/api/dlquery/', query: [ labels: true, ontology: ontology, type: type, query: query.toLowerCase(), direct: false ]) { r, json ->
       cb(json.result) 
     }
   }

@@ -206,8 +206,18 @@ def run(cliBuilder, args) {
     }
 
     def target = new File(o.t)
-    def files = [ target ]
-    if(target.isDirectory()) { files = [] ; target.eachFile { files << it } }
+    def processFileOrDir
+    processFileOrDir = { f, item -> 
+      if(item.isDirectory()) {
+        item.eachFile {
+          if(it.isDirectory()) { processFileOrDir(f, it) } else { f << it }
+        }
+      } else { 
+        f << item
+      }
+      f
+    }
+    files = processFileOrDir([], target)
 
     def komentisto = new Komentisto(o.l)
 

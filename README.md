@@ -19,7 +19,7 @@ Commands should be able to run in any command line interface, including on the W
 Get labels for a semantic subclass query.
 
 ```bash
-./Komenti query -q "part of some 'apoptotic process'" -o GO --out labels.txt
+./Komenti query -q "'part of' some 'apoptotic process'" -o GO --out labels.txt
 ```
 
 ### Class list

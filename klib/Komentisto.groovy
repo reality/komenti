@@ -8,9 +8,9 @@ public class Komentisto {
   def REP_TOKEN = 'biscuit'
   def UNC_WORDS_FILE = './words/uncertain.txt'
 
-  def pipeline
+  def advancedCoreNLP
+  def basicPipeline
   def entities
-  def coreNLP
   def uncertainTerms
 
   def Komentisto(labelFilePath) {
@@ -33,16 +33,20 @@ public class Komentisto {
     props.put("depparse.nthreads", 8)
     props.put("ner.nthreads", 8)
     props.put("parse.nthreads", 8)
+    advancedCoreNLP = new StanfordCoreNLP(props)
 
-    coreNLP = new StanfordCoreNLP(props)
-    pipeline = new AnnotationPipeline()
-
-    pipeline.addAnnotator(coreNLP)
+    props = new Properties()
+    props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
+    props.put("regexner.mapping", labelFile.getAbsolutePath())
+    props.put("regexner.ignorecase", "true")
+    def basicCoreNLP = new StanfordCoreNLP(props)
+    basicPipeline = new AnnotationPipeline()
+    basicPipeline.addAnnotator(basicCoreNLP)
   }
 
   def annotate(id, text) {
     def aDocument = new Annotation(text.toLowerCase())
-    pipeline.annotate(aDocument)
+    basicPipeline.annotate(aDocument)
 
     def results = []
     def sentenceCount = 0
@@ -56,7 +60,7 @@ public class Komentisto {
           def a = [ f: id, c: ner, tags: [], text: sentence.toString(), sid: sentenceCount ]
 
           def klSentence = new Sentence(sentence.toString(), id)
-          klSentence.genTypeDeps(coreNLP, entities[ner], REP_TOKEN) 
+          klSentence.genTypeDeps(advancedCoreNLP, entities[ner], REP_TOKEN) 
 
           if(klSentence.isNegated([REP_TOKEN])) { a.tags << 'negated' }
           if(klSentence.isUncertain([REP_TOKEN], uncertainTerms)) { a.tags << 'uncertain' }

@@ -47,6 +47,7 @@ class KomentLib {
   static def PMCSearch(searchString, cb) {
     def http = new HTTPBuilder('https://www.ebi.ac.uk/')
     searchString = searchString.replaceAll('-', ' ')
+    searchString = searchString.replaceAll('\\\\', '')
     def qs = [ format: 'json', query: searchString, synonym: 'TRUE', pageSize: 1000, resultType: 'idlist' ]
 
     http.get(path: '/europepmc/webservices/rest/search', query: qs) { resp, json ->

@@ -8,6 +8,11 @@
 
 import groovy.json.*
 import klib.*
+import java.util.concurrent.*
+import java.util.concurrent.atomic.*
+import groovyx.gpars.*
+import org.codehaus.gpars.*
+
 
 /**
  * Read command line input!
@@ -57,6 +62,7 @@ cliBuilder.with {
     _ longOpt: 'group-by-query', 'Group classes by query (rather than URI)', type: Boolean
     _ longOpt: 'conjunction', 'Use a conjunctive query to obtain articles', type: Boolean
     _ longOpt: 'exclude-groups', 'Comma delimited list of groups to ignore for download query', args: 1
+    _ longOpt: 'id-list-only', 'Only download a file list of', type: Boolean
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
@@ -223,9 +229,15 @@ def run(cliBuilder, args) {
 
     println "Annotating ${files.size()} files ..."
 
-    def annotations = files.collect { f ->
+    def i = 0
+    def annotations = []
+    GParsPool.withPool(8) { p -> 
+    files.eachParallel { f ->
       komentisto.annotate(f.getName(), f.text)
-    }.flatten()
+      println "${++i}/${files.size()}"
+    }
+    }
+    annotations = annotations.flatten()
 
     println "Found ${annotations.size()} annotations"
 
@@ -235,8 +247,10 @@ def run(cliBuilder, args) {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 
     def outDir = new File(o.out)
-    if(!outDir.exists()) { outDir.mkdir() }
-    if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
+    if(!o['id-list-only']) {
+      if(!outDir.exists()) { outDir.mkdir() }
+      if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
+    }
 
     def classLabels = [:]
     def gIndex = 1
@@ -261,8 +275,20 @@ def run(cliBuilder, args) {
       def query = '(' + classLabels.collect { c, l -> '"' + l.join('" OR "') + '"' }.join(') AND (') + ')'
       KomentLib.PMCSearch(query, { result -> aids << result })
     } else { // disjunction (default)
+      def newLabels = []
+      def thisLabelGroup = []
       classLabels.each { cls, labels ->
+        thisLabelGroup << labels
+        if(thisLabelGroup.size() == 10) {
+          newLabels << thisLabelGroup.flatten()
+          thisLabelGroup = []
+        }
+      }
+
+      def i = 0
+      newLabels.each { labels ->
         KomentLib.PMCSearchTerms(labels, { result -> aids << result })
+        println "${++i}/${newLabels.size()}"
       }
     }
 
@@ -276,23 +302,27 @@ def run(cliBuilder, args) {
 
     println "Downloading abstracts for ${aids.size()} articles ..."
 
-    def komentisto = new Komentisto(o.l)
 
-    def abstracts = []
-    aids.each { pmcid ->
-      KomentLib.PMCGetAbstracts(pmcid, { a -> 
-        if(a) { 
-          a = komentisto.lemmatise(a)
-          abstracts << [ id: pmcid, text: a ]
-        }
-      })
+    if(o['id-list-only']) {
+      writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
+    } else {
+      def komentisto = new Komentisto(o.l)
+      def abstracts = []
+      aids.each { pmcid ->
+        KomentLib.PMCGetAbstracts(pmcid, { a -> 
+          if(a) { 
+            a = komentisto.lemmatise(a)
+            abstracts << [ id: pmcid, text: a ]
+          }
+        })
+      }
+
+      println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
+
+      abstracts.each { a ->
+        new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
+      } 
     }
-
-    println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
-
-    abstracts.each { a ->
-      new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
-    } 
   } else if(command == 'summarise_entity_pair') {
     if(!o.l || !o.a || !o.c) { cliBuilder.usage() ; System.exit(1) }
     def classes = o.c.split(',')

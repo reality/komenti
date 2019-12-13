@@ -95,3 +95,11 @@ The rosters can be executed with the following command:
 ```bash
 ./Komenti auto -r roster.json
 ```
+
+## Advanced: Suggest axiom
+
+
+thoughts: 
+
+1. what kind of relations does the entity have?
+2. what quality does this entity have?

@@ -71,8 +71,6 @@ def run(cliBuilder, args) {
   def command = args[0]
   def o = cliBuilder.parse(args.drop(1))
 
-  println args
-  
   if(o.h) { cliBuilder.usage() ; System.exit(0) }
 
   if(command == 'gen_roster') {
@@ -232,12 +230,14 @@ def run(cliBuilder, args) {
 
     def classLabels = [:]
     def gIndex = 1
-    def excludeGroups = o['exclude-groups'].split(',')
+    def excludeGroups = []
+    if(o['exclude-groups']) {
+      excludeGroups = o['exclude-groups'].split(',')
+    }
     if(o['group-by-query']) {
       gIndex = 2
     }
     new File(o.l).splitEachLine('\t') {
-      println it[2]
       if(!excludeGroups.contains(it[2])) {
         if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
         classLabels[it[gIndex]] << it[0]
@@ -392,9 +392,16 @@ def run(cliBuilder, args) {
     def qualityCounts = [:]
     def relationCounts = [:]
 
+    def entityAndQualitySentence
+
     sentences.each { id, annotations ->
+      def tentity  = annotations.find { it.group == 'entity' }
       def quality = annotations.find { it.group == 'quality' }
       def relation = annotations.find { it.group == 'relation' }
+
+      if(tentity && quality) {
+        entityAndQualitySentence = quality
+      }
 
       if(quality) {
         if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
@@ -410,8 +417,13 @@ def run(cliBuilder, args) {
     }
 
     def bestQuality
-    def bestQualityCount = 0
-    qualityCounts.each { iri, c -> if(!bestQuality || c.count > bestQualityCount) { bestQuality = c ; bestQualityCount = c.count }}
+    if(entityAndQualitySentence) {
+      bestQuality = qualityCounts[entityAndQualitySentence.iri]
+    } else {
+      def bestQualityCount = 0
+      qualityCounts.each { iri, c -> if(!bestQuality || c.count > bestQualityCount) { bestQuality = c ; bestQualityCount = c.count }}
+    }
+
     def bestRelation
     def bestRelationCount = 0
     relationCounts.each { iri, c -> if(!bestRelation || c.count > bestRelationCount) { bestRelation = c ; bestRelationCount = c.count }}

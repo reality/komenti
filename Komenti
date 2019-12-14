@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.*
 import groovyx.gpars.*
 import org.codehaus.gpars.*
 
-
 /**
  * Read command line input!
  */
@@ -204,16 +203,18 @@ def run(cliBuilder, args) {
     writeOutput(labelOut.join('\n'), o,
                 "Saved ${labelOut.size()} labels to $o.out!")
   } else if(command == 'get_metadata') {
-    if(!o.l || !o.o) { cliBuilder.usage() ; System.exit(1) }
+    if(!o.l) { println "Must pass label file" ; cliBuilder.usage() ; System.exit(1) }
 
+    def outDir = getOutDir(o)
     def classLabels = loadClassLabels(o)
     def files = [:]
+    def komentisto = new Komentisto(o.l)
     
-    classLabels.each { c, l ->
-      KomentLib.AOSemanticQuery("<$c>", l.o, "equivalent", { classes ->
-        classes.each { c ->
-          files[l.l[0]] = KomentLib.AOExtractMetadata(c)
-        }
+    classLabels.each { iri, l ->
+      KomentLib.AOSemanticQuery("<$iri>", l.o, "equivalent", { classes ->
+        // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
+        def c = classes.find { it.class == iri }
+        files[l.l[0]] = komentisto.lemmatise(KomentLib.AOExtractMetadata(c))
       })
     }
 
@@ -221,6 +222,8 @@ def run(cliBuilder, args) {
     files.each { n, c ->
       new File(outDir.getAbsolutePath() + '/' + n + '.txt').text = c
     } 
+
+    println "Done"
   } else if(command == 'annotate') {
     if(!o.t || !o.l) { cliBuilder.usage() ; System.exit(1) }
 
@@ -234,9 +237,7 @@ def run(cliBuilder, args) {
     def processFileOrDir
     processFileOrDir = { f, item -> 
         if(item.isDirectory()) {
-          item.eachFile {
-            processFileOrDir(f, it)
-          }
+          item.eachFile { processFileOrDir(f, it) }
         } else { 
           if(!fList || (fList && fList.contains(item.getName()))) {
             f << item
@@ -267,12 +268,7 @@ def run(cliBuilder, args) {
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 
-    def outDir = new File(o.out)
-    if(!o['id-list-only']) {
-      if(!outDir.exists()) { outDir.mkdir() }
-      if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
-    }
-
+    def outDir = getOutDir(o)
     def classLabels = [:] // TODO integrate this gIndex etc with the loadClassLabels function
     def gIndex = 1
     def excludeGroups = []
@@ -514,4 +510,13 @@ def loadClassLabels(o) {
     classLabels[it[1]].l << it[0]
   }
   classLabels
+}
+
+def getOutDir(o) {
+  def outDir = new File(o.out)
+  if(!o['id-list-only']) {
+    if(!outDir.exists()) { outDir.mkdir() }
+    if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
+  }
+  outDir
 }

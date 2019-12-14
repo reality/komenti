@@ -6,9 +6,21 @@ class KomentLib {
   static def ABEROWL_ROOT = 'http://aber-owl.net/'
   static def ROOT_OBJECT_PROPERTY = 'http://www.w3.org/2002/07/owl#topObjectProperty'
 
+  static def isIRI(s) {
+    s[0] == '<' && s[-1] == '>'
+  }
+
   static def AOSemanticQuery(query, ontology, type, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
-    http.get(path: '/api/dlquery/', query: [ labels: true, ontology: ontology, type: type, query: query.toLowerCase(), direct: false ]) { r, json ->
+    if(!isIRI(query)) { query = query.toLowerCase() }
+    def params = [
+      labels: !isIRI(query),
+      ontology: ontology, 
+      type: type, 
+      query: query,
+      direct: false 
+    ] 
+    http.get(path: '/api/dlquery/', query: params) { r, json ->
       cb(json.result) 
     }
   }
@@ -50,10 +62,11 @@ class KomentLib {
     def out = ''
     c.each { k, v ->
       if(k == 'SubClassOf') { return; }
+      if(k.length() > 30) { return; } // try to remove some of the bugprops
       if(v instanceof Collection) {
         out += "$k:\n"
-        v.each {
-          out += "  $v\n"
+        v.unique(false).each {
+          out += "  $it\n"
         }
       } else {
         out += "$k: $v\n" 

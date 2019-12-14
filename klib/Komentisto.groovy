@@ -28,7 +28,9 @@ public class Komentisto {
     def props = new Properties()
     props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions, depparse")
     props.put("parse.maxtime", "20000")
-    props.put("regexner.mapping", labelFile.getAbsolutePath())
+
+    addRegexNERProps(props, labelFile)
+
     props.put("regexner.ignorecase", "true")
     props.put("depparse.nthreads", 8)
     props.put("ner.nthreads", 8)
@@ -37,11 +39,20 @@ public class Komentisto {
 
     props = new Properties()
     props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
-    props.put("regexner.mapping", labelFile.getAbsolutePath())
-    props.put("regexner.ignorecase", "true")
     def basicCoreNLP = new StanfordCoreNLP(props)
+
+    addRegexNERProps(props, labelFile)
+
     basicPipeline = new AnnotationPipeline()
     basicPipeline.addAnnotator(basicCoreNLP)
+  }
+
+  def addRegexNERProps(props, labelFile) { // i feel like it should be easier than this to make custom rows. some kind of 'ignore, or N/A' header, perhaps
+    props.put("regexner.mapping", labelFile.getAbsolutePath())
+    props.put("regexner.mapping.header", "pattern,ner,q,ontology") // wtf
+    props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
+    props.put("regexner.mapping.field.ontology", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
+    props.put("regexner.ignorecase", "true")
   }
 
   def annotate(id, text) {
@@ -75,7 +86,7 @@ public class Komentisto {
 
   def lemmatise(text) {
     def aDocument = new Annotation(text.toLowerCase())
-    pipeline.annotate(aDocument)
+    basicPipeline.annotate(aDocument)
 
     def newText = ''
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->

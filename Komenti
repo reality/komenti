@@ -57,12 +57,13 @@ cliBuilder.with {
     qo longOpt: 'quality-ontology', 'Ontology to query for qualities (if not included will use the same as class query)', args: 1
     oo longOpt: 'object-property-ontology', 'Ontology to get object properties from (if not included will use the same as class query)', args: 1
 
-    // get_articles option
+    // get_articles option (some also apply to get_metadata)
     _ longOpt: 'limit', 'Limit articles download', args: 1, type: Integer
     _ longOpt: 'group-by-query', 'Group classes by query (rather than URI)', type: Boolean
     _ longOpt: 'conjunction', 'Use a conjunctive query to obtain articles', type: Boolean
     _ longOpt: 'exclude-groups', 'Comma delimited list of groups to ignore for download query', args: 1
     _ longOpt: 'id-list-only', 'Only download a file list of', type: Boolean
+    _ longOpt: 'lemmatise', 'Lemmatise the downloaded information', type: Boolean
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
@@ -214,7 +215,11 @@ def run(cliBuilder, args) {
       KomentLib.AOSemanticQuery("<$iri>", l.o, "equivalent", { classes ->
         // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
         def c = classes.find { it.class == iri }
-        files[l.l[0]] = komentisto.lemmatise(KomentLib.AOExtractMetadata(c))
+        def metadata = KomentLib.AOExtractMetadata(c)
+        if(o['lemmatise']) { // we do it per line here, since it's a field based document
+          metadata = metadata.split('\n').collect { komentisto.lemmatise(it) }.join('\n')
+        }
+        files[l.l[0]] = metadata
       })
     }
 
@@ -328,7 +333,9 @@ def run(cliBuilder, args) {
       aids.each { pmcid ->
         KomentLib.PMCGetAbstracts(pmcid, { a -> 
           if(a) { 
-            a = komentisto.lemmatise(a)
+            if(o['lemmatise']) {
+              a = komentisto.lemmatise(a)
+            }
             abstracts << [ id: pmcid, text: a ]
           }
         })

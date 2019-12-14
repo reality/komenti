@@ -37,6 +37,7 @@ cliBuilder.with {
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
     l longOpt: 'labels', 'Annotation labels file.', args: 1
+    _ longOpt: 'file-list', 'A file containing a list of strings file names in the directory given by -t/--text must contain to be annotated (e.g. pmcids)', args: 1
 
     // summary options
     a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1
@@ -176,10 +177,10 @@ def run(cliBuilder, args) {
           theseLabels[c] += Komentisto.getLemmas(l)
         }
         theseLabels[c].unique(true)
-      }          
+      }
 
       if(o['override-group']) { q = o['override-group'] }
-      theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q" } }.flatten()
+      theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q\t$o.o" } }.flatten()
     }
 
     if(o['object-properties']) {
@@ -202,25 +203,45 @@ def run(cliBuilder, args) {
 
     writeOutput(labelOut.join('\n'), o,
                 "Saved ${labelOut.size()} labels to $o.out!")
+  } else if(command == 'get_metadata') {
+    if(!o.l || !o.o) { cliBuilder.usage() ; System.exit(1) }
+
+    def classLabels = loadClassLabels(o)
+    def files = [:]
+    
+    classLabels.each { c, l ->
+      KomentLib.AOSemanticQuery("<$c>", l.o, "equivalent", { classes ->
+        classes.each { c ->
+          files[l.l[0]] = KomentLib.AOExtractMetadata(c)
+        }
+      })
+    }
+
+    println "Writing metadata files for ${files.size()} classes."
+    files.each { n, c ->
+      new File(outDir.getAbsolutePath() + '/' + n + '.txt').text = c
+    } 
   } else if(command == 'annotate') {
     if(!o.t || !o.l) { cliBuilder.usage() ; System.exit(1) }
 
-    def classLabels = [:]
-    new File(o.l).splitEachLine('\t') {
-      if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [] }
-      classLabels[it[1]] << it[0]
+    def classLabels = loadClassLabels(o)
+    def fList
+    if(o['file-list']) {
+      fList = new File(o['file-list']).text.split('\n').collect { it + '.txt' }
     }
 
     def target = new File(o.t)
     def processFileOrDir
     processFileOrDir = { f, item -> 
-      if(item.isDirectory()) {
-        item.eachFile {
-          if(it.isDirectory()) { processFileOrDir(f, it) } else { f << it }
+        if(item.isDirectory()) {
+          item.eachFile {
+            processFileOrDir(f, it)
+          }
+        } else { 
+          if(!fList || (fList && fList.contains(item.getName()))) {
+            f << item
+          }
         }
-      } else { 
-        f << item
-      }
       f
     }
     files = processFileOrDir([], target)
@@ -241,7 +262,7 @@ def run(cliBuilder, args) {
 
     println "Found ${annotations.size()} annotations"
 
-    def out = annotations.collect { a -> "$a.f\t$a.c\t${classLabels[a.c][0]}\t${a.tags.join(',')}\t$a.sid\t${a.text.replaceAll('\n','')}" }.join('\n')
+    def out = annotations.collect { a -> "$a.f\t$a.c\t${classLabels.l[a.c][0]}\t${a.tags.join(',')}\t$a.sid\t${a.text.replaceAll('\n','')}" }.join('\n')
     writeOutput(out, o, "Saved annotations to $o.out!")
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
@@ -252,7 +273,7 @@ def run(cliBuilder, args) {
       if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
     }
 
-    def classLabels = [:]
+    def classLabels = [:] // TODO integrate this gIndex etc with the loadClassLabels function
     def gIndex = 1
     def excludeGroups = []
     if(o['exclude-groups']) {
@@ -261,7 +282,7 @@ def run(cliBuilder, args) {
     if(o['group-by-query']) {
       gIndex = 2
     }
-    new File(o.l).splitEachLine('\t') {
+    new File(o.l).splitEachLine('\t') { // TODO: integrate this into loadClassLabels
       if(!excludeGroups.contains(it[2])) {
         if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
         classLabels[it[gIndex]] << it[0]
@@ -484,4 +505,13 @@ def writeOutput(text, o, success) {
     oFile.text = text
     println success
   } catch(e) { println 'Error: ' + e.getMessage() }
+}
+
+def loadClassLabels(o) {
+  def classLabels = [:]
+  new File(o.l).splitEachLine('\t') {
+    if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [ l: [], o: it[3] ] }
+    classLabels[it[1]].l << it[0]
+  }
+  classLabels
 }

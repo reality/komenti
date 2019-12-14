@@ -21,6 +21,7 @@ class KomentLib {
     }
   }
 
+
   // Extract the names and labels of classes and object properties
   static def AOExtractNames(c) {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym
@@ -42,6 +43,23 @@ class KomentLib {
     names = names.collect { it.replaceAll('\\{', '\\\\{') }
 
     names
+  }
+
+  // metadata to text
+  static def AOExtractMetadata(c) {
+    def out = ''
+    c.each { k, v ->
+      if(k == 'SubClassOf') { return; }
+      if(v instanceof Collection) {
+        out += "$k:\n"
+        v.each {
+          out += "  $v\n"
+        }
+      } else {
+        out += "$k: $v\n" 
+      }
+    }
+    out
   }
 
   static def PMCSearch(searchString, cb) {

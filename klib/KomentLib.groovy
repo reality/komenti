@@ -6,9 +6,21 @@ class KomentLib {
   static def ABEROWL_ROOT = 'http://aber-owl.net/'
   static def ROOT_OBJECT_PROPERTY = 'http://www.w3.org/2002/07/owl#topObjectProperty'
 
+  static def isIRI(s) {
+    s[0] == '<' && s[-1] == '>'
+  }
+
   static def AOSemanticQuery(query, ontology, type, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
-    http.get(path: '/api/dlquery/', query: [ labels: true, ontology: ontology, type: type, query: query.toLowerCase() ]) { r, json ->
+    if(!isIRI(query)) { query = query.toLowerCase() }
+    def params = [
+      labels: !isIRI(query),
+      ontology: ontology, 
+      type: type, 
+      query: query,
+      direct: false 
+    ] 
+    http.get(path: '/api/dlquery/', query: params) { r, json ->
       cb(json.result) 
     }
   }
@@ -21,12 +33,13 @@ class KomentLib {
     }
   }
 
+
   // Extract the names and labels of classes and object properties
   static def AOExtractNames(c) {
-    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym
+    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym + c.has_related_synonym
     names.removeAll([null])
     names.unique(true)
-    names = names.findAll { it.size() > 3 }
+    names = names.findAll { it.size() > 3 && it.size() < 35 }
     names = names.collect { it.toLowerCase() }
     names = names.collect { it.replaceAll('\t', '') }
     names = names.collect { it.replaceAll('\n', '') }
@@ -44,9 +57,44 @@ class KomentLib {
     names
   }
 
+  // metadata to text
+  static def AOExtractMetadata(c, dLabels) {
+    def out = ''
+    c.each { k, v ->
+      if(k == 'SubClassOf') { return; }
+      if(k.length() > 30) { return; } // try to remove some of the bugprops
+      if(v instanceof Collection) {
+        out += "$k:\n"
+        v.unique(false).each {
+          out += "  $it\n"
+          
+          def dec = dLabels.findAll { l -> "$it".indexOf(l) != -1 }
+          if(dec) {
+            dec.each { d ->
+              out += "  (decomposed) ${it.replace(d, '')}\n"
+              out += "  (decomposed): ${d}\n" 
+            }
+          }
+        }
+      } else {
+        out += "$k: $v\n" 
+
+        def dec = dLabels.findAll { l -> "$v".indexOf(l) != -1 }
+        if(dec) {
+          dec.each { d ->
+            out += "$k (decomposed): ${v.replace(d, '')}\n" 
+            out += "$k (decomposed): ${d}\n" 
+          }
+        }
+      }
+    }
+    out
+  }
+
   static def PMCSearch(searchString, cb) {
     def http = new HTTPBuilder('https://www.ebi.ac.uk/')
     searchString = searchString.replaceAll('-', ' ')
+    searchString = searchString.replaceAll('\\\\', '')
     def qs = [ format: 'json', query: searchString, synonym: 'TRUE', pageSize: 1000, resultType: 'idlist' ]
 
     http.get(path: '/europepmc/webservices/rest/search', query: qs) { resp, json ->

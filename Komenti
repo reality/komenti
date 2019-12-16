@@ -8,6 +8,10 @@
 
 import groovy.json.*
 import klib.*
+import java.util.concurrent.*
+import java.util.concurrent.atomic.*
+import groovyx.gpars.*
+import org.codehaus.gpars.*
 
 /**
  * Read command line input!
@@ -28,10 +32,13 @@ cliBuilder.with {
     _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
     _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
     _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
+    _ longOpt: 'priority', 'RegexNER priority in output. Default is 1.', args: 1
 
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
     l longOpt: 'labels', 'Annotation labels file.', args: 1
+    _ longOpt: 'file-list', 'A file containing a list of strings file names in the directory given by -t/--text must contain to be annotated (e.g. pmcids)', args: 1
+    _ longOpt: 'per-line', 'Process each line of each file seperately (useful for field-based data e.g. downloaded with get_metadata)', type: Boolean
 
     // summary options
     a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1
@@ -44,6 +51,8 @@ cliBuilder.with {
     _ longOpt: 'mine-relationship', 'Generate a roster that mines text for a relationship between entities.', type: Boolean
 
     // genroster suggestaxiom options
+    _ longOpt: 'default-relation', 'Default relation to use for suggest_axiom', args: 1
+    _ longOpt: 'default-entity', 'Default entity to use for suggest_axiom', args: 1
 
     _ longOpt: 'suggest-axiom', 'Generate a roster that suggests an axiom for a class'
     _ longOpt: 'entity', 'Entity to query for (class name).', args: 1
@@ -52,15 +61,19 @@ cliBuilder.with {
     qo longOpt: 'quality-ontology', 'Ontology to query for qualities (if not included will use the same as class query)', args: 1
     oo longOpt: 'object-property-ontology', 'Ontology to get object properties from (if not included will use the same as class query)', args: 1
 
-    // get_articles option
+    // get_articles option (some also apply to get_metadata)
     _ longOpt: 'limit', 'Limit articles download', args: 1, type: Integer
     _ longOpt: 'group-by-query', 'Group classes by query (rather than URI)', type: Boolean
     _ longOpt: 'conjunction', 'Use a conjunctive query to obtain articles', type: Boolean
     _ longOpt: 'exclude-groups', 'Comma delimited list of groups to ignore for download query', args: 1
+    _ longOpt: 'id-list-only', 'Only download a file list of', type: Boolean
+    _ longOpt: 'lemmatise', 'Lemmatise the downloaded information', type: Boolean
+    _ longOpt: 'decompose-entities', 'If the label of an entity (group class in the label file) appears in a string, decompose it in a new label', type: Boolean
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
     _ longOpt: 'append', 'Append output file, instead of replacing it', type: Boolean
+    _ longOpt: 'verbose', 'Verbose output, mostly progress', type: Boolean
 }
 
 run(cliBuilder, args)
@@ -102,7 +115,7 @@ def run(cliBuilder, args) {
     }
     if(o.o) { roster.commands.find { it.id == 'class_query' }.args.ontology = o.o }
     if(!o['with-abstracts-download'] && !o['mine-relationship']) {
-      roster.commands.find { it.command = 'annotate' }.args.text = o.t
+      roster.commands.find { it.command == 'annotate' }.args.text = o.t
     } else {
       if(o.l) { roster.commands.find { it.command == 'get_abstracts' }.args.limit = o.l }
     }
@@ -159,6 +172,8 @@ def run(cliBuilder, args) {
     def labelOut = []
     def processEntities = { q, entities ->
       def theseLabels = [:]
+      def priority = 1
+      if(o['priority']) { priority = o['priority'] }
       entities.each { e -> theseLabels[e.class] = KomentLib.AOExtractNames(e) }
 
       def labelCount = entities.collect { e -> theseLabels[e.class].size() }.sum()
@@ -170,10 +185,11 @@ def run(cliBuilder, args) {
           theseLabels[c] += Komentisto.getLemmas(l)
         }
         theseLabels[c].unique(true)
-      }          
+        theseLabels[c].findAll { it != '' }
+      }
 
       if(o['override-group']) { q = o['override-group'] }
-      theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q" } }.flatten()
+      theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q\t$o.o\t$priority" } }.flatten()
     }
 
     if(o['object-properties']) {
@@ -196,39 +212,111 @@ def run(cliBuilder, args) {
 
     writeOutput(labelOut.join('\n'), o,
                 "Saved ${labelOut.size()} labels to $o.out!")
+  } else if(command == 'get_metadata') {
+    if(!o.l) { println "Must pass label file" ; cliBuilder.usage() ; System.exit(1) }
+
+    def outDir = getOutDir(o)
+    def files = [:]
+    def komentisto = new Komentisto(o.l)
+
+    def excludeGroups = []
+    def entityLabels = []
+    def classLabels = [:]
+    if(o['exclude-groups']) {
+      excludeGroups = o['exclude-groups'].split(',')
+    }
+    new File(o.l).splitEachLine('\t') { // TODO: integrate this into loadClassLabels
+      if(it[2] == 'entity') { entityLabels << it[0].replaceAll('\\\\', '') }
+      if(!excludeGroups.contains(it[2])) {
+        if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [ l: [], o: it[3] ] }
+          classLabels[it[1]].l << it[0]
+        }
+      }
+
+    if(!o['decompose-entities']) { entityLabels = [] }
+
+    classLabels.each { iri, l ->
+      KomentLib.AOSemanticQuery("<$iri>", l.o, "equivalent", { classes ->
+        // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
+        def c = classes.find { it.class == iri }
+        def metadata = KomentLib.AOExtractMetadata(c, entityLabels)
+        if(o['lemmatise']) { // we do it per line here, since it's a field based document
+          metadata = metadata.split('\n').collect { komentisto.lemmatise(it) }.join('\n')
+        }
+        files[l.l[0]] = metadata
+      })
+    }
+
+    println "Writing metadata files for ${files.size()} classes."
+    files.each { n, c ->
+      new File(outDir.getAbsolutePath() + '/' + n.replaceAll('/','') + '.txt').text = c
+    } 
+
+    println "Done"
   } else if(command == 'annotate') {
     if(!o.t || !o.l) { cliBuilder.usage() ; System.exit(1) }
+    if(!o.out) { println "Must provide output filename via --out" ; System.exit(1) }
 
-    def classLabels = [:]
-    new File(o.l).splitEachLine('\t') {
-      if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [] }
-      classLabels[it[1]] << it[0]
+    def classLabels = loadClassLabels(o)
+    def fList
+    if(o['file-list']) {
+      fList = new File(o['file-list']).text.split('\n').collect { it + '.txt' }
     }
 
     def target = new File(o.t)
-    def files = [ target ]
-    if(target.isDirectory()) { files = [] ; target.eachFile { files << it } }
+    def processFileOrDir
+    processFileOrDir = { f, item -> 
+        if(item.isDirectory()) {
+          item.eachFile { processFileOrDir(f, it) }
+        } else { 
+          if(!fList || (fList && fList.contains(item.getName()))) {
+            f << item
+          }
+        }
+      f
+    }
+    files = processFileOrDir([], target)
 
     def komentisto = new Komentisto(o.l)
 
     println "Annotating ${files.size()} files ..."
 
-    def annotations = files.collect { f ->
-      komentisto.annotate(f.getName(), f.text)
-    }.flatten()
+    def i = 0
+    def annotations = []
+    GParsPool.withPool(8) { p -> 
+    files.eachParallel{ f ->
+      if(o['per-line']) {
+        f.text.tokenize('\n').each { lineText ->
+          annotations << komentisto.annotate(f.getName(), lineText)
+        }
+      } else {
+        annotations << komentisto.annotate(f.getName(), f.text)
+      }
+      if(o.verbose) {
+        println "${++i}/${files.size()}"
+      }
+    }
+    }
+    annotations = annotations.flatten()
+    annotations.removeAll([null])
 
     println "Found ${annotations.size()} annotations"
 
-    def out = annotations.collect { a -> "$a.f\t$a.c\t${classLabels[a.c][0]}\t${a.tags.join(',')}\t$a.sid\t${a.text.replaceAll('\n','')}" }.join('\n')
+    def out = annotations.collect { a -> 
+      [ a.f, 
+        a.c,
+        classLabels[a.c].l[0],
+        a.tags.join(','),
+        a.sid,
+        a.text.replaceAll('\n', '')
+      ].join('\t')
+    }.join('\n')
     writeOutput(out, o, "Saved annotations to $o.out!")
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 
-    def outDir = new File(o.out)
-    if(!outDir.exists()) { outDir.mkdir() }
-    if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
-
-    def classLabels = [:]
+    def outDir = getOutDir(o)
+    def classLabels = [:] // TODO integrate this gIndex etc with the loadClassLabels function
     def gIndex = 1
     def excludeGroups = []
     if(o['exclude-groups']) {
@@ -237,7 +325,7 @@ def run(cliBuilder, args) {
     if(o['group-by-query']) {
       gIndex = 2
     }
-    new File(o.l).splitEachLine('\t') {
+    new File(o.l).splitEachLine('\t') { // TODO: integrate this into loadClassLabels
       if(!excludeGroups.contains(it[2])) {
         if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
         classLabels[it[gIndex]] << it[0]
@@ -251,8 +339,20 @@ def run(cliBuilder, args) {
       def query = '(' + classLabels.collect { c, l -> '"' + l.join('" OR "') + '"' }.join(') AND (') + ')'
       KomentLib.PMCSearch(query, { result -> aids << result })
     } else { // disjunction (default)
+      def newLabels = []
+      def thisLabelGroup = []
       classLabels.each { cls, labels ->
+        thisLabelGroup << labels
+        if(thisLabelGroup.size() == 10) {
+          newLabels << thisLabelGroup.flatten()
+          thisLabelGroup = []
+        }
+      }
+
+      def i = 0
+      newLabels.each { labels ->
         KomentLib.PMCSearchTerms(labels, { result -> aids << result })
+        println "${++i}/${newLabels.size()}"
       }
     }
 
@@ -266,23 +366,28 @@ def run(cliBuilder, args) {
 
     println "Downloading abstracts for ${aids.size()} articles ..."
 
-    def komentisto = new Komentisto(o.l)
+    if(o['id-list-only']) {
+      writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
+    } else {
+      def komentisto = new Komentisto(o.l)
+      def abstracts = []
+      aids.each { pmcid ->
+        KomentLib.PMCGetAbstracts(pmcid, { a -> 
+          if(a) { 
+            if(o['lemmatise']) {
+              a = komentisto.lemmatise(a)
+            }
+            abstracts << [ id: pmcid, text: a ]
+          }
+        })
+      }
 
-    def abstracts = []
-    aids.each { pmcid ->
-      KomentLib.PMCGetAbstracts(pmcid, { a -> 
-        if(a) { 
-          a = komentisto.lemmatise(a)
-          abstracts << [ id: pmcid, text: a ]
-        }
-      })
+      println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
+
+      abstracts.each { a ->
+        new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
+      } 
     }
-
-    println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
-
-    abstracts.each { a ->
-      new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
-    } 
   } else if(command == 'summarise_entity_pair') {
     if(!o.l || !o.a || !o.c) { cliBuilder.usage() ; System.exit(1) }
     def classes = o.c.split(',')
@@ -362,18 +467,40 @@ def run(cliBuilder, args) {
   } else if(command == 'suggest_axiom') {
     if(!o.l || !o.a) { println 'Must provide a --label file and a --annotations file to suggest_axiom' ; System.exit(1) }
 
+    // TODO probably just put this into an Labels class, replacing the loadLabels
     def groupClasses = [:]
+    def classes = [:]
     def entity
+    def relation
     new File(o.l).splitEachLine('\t') {
       groupClasses[it[1]] = it[2]
-      if(it[2] == 'entity') {
+      if(it[2] == 'class') {
+        if(!classes.containsKey(it[1])) {
+          classes[it[1]] = it[0]
+        }
+      }
+      if(it[2] == 'entity' && it[0] == o['default-entity']) {
         entity = [
           iri: it[1],
-          label: it[0]
+          label: it[0].replaceAll('\\\\',''),
+          count: 0
+        ]
+      }
+      if(it[2] == 'relation' && it[0] == o['default-relation']) {
+        relation = [
+          iri: it[1],
+          label: it[0].replaceAll('\\\\',''),
+          count: 0
         ]
       }
     }
 
+    if(!relation) { println "Could not find default relation in label file." ; System.exit(1) }
+    if(!entity) { println "Could not find default entity in label file." ; System.exit(1) }
+
+    // TODO put this into a load annotations
+    // by files, sentences, annotation 
+//    def annotations = [:]
     def sentences = [:]
     new File(o.a).splitEachLine('\t') {
       def sid = it[0] + ':' + it[4]
@@ -381,7 +508,7 @@ def run(cliBuilder, args) {
       sentences[sid] << [
         f: it[0],
         iri: it[1],
-        label: it[2],
+        label: it[2].replaceAll('\\\\',''),
         tags: it[3],
         sid: it[4],
         text: it[5],
@@ -389,50 +516,58 @@ def run(cliBuilder, args) {
       ]
     }
 
-    def qualityCounts = [:]
-    def relationCounts = [:]
+    if(o['class-list']) { def cl = o['class-list'].split(',') ; classes = classes.findAll { cIRI, cLabel -> cl.contains(cLabel) } }
 
-    def entityAndQualitySentence
+    classes.each { cIRI, cLabel ->
+      def counts = [:]
+      def qualityCounts = [:]
+      def relationCounts = [:]
+      def entityCounts = [:]
 
-    sentences.each { id, annotations ->
-      def tentity  = annotations.find { it.group == 'entity' }
-      def quality = annotations.find { it.group == 'quality' }
-      def relation = annotations.find { it.group == 'relation' }
+      // files that mention our class ...
+      def classFiles = sentences.findAll { i, s -> s.any { it.iri == cIRI } }.collect { i, s -> s.f }
+      sentences.findAll { i, s -> classFiles.contains(s.f) }.each { id, annotations ->
 
-      if(tentity && quality) {
-        entityAndQualitySentence = quality
+        def tentity  = annotations.find { it.group == 'entity' }
+        def quality = annotations.find { it.group == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }
+        def trelation = annotations.find { it.group == 'relation' }
+
+        if(quality) {
+          if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
+          qualityCounts[quality.iri].count++
+          qualityCounts[quality.iri].sids << id
+        }
+
+        if(trelation) {
+          if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
+          relationCounts[relation.iri].count++
+          relationCounts[relation.iri].sids << id
+        }
+
+        if(tentity) {
+          if(!entityCounts.containsKey(tentity.iri)) { entityCounts[tentity.iri] = [ iri: tentity.iri, label: tentity.label, sids: [], count: 0] }
+          entityCounts[tentity.iri].count++
+          entityCounts[tentity.iri].sids << id
+        }
+
       }
 
-      if(quality) {
-        if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
-        qualityCounts[quality.iri].count++
-        qualityCounts[quality.iri].sids << id
-      }
+      if(qualityCounts.size() > 0) {
+        def bestQuality = qualityCounts.collect { it.getValue() }.inject { s, c -> c.count > s.count ? c : s }
+        def bestEntity = entityCounts.collect { it.getValue() }.inject(entity) { s, c -> c.count > s.count ? c : s }
+        def bestRelation = relationCounts.collect { it.getValue() }.inject(relation) { s, c -> c.count > s.count ? c : s }
 
-      if(relation) {
-        if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
-        relationCounts[relation.iri].count++
-        relationCounts[relation.iri].sids << id
+        println "Suggested axiom for $cLabel ($cIRI): "
+          println "  $bestEntity.label AND ($bestRelation.label SOME $bestQuality.label)"
+          println "  <$bestEntity.iri> AND (<$bestRelation.iri> SOME <$bestQuality.iri>)"
+        println 'Evidence:'
+        println '  ' + bestQuality.sids.join('\n  ')
+      } else {
+        println "No qualities found for $cLabel ($cIRI)"
       }
+      println ''
+      //def bestRelation = relationCounts.inject { s, iri, c -> c.count > s.count ? c : s }
     }
-
-    def bestQuality
-    if(entityAndQualitySentence) {
-      bestQuality = qualityCounts[entityAndQualitySentence.iri]
-    } else {
-      def bestQualityCount = 0
-      qualityCounts.each { iri, c -> if(!bestQuality || c.count > bestQualityCount) { bestQuality = c ; bestQualityCount = c.count }}
-    }
-
-    def bestRelation
-    def bestRelationCount = 0
-    relationCounts.each { iri, c -> if(!bestRelation || c.count > bestRelationCount) { bestRelation = c ; bestRelationCount = c.count }}
-
-    println 'Suggested axiom: '
-      println "  $entity.label AND ($bestRelation.label SOME $bestQuality.label)"
-      println "  <$entity.iri> AND (<$bestRelation.iri> SOME <$bestQuality.iri>)"
-    println 'Evidence:'
-    println '  ' + bestQuality.sids.join('\n  ')
   }
 }
 
@@ -444,4 +579,22 @@ def writeOutput(text, o, success) {
     oFile.text = text
     println success
   } catch(e) { println 'Error: ' + e.getMessage() }
+}
+
+def loadClassLabels(o) {
+  def classLabels = [:]
+  new File(o.l).splitEachLine('\t') {
+    if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [ l: [], o: it[3] ] }
+    classLabels[it[1]].l << it[0]
+  }
+  classLabels
+}
+
+def getOutDir(o) {
+  def outDir = new File(o.out)
+  if(!o['id-list-only']) {
+    if(!outDir.exists()) { outDir.mkdir() }
+    if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
+  }
+  outDir
 }

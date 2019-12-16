@@ -46,7 +46,7 @@ public class Komentisto {
 
   def addRegexNERProps(props, labelFile) { // i feel like it should be easier than this to make custom rows. some kind of 'ignore, or N/A' header, perhaps
     props.put("regexner.mapping", labelFile.getAbsolutePath())
-    props.put("regexner.mapping.header", "pattern,ner,q,ontology") // wtf
+    props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
     props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.mapping.field.ontology", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.ignorecase", "true")
@@ -59,12 +59,11 @@ public class Komentisto {
     def results = []
     def sentenceCount = 0
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
-      def foundInThisSentence = []
       sentenceCount++
 
       for(entityMention in sentence.get(CoreAnnotations.MentionsAnnotation.class)) {
         def ner = entityMention.get(CoreAnnotations.NamedEntityTagAnnotation.class)
-        if(entities.containsKey(ner) && !foundInThisSentence.contains(ner)) {
+        if(entities.containsKey(ner)) {
           def a = [ f: id, c: ner, tags: [], text: sentence.toString(), sid: sentenceCount ]
 
           def klSentence = new Sentence(sentence.toString(), id)

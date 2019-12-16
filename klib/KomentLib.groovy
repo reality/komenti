@@ -58,7 +58,7 @@ class KomentLib {
   }
 
   // metadata to text
-  static def AOExtractMetadata(c) {
+  static def AOExtractMetadata(c, decompose) {
     def out = ''
     c.each { k, v ->
       if(k == 'SubClassOf') { return; }
@@ -67,9 +67,15 @@ class KomentLib {
         out += "$k:\n"
         v.unique(false).each {
           out += "  $it\n"
+          if(decompose && "$it".indexOf(decompose) != -1) { // TODO we should perhaps only be doing this to things that are already strings (also below)
+            out += "  (decomposed) ${it.replace(decompose, '')}\n"
+          }
         }
       } else {
         out += "$k: $v\n" 
+        if(decompose && "$v".indexOf(decompose) != -1) {
+          out += "$k (decomposed): ${v.replace(decompose, '')}\n" 
+        }
       }
     }
     out

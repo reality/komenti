@@ -32,6 +32,7 @@ cliBuilder.with {
     _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
     _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
     _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
+    _ longOpt: 'priority', 'RegexNER priority in output. Default is 1.', args: 1
 
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
@@ -66,6 +67,7 @@ cliBuilder.with {
     _ longOpt: 'exclude-groups', 'Comma delimited list of groups to ignore for download query', args: 1
     _ longOpt: 'id-list-only', 'Only download a file list of', type: Boolean
     _ longOpt: 'lemmatise', 'Lemmatise the downloaded information', type: Boolean
+    _ longOpt: 'decompose', 'If this word exists in a label, produce another label without this term', args: 1
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
@@ -169,6 +171,8 @@ def run(cliBuilder, args) {
     def labelOut = []
     def processEntities = { q, entities ->
       def theseLabels = [:]
+      def priority = 1
+      if(o['priority']) { priority = o['priority'] }
       entities.each { e -> theseLabels[e.class] = KomentLib.AOExtractNames(e) }
 
       def labelCount = entities.collect { e -> theseLabels[e.class].size() }.sum()
@@ -184,7 +188,7 @@ def run(cliBuilder, args) {
       }
 
       if(o['override-group']) { q = o['override-group'] }
-      theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q\t$o.o" } }.flatten()
+      theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q\t$o.o\t$priority" } }.flatten()
     }
 
     if(o['object-properties']) {
@@ -219,7 +223,7 @@ def run(cliBuilder, args) {
       KomentLib.AOSemanticQuery("<$iri>", l.o, "equivalent", { classes ->
         // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
         def c = classes.find { it.class == iri }
-        def metadata = KomentLib.AOExtractMetadata(c)
+        def metadata = KomentLib.AOExtractMetadata(c, o['decompose'])
         if(o['lemmatise']) { // we do it per line here, since it's a field based document
           metadata = metadata.split('\n').collect { komentisto.lemmatise(it) }.join('\n')
         }
@@ -490,6 +494,8 @@ def run(cliBuilder, args) {
         group: groupClasses[it[1]],
       ]
     }
+
+    if(o['class-list']) { def cl = o['class-list'].split(',') ; classes = classes.findAll { cIRI, cLabel -> cl.contains(cLabel) } }
 
     classes.each { cIRI, cLabel ->
       def counts = [:]

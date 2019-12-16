@@ -525,31 +525,27 @@ def run(cliBuilder, args) {
       def entityCounts = [:]
 
       // files that mention our class ...
-      def classFiles = sentences.findAll { i, s -> s.any { it.iri == cIRI } }.collect { i, s -> s.f }
+      def classFiles = sentences.findAll { i, s -> s.any { it.f.indexOf(cLabel) != -1 } }.collect { i, s -> s.f }
       sentences.findAll { i, s -> classFiles.contains(s.f) }.each { id, annotations ->
-
-        def tentity  = annotations.find { it.group == 'entity' }
-        def quality = annotations.find { it.group == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }
-        def trelation = annotations.find { it.group == 'relation' }
-
-        if(quality) {
-          if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
-          qualityCounts[quality.iri].count++
-          qualityCounts[quality.iri].sids << id
-        }
-
-        if(trelation) {
-          if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
-          relationCounts[relation.iri].count++
-          relationCounts[relation.iri].sids << id
-        }
-
-        if(tentity) {
+        annotations.findAll { it.group == 'entity' }.each { tentity ->
           if(!entityCounts.containsKey(tentity.iri)) { entityCounts[tentity.iri] = [ iri: tentity.iri, label: tentity.label, sids: [], count: 0] }
           entityCounts[tentity.iri].count++
           entityCounts[tentity.iri].sids << id
         }
-
+        annotations.findAll { it.group == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }.each { quality ->
+          if(quality) {
+            if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
+            qualityCounts[quality.iri].count++
+            qualityCounts[quality.iri].sids << id
+          }
+        }
+        annotations.findAll { it.group == 'relation' }.each { trelation ->
+          if(trelation) {
+            if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
+            relationCounts[relation.iri].count++
+            relationCounts[relation.iri].sids << id
+          }
+        }
       }
 
       if(qualityCounts.size() > 0) {
@@ -561,7 +557,7 @@ def run(cliBuilder, args) {
           println "  $bestEntity.label AND ($bestRelation.label SOME $bestQuality.label)"
           println "  <$bestEntity.iri> AND (<$bestRelation.iri> SOME <$bestQuality.iri>)"
         println 'Evidence:'
-        println '  ' + bestQuality.sids.join('\n  ')
+        println '  ' + bestQuality.sids.join(',  ')
       } else {
         println "No qualities found for $cLabel ($cIRI)"
       }

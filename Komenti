@@ -37,6 +37,7 @@ cliBuilder.with {
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
     l longOpt: 'labels', 'Annotation labels file.', args: 1
     _ longOpt: 'file-list', 'A file containing a list of strings file names in the directory given by -t/--text must contain to be annotated (e.g. pmcids)', args: 1
+    _ longOpt: 'per-line', 'Process each line of each file seperately (useful for field-based data e.g. downloaded with get_metadata)', type: Boolean
 
     // summary options
     a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1
@@ -262,13 +263,20 @@ def run(cliBuilder, args) {
     def annotations = []
     GParsPool.withPool(8) { p -> 
     files.eachParallel { f ->
-      annotations << komentisto.annotate(f.getName(), f.text)
+      if(o['per-line']) {
+        f.text.tokenize('\n').each { lineText ->
+          annotations << komentisto.annotate(f.getName(), lineText)
+        }
+      } else {
+        annotations << komentisto.annotate(f.getName(), f.text)
+      }
       if(o.verbose) {
         println "${++i}/${files.size()}"
       }
     }
     }
     annotations = annotations.flatten()
+    annotations.removeAll([null])
 
     println "Found ${annotations.size()} annotations"
 

@@ -105,7 +105,6 @@ public class Komentisto {
       if(s[0] == 'toxicity') {
         s[0] = 'toxic'
       } 
-      s = s.findAll { it != 'nanoparticle' }
 
       s.collect { m.stem(it) }.join(' ')
     }

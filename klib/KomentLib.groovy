@@ -36,7 +36,7 @@ class KomentLib {
 
   // Extract the names and labels of classes and object properties
   static def AOExtractNames(c) {
-    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym
+    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym + c.has_related_synonym
     names.removeAll([null])
     names.unique(true)
     names = names.findAll { it.size() > 3 }

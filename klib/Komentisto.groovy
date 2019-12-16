@@ -19,7 +19,6 @@ public class Komentisto {
     entities = [:]
     labelFile.text.split('\n').each { 
       it = it.split('\t')
-      println it
       if(!entities.containsKey(it[1])) { entities[it[1]] = [] }
       entities[it[1]] << it[0].toLowerCase()
     }

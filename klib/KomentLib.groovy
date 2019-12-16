@@ -39,7 +39,7 @@ class KomentLib {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym + c.has_related_synonym
     names.removeAll([null])
     names.unique(true)
-    names = names.findAll { it.size() > 3 && it.size() < 25 }
+    names = names.findAll { it.size() > 3 && it.size() < 35 }
     names = names.collect { it.toLowerCase() }
     names = names.collect { it.replaceAll('\t', '') }
     names = names.collect { it.replaceAll('\n', '') }
@@ -58,7 +58,7 @@ class KomentLib {
   }
 
   // metadata to text
-  static def AOExtractMetadata(c, decompose) {
+  static def AOExtractMetadata(c, dLabels) {
     def out = ''
     c.each { k, v ->
       if(k == 'SubClassOf') { return; }
@@ -67,14 +67,24 @@ class KomentLib {
         out += "$k:\n"
         v.unique(false).each {
           out += "  $it\n"
-          if(decompose && "$it".indexOf(decompose) != -1) { // TODO we should perhaps only be doing this to things that are already strings (also below)
-            out += "  (decomposed) ${it.replace(decompose, '')}\n"
+          
+          def dec = dLabels.findAll { l -> "$it".indexOf(l) != -1 }
+          if(dec) {
+            dec.each { d ->
+              out += "  (decomposed) ${it.replace(d, '')}\n"
+              out += "  (decomposed): ${d}\n" 
+            }
           }
         }
       } else {
         out += "$k: $v\n" 
-        if(decompose && "$v".indexOf(decompose) != -1) {
-          out += "$k (decomposed): ${v.replace(decompose, '')}\n" 
+
+        def dec = dLabels.findAll { l -> "$v".indexOf(l) != -1 }
+        if(dec) {
+          dec.each { d ->
+            out += "$k (decomposed): ${v.replace(d, '')}\n" 
+            out += "$k (decomposed): ${d}\n" 
+          }
         }
       }
     }

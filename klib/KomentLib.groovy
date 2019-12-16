@@ -39,7 +39,7 @@ class KomentLib {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym + c.has_related_synonym
     names.removeAll([null])
     names.unique(true)
-    names = names.findAll { it.size() > 3 }
+    names = names.findAll { it.size() > 3 && it.size() < 25 }
     names = names.collect { it.toLowerCase() }
     names = names.collect { it.replaceAll('\t', '') }
     names = names.collect { it.replaceAll('\n', '') }

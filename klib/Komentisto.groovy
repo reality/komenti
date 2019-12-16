@@ -28,9 +28,7 @@ public class Komentisto {
     def props = new Properties()
     props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions, depparse")
     props.put("parse.maxtime", "20000")
-
     addRegexNERProps(props, labelFile)
-
     props.put("regexner.ignorecase", "true")
     props.put("depparse.nthreads", 8)
     props.put("ner.nthreads", 8)
@@ -39,10 +37,9 @@ public class Komentisto {
 
     props = new Properties()
     props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
-    def basicCoreNLP = new StanfordCoreNLP(props)
-
     addRegexNERProps(props, labelFile)
 
+    def basicCoreNLP = new StanfordCoreNLP(props)
     basicPipeline = new AnnotationPipeline()
     basicPipeline.addAnnotator(basicCoreNLP)
   }

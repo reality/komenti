@@ -283,8 +283,8 @@ def run(cliBuilder, args) {
 
     def i = 0
     def annotations = []
-//    GParsPool.withPool(8) { p -> 
-    files.each{ f ->
+    GParsPool.withPool(8) { p -> 
+    files.eachParallel{ f ->
       if(o['per-line']) {
         f.text.tokenize('\n').each { lineText ->
           annotations << komentisto.annotate(f.getName(), lineText)
@@ -296,7 +296,7 @@ def run(cliBuilder, args) {
         println "${++i}/${files.size()}"
       }
     }
- //   }
+    }
     annotations = annotations.flatten()
     annotations.removeAll([null])
 
@@ -479,19 +479,24 @@ def run(cliBuilder, args) {
           classes[it[1]] = it[0]
         }
       }
-      if(it[2] == 'entity') {
+      if(it[2] == 'entity' && it[0] == o['default-entity']) {
         entity = [
           iri: it[1],
-          label: it[0].replaceAll('\\\\','')
+          label: it[0].replaceAll('\\\\',''),
+          count: 0
         ]
       }
-      if(it[2] == 'relation' && it[0] == o['relation']) {
+      if(it[2] == 'relation' && it[0] == o['default-relation']) {
         relation = [
           iri: it[1],
-          label: it[0].replaceAll('\\\\','')
+          label: it[0].replaceAll('\\\\',''),
+          count: 0
         ]
       }
     }
+
+    if(!relation) { println "Could not find default relation in label file." ; System.exit(1) }
+    if(!entity) { println "Could not find default entity in label file." ; System.exit(1) }
 
     // TODO put this into a load annotations
     // by files, sentences, annotation 
@@ -517,7 +522,7 @@ def run(cliBuilder, args) {
       def counts = [:]
       def qualityCounts = [:]
       def relationCounts = [:]
-      def entityAndQualitySentence
+      def entityCounts = [:]
 
       // files that mention our class ...
       def classFiles = sentences.findAll { i, s -> s.any { it.iri == cIRI } }.collect { i, s -> s.f }
@@ -525,11 +530,7 @@ def run(cliBuilder, args) {
 
         def tentity  = annotations.find { it.group == 'entity' }
         def quality = annotations.find { it.group == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }
-        //def relation = annotations.find { it.group == 'relation' }
-
-        if(tentity && quality) {
-          entityAndQualitySentence = quality
-        }
+        def trelation = annotations.find { it.group == 'relation' }
 
         if(quality) {
           if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
@@ -537,22 +538,28 @@ def run(cliBuilder, args) {
           qualityCounts[quality.iri].sids << id
         }
 
-        /*if(relation) {
+        if(trelation) {
           if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
           relationCounts[relation.iri].count++
           relationCounts[relation.iri].sids << id
-        }*/
+        }
+
+        if(tentity) {
+          if(!entityCounts.containsKey(tentity.iri)) { entityCounts[tentity.iri] = [ iri: tentity.iri, label: tentity.label, sids: [], count: 0] }
+          entityCounts[tentity.iri].count++
+          entityCounts[tentity.iri].sids << id
+        }
+
       }
 
       if(qualityCounts.size() > 0) {
-        def bestQuality = qualityCounts.collect { it.getValue() }.inject { s, c -> c.count > s.count ? c : s } // for some reason you cannot give it three args
-        //bestQuality = bestQuality.getValue()
-
-        //bestQuality = bestQuality.getValue()
+        def bestQuality = qualityCounts.collect { it.getValue() }.inject { s, c -> c.count > s.count ? c : s }
+        def bestEntity = entityCounts.collect { it.getValue() }.inject(entity) { s, c -> c.count > s.count ? c : s }
+        def bestRelation = relationCounts.collect { it.getValue() }.inject(relation) { s, c -> c.count > s.count ? c : s }
 
         println "Suggested axiom for $cLabel ($cIRI): "
-          println "  $entity.label AND ($relation.label SOME $bestQuality.label)"
-          println "  <$entity.iri> AND (<$relation.iri> SOME <$bestQuality.iri>)"
+          println "  $bestEntity.label AND ($bestRelation.label SOME $bestQuality.label)"
+          println "  <$bestEntity.iri> AND (<$bestRelation.iri> SOME <$bestQuality.iri>)"
         println 'Evidence:'
         println '  ' + bestQuality.sids.join('\n  ')
       } else {

@@ -565,6 +565,7 @@ def run(cliBuilder, args) {
       } else {
         println "No qualities found for $cLabel ($cIRI)"
       }
+      println ''
       //def bestRelation = relationCounts.inject { s, iri, c -> c.count > s.count ? c : s }
     }
   }

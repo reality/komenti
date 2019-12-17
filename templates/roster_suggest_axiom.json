@@ -47,26 +47,28 @@
       }
     },
     {
-      "command": "get_abstracts",
+      "command": "get_metadata",
       "args": {
         "labels": "./out/labels.txt",
-        "out": "./out/abstracts/",
-        "group-by-query": true,
+        "out": "./out/ls/",
         "exclude-groups": "entity,quality,relation",
-        "conjunction": true
+        "decompose-entities": true
       }
     },
     {
       "command": "annotate",
       "args": {
-        "text": "./out/abstracts/",
+        "text": "./out/ls/",
         "labels": "./out/labels.txt",
-        "out": "./out/annotations.txt"
+        "out": "./out/annotations.txt",
+        "per-line": true
       }
     },
     {
       "command": "suggest_axiom",
       "args": {
+        "default-relation": "",
+        "default-entity": "",
         "annotation-file": "./out/annotations.txt",
         "labels": "./out/labels.txt"
       }

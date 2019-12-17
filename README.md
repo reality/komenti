@@ -90,16 +90,12 @@ examining concept co-occurence:
 ./Komenti gen_roster --mine-relationship -c asbestos,toxicity -o ENM --out relationship_roster.json
 ```
 
+```bash
+./Komenti gen_roster --suggest-axiom --with-metadata-download -c 'nanoparticle' --ontology ENM --entity nanoparticle,nanocage,nanocell,nanosphere,nanohorn,nanorod,nanotube,nanoshell,'quantum dot' --default-entity nanoparticle --quality 'chemical substance','environmental material' --default-relation has_component_part --out enm_roster.json
+```
+
 The rosters can be executed with the following command:
 
 ```bash
 ./Komenti auto -r roster.json
 ```
-
-## Advanced: Suggest axiom
-
-
-thoughts: 
-
-1. what kind of relations does the entity have?
-2. what quality does this entity have?

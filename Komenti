@@ -47,7 +47,8 @@ cliBuilder.with {
     r longOpt: 'roster', 'The file to get the automatic order list from.', args: 1
 
     // genroster
-    _ longOpt: 'with-abstracts-download', 'Generate a roster that downloads abstracts from PubMed Central to annotate, instead of using the file/directory referred to by -t/--text.', type: Boolean
+    _ longOpt: 'with-abstracts-download', 'Generate a roster that downloads abstracts from PubMed Central.', type: Boolean
+    _ longOpt: 'with-metadata-download', 'Generate a roster that downloads metadata for classes.', type: Boolean
     _ longOpt: 'mine-relationship', 'Generate a roster that mines text for a relationship between entities.', type: Boolean
 
     // genroster suggestaxiom options
@@ -81,6 +82,8 @@ run(cliBuilder, args)
 def run(cliBuilder, args) {
   if(!args) { println "Must provide command." ; cliBuilder.usage() ; System.exit(1) }
 
+  println args
+
   def command = args[0]
   def o = cliBuilder.parse(args.drop(1))
 
@@ -89,10 +92,10 @@ def run(cliBuilder, args) {
   if(command == 'gen_roster') {
     if(!o.q && !o.c) { println "You must provide a query or class-list" ; cliBuilder.usage() ; System.exit(1) }
     if(!o.out) { println "Must provide place to save roster" ; cliBuilder.usage() ; System.exit(1) }
-    if(!o['with-abstracts-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
+    if(!o['with-abstracts-download'] && !o['with-metadata-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts, metadata, or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
     if(o['mine-relationship'] && (!o.c || (o.c && o.c.split(',').size() != 2))) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
     if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
-    if(o['suggest-axiom'] && (!o.c || (o.c && o.c.split(',').size() != 1) || !o.entity || !o.quality))  { println "to --suggest-axiom you must pass exactly one class with -c/--class-list and exactly one entity with --entity and exactly one quality with --quality" ; System.exit(1) }
+    if(o['suggest-axiom'] && (!o.c || (o.c && o.c.split(',').size() != 1) || !o.entity || !o.quality) || !o['default-entity'] || !o['default-relation'])  { println "to --suggest-axiom you must pass class lists for each -c, --entity, --quality. You must also pass --default-relation and --default-entity." ; System.exit(1) }
 
     def templateFile = new File('templates/roster.json')
     if(o['with-abstracts-download']) {
@@ -114,10 +117,18 @@ def run(cliBuilder, args) {
       roster.commands.find { it.id == 'class_query' }.args['class-list'] = o.c
     }
     if(o.o) { roster.commands.find { it.id == 'class_query' }.args.ontology = o.o }
-    if(!o['with-abstracts-download'] && !o['mine-relationship']) {
-      roster.commands.find { it.command == 'annotate' }.args.text = o.t
-    } else {
+
+    if(o['with-abstracts-download']) {
       if(o.l) { roster.commands.find { it.command == 'get_abstracts' }.args.limit = o.l }
+    }
+
+    if(!o['with-abstracts-download'] && !o['with-metadata-download']) {
+     roster.commands = roster.commands.findAll { it.command != 'get_abstracts' && it.command != 'get_metadata' }
+     roster.commands.find { it.command == 'annotate' }.text = o.t 
+    } else if(!o['with-abstracts-download']) {
+     roster.commands = roster.commands.findAll { it.command != 'get_abstracts' }
+    } else if(!o['with-metadata-download']) {
+     roster.commands = roster.commands.findAll { it.command != 'get_metadata' }
     }
 
     if(o['mine-relationship']) {
@@ -140,10 +151,9 @@ def run(cliBuilder, args) {
       qq.args['class-list'] = o.quality
       qq.args['ontology'] = o.qo ? o.qo : o.o
 
-      if(!o['with-abstracts-download']) {
-        roster = roster.findAll { it.command != get_abstracts }
-        roster.find { it.command == 'annotate' }.text = o.t 
-      }
+      def sa = roster.commands.find { it.command == 'suggest_axiom' }
+      sa.args['default-relation'] = o['default-relation']
+      sa.args['default-entity'] = o['default-entity']
     }
 
     new File(o.out).text = JsonOutput.prettyPrint(JsonOutput.toJson(roster))
@@ -266,16 +276,18 @@ def run(cliBuilder, args) {
     def target = new File(o.t)
     def processFileOrDir
     processFileOrDir = { f, item -> 
-        if(item.isDirectory()) {
-          item.eachFile { processFileOrDir(f, it) }
-        } else { 
-          if(!fList || (fList && fList.contains(item.getName()))) {
-            f << item
-          }
+      if(item.isDirectory()) {
+        item.eachFile { processFileOrDir(f, it) }
+      } else { 
+        if(!fList || (fList && fList.contains(item.getName()))) {
+          f << item
         }
+      }
       f
     }
     files = processFileOrDir([], target)
+
+    println files
 
     def komentisto = new Komentisto(o.l)
 
@@ -525,31 +537,27 @@ def run(cliBuilder, args) {
       def entityCounts = [:]
 
       // files that mention our class ...
-      def classFiles = sentences.findAll { i, s -> s.any { it.iri == cIRI } }.collect { i, s -> s.f }
+      def classFiles = sentences.findAll { i, s -> s.any { it.f.indexOf(cLabel) != -1 } }.collect { i, s -> s.f }
       sentences.findAll { i, s -> classFiles.contains(s.f) }.each { id, annotations ->
-
-        def tentity  = annotations.find { it.group == 'entity' }
-        def quality = annotations.find { it.group == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }
-        def trelation = annotations.find { it.group == 'relation' }
-
-        if(quality) {
-          if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
-          qualityCounts[quality.iri].count++
-          qualityCounts[quality.iri].sids << id
-        }
-
-        if(trelation) {
-          if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
-          relationCounts[relation.iri].count++
-          relationCounts[relation.iri].sids << id
-        }
-
-        if(tentity) {
+        annotations.findAll { it.group == 'entity' }.each { tentity ->
           if(!entityCounts.containsKey(tentity.iri)) { entityCounts[tentity.iri] = [ iri: tentity.iri, label: tentity.label, sids: [], count: 0] }
           entityCounts[tentity.iri].count++
           entityCounts[tentity.iri].sids << id
         }
-
+        annotations.findAll { it.group == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }.each { quality ->
+          if(quality) {
+            if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
+            qualityCounts[quality.iri].count++
+            qualityCounts[quality.iri].sids << id
+          }
+        }
+        annotations.findAll { it.group == 'relation' }.each { trelation ->
+          if(trelation) {
+            if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
+            relationCounts[relation.iri].count++
+            relationCounts[relation.iri].sids << id
+          }
+        }
       }
 
       if(qualityCounts.size() > 0) {
@@ -561,7 +569,7 @@ def run(cliBuilder, args) {
           println "  $bestEntity.label AND ($bestRelation.label SOME $bestQuality.label)"
           println "  <$bestEntity.iri> AND (<$bestRelation.iri> SOME <$bestQuality.iri>)"
         println 'Evidence:'
-        println '  ' + bestQuality.sids.join('\n  ')
+        println '  ' + bestQuality.sids.join(',  ')
       } else {
         println "No qualities found for $cLabel ($cIRI)"
       }

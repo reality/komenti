@@ -298,8 +298,10 @@ def run(cliBuilder, args) {
     GParsPool.withPool(8) { p -> 
     files.eachParallel{ f ->
       if(o['per-line']) {
+        def z = 0
         f.text.tokenize('\n').each { lineText ->
-          annotations << komentisto.annotate(f.getName(), lineText)
+          annotations << komentisto.annotate(f.getName(), lineText, z+i)
+          z++
         }
       } else {
         annotations << komentisto.annotate(f.getName(), f.text)

@@ -55,16 +55,10 @@ class Sentence {
       if(tText.indexOf(replaceWith + ': ' + n) != -1) {
         tText = replaceWith + ' is excluded. '
       }
-      //tText = tText.replaceAll('^.*' + replaceWith + ': ' + n, n + ' ' + replaceWith + '.') 
+      if(tText.indexOf(n + ' ' + replaceWith) != -1) {
+        tText = replaceWith + ' is excluded. '
+      }
     } 
-
-    if(tText.indexOf('no ' + replaceWith) != -1) {
-      tText = replaceWith + ' is excluded. '
-    }
-
-    if(tText.indexOf('not ' + replaceWith) != -1) {
-      tText = replaceWith + ' is excluded. '
-    }
 
     def aDocument = new Annotation(tText)
     tParser.annotate(aDocument)

@@ -33,6 +33,7 @@ cliBuilder.with {
     _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
     _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
     _ longOpt: 'priority', 'RegexNER priority in output. Default is 1.', args: 1
+    _ longOpt: 'expand-synonyms', 'Expand synonyms using AberOWL', type: Boolean
 
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1

@@ -7,7 +7,7 @@
         "ontology": "HP",
         "query": "hypertension",
         "out": "./out/labels.txt",
-        "expand-labels": true
+        "lemmatise": true
       }
     },
     {

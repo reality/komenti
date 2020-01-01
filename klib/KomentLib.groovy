@@ -22,8 +22,8 @@ class KomentLib {
 
   static def AOQueryNames(query, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
-    http.get(path: '/api/querynames/', query: [ query: term ]) { resp, json ->
-      cb(json.collect { k, v -> v})
+    http.get(path: '/api/querynames/', query: [ query: query ]) { resp, json ->
+      cb(json.collect { k, v -> v}.flatten())
     }
   }
 
@@ -41,6 +41,7 @@ class KomentLib {
       query: query,
       direct: false 
     ] 
+    if(!ontology) { params.remove('ontology') }
     http.get(path: '/api/dlquery/', query: params) { r, json ->
       cb(json.result) 
     }
@@ -57,6 +58,7 @@ class KomentLib {
   // Extract the names and labels of classes and object properties
   static def AOExtractNames(c) {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym + c.has_related_synonym
+    names = names.flatten()
     names.removeAll([null])
     names.unique(true)
     
@@ -72,6 +74,7 @@ class KomentLib {
          .collect { it.replaceAll('\\]', '\\\\]') }
          .collect { it.replaceAll('\\}', '\\\\}') }
          .collect { it.replaceAll('\\{', '\\\\{') }
+         .findAll { !BANNED_SYNONYMS.contains(it) }
   }
 
   // metadata to text
@@ -108,20 +111,24 @@ class KomentLib {
     out
   }
 
-  static AOExpandSynonyms(labels) {
+  static AOExpandSynonyms(iri, label) {
     def synonyms = []
-    labels.each { l ->
-      AOQueryNames(l, { nameClasses ->
-        nameClasses.each { nCl ->
-          AOSemanticQuery(nCl.owlClass, 'equivalent', { eqClasses ->
-            eqClasses.each { eqCl ->
-              synonyms += AOExtractNames(eqCl)
-            }
-          }
-        }
+    AOQueryNames(label, { nameClasses ->
+      nameClasses.findAll { nCl ->
+        nCl.label.collect { it.toLowerCase() }.contains(label)
+      }.each { nCl ->
         synonyms += AOExtractNames(nCl)
-      })
-    }
+      }
+    })
+    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
+      eqClasses.each { eqCl ->
+        if(!BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
+          synonyms += AOExtractNames(eqCl)
+        }
+      }
+    })
+
+    synonyms
   }
 
   static def PMCSearch(searchString, cb) {

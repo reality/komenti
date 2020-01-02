@@ -184,7 +184,9 @@ def run(cliBuilder, args) {
       def theseLabels = [:]
       def priority = 1
       if(o['priority']) { priority = o['priority'] }
+      def i = 0
       entities.each { e -> 
+        if(o['verbose']) { println "Synonym Expansion: ${++i}/${entities.size()}" }
         theseLabels[e.class] = KomentLib.AOExtractNames(e)
         if(o['expand-synonyms']) { // they will be made unique etc later
           theseLabels[e.class] += KomentLib.AOExpandSynonyms(e.owlClass, 

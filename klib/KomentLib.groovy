@@ -122,7 +122,7 @@ class KomentLib {
     })
     AOSemanticQuery(iri, 'equivalent', { eqClasses ->
       eqClasses.each { eqCl ->
-        if(!BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
+        if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
           synonyms += AOExtractNames(eqCl)
         }
       }

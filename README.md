@@ -22,7 +22,8 @@ Get labels for a semantic subclass query.
 
 ### Parameters
 
-* The labels can be extended by the power of lemmatisation, by passing --expand-labels/-e.
+* The labels can be extended by the power of lemmatisation, by passing --lemmatise
+* Synonyms can be expanded used name and semantic matching over AberOWL by passing --expand-synonyms
 
 ## Get Abstracts
 

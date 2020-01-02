@@ -30,7 +30,7 @@
         "class-list": "",
         "out": "./out/labels.txt",
         "append": true,
-        "expand-labels": true,
+        "lemmatise": true,
         "override-group": "quality"
       }
     },
@@ -42,7 +42,7 @@
         "object-properties": "true",
         "out": "./out/labels.txt",
         "append": true,
-        "expand-labels": true,
+        "lemmatise": true,
         "override-group": "relation"
       }
     },

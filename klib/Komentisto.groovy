@@ -53,11 +53,14 @@ public class Komentisto {
   }
 
   def annotate(id, text) {
+    annotate(id, text, 0)
+  }
+
+  def annotate(id, text, sentenceCount) {
     def aDocument = new Annotation(text.toLowerCase())
     basicPipeline.annotate(aDocument)
 
     def results = []
-    def sentenceCount = 0
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
       sentenceCount++
 

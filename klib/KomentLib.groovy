@@ -5,9 +5,30 @@ import groovyx.net.http.HTTPBuilder
 class KomentLib {
   static def ABEROWL_ROOT = 'http://aber-owl.net/'
   static def ROOT_OBJECT_PROPERTY = 'http://www.w3.org/2002/07/owl#topObjectProperty'
+  static def BANNED_ONTOLOGIES = [ 'GO-PLUS', 'MONDO', 'CCONT', 'jp/bio', 'phenX', 'ontoparonmed' ]
+  static def BANNED_SYNONYMS = [
+                    "europe pmc",
+                    "kegg compound",
+                    "chemidplus",
+                    "lipid maps",
+                    "beilstein",
+                    "reaxys",
+                    "nist chemistry webbook", "cas registry number", "lipid maps instance", "beilstein registry number" ]
+
 
   static def isIRI(s) {
     s[0] == '<' && s[-1] == '>'
+  }
+
+  static def AOQueryNames(query, cb) {
+    def http = new HTTPBuilder(ABEROWL_ROOT)
+    http.get(path: '/api/querynames/', query: [ query: query ]) { resp, json ->
+      cb(json.collect { k, v -> v}.flatten())
+    }
+  }
+
+  static def AOSemanticQuery(query, type, cb) {
+    AOSemanticQuery(query, null, type, cb)
   }
 
   static def AOSemanticQuery(query, ontology, type, cb) {
@@ -20,6 +41,7 @@ class KomentLib {
       query: query,
       direct: false 
     ] 
+    if(!ontology) { params.remove('ontology') }
     http.get(path: '/api/dlquery/', query: params) { r, json ->
       cb(json.result) 
     }
@@ -33,28 +55,26 @@ class KomentLib {
     }
   }
 
-
   // Extract the names and labels of classes and object properties
   static def AOExtractNames(c) {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym + c.has_related_synonym
+    names = names.flatten()
     names.removeAll([null])
     names.unique(true)
-    names = names.findAll { it.size() > 3 && it.size() < 35 }
-    names = names.collect { it.toLowerCase() }
-    names = names.collect { it.replaceAll('\t', '') }
-    names = names.collect { it.replaceAll('\n', '') }
-
-    // java dot gif
-    names = names.collect { it.replaceAll('\\(', '\\\\(') }
-    names = names.collect { it.replaceAll('\\)', '\\\\)') }
-    names = names.collect { it.replaceAll('\\+', '\\\\+') }
-    names = names.collect { it.replaceAll('\\-', '\\\\-') }
-    names = names.collect { it.replaceAll('\\[', '\\\\[') }
-    names = names.collect { it.replaceAll('\\]', '\\\\]') }
-    names = names.collect { it.replaceAll('\\}', '\\\\}') }
-    names = names.collect { it.replaceAll('\\{', '\\\\{') }
-
-    names
+    
+    names.findAll { it.size() > 3 && it.size() < 35 }
+         .collect { it.toLowerCase() }
+         .collect { it.replaceAll('\t', '') }
+         .collect { it.replaceAll('\n', '') }
+         .collect { it.replaceAll('\\(', '\\\\(') } // java dot gif
+         .collect { it.replaceAll('\\)', '\\\\)') }
+         .collect { it.replaceAll('\\+', '\\\\+') }
+         .collect { it.replaceAll('\\-', '\\\\-') }
+         .collect { it.replaceAll('\\[', '\\\\[') }
+         .collect { it.replaceAll('\\]', '\\\\]') }
+         .collect { it.replaceAll('\\}', '\\\\}') }
+         .collect { it.replaceAll('\\{', '\\\\{') }
+         .findAll { !BANNED_SYNONYMS.contains(it) }
   }
 
   // metadata to text
@@ -89,6 +109,26 @@ class KomentLib {
       }
     }
     out
+  }
+
+  static AOExpandSynonyms(iri, label) {
+    def synonyms = []
+    AOQueryNames(label, { nameClasses ->
+      nameClasses.findAll { nCl ->
+        nCl.label.collect { it.toLowerCase() }.contains(label)
+      }.each { nCl ->
+        synonyms += AOExtractNames(nCl)
+      }
+    })
+    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
+      eqClasses.each { eqCl ->
+        if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
+          synonyms += AOExtractNames(eqCl)
+        }
+      }
+    })
+
+    synonyms
   }
 
   static def PMCSearch(searchString, cb) {

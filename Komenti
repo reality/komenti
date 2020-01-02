@@ -27,12 +27,12 @@ cliBuilder.with {
     // query options
 	o longOpt: 'ontology', 'Which ontology to query.', args: 1
 	q longOpt: 'query', 'A Manchester OWL Syntax query, the result of which will be the set of NER labels.', args: '+'
-    e longOpt: 'expand-labels', 'Expand the set of synonyms retrieved using syntactic methods.'
     c longOpt: 'class-list', 'A list of classes to get subclasses of', args: 1
     _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
     _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
     _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
     _ longOpt: 'priority', 'RegexNER priority in output. Default is 1.', args: 1
+    _ longOpt: 'expand-synonyms', 'Expand synonyms using AberOWL', type: Boolean
 
     // annotation options
 	t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
@@ -68,7 +68,7 @@ cliBuilder.with {
     _ longOpt: 'conjunction', 'Use a conjunctive query to obtain articles', type: Boolean
     _ longOpt: 'exclude-groups', 'Comma delimited list of groups to ignore for download query', args: 1
     _ longOpt: 'id-list-only', 'Only download a file list of', type: Boolean
-    _ longOpt: 'lemmatise', 'Lemmatise the downloaded information', type: Boolean
+    _ longOpt: 'lemmatise', 'Lemmatise the downloaded information. Can be used on query, download_metadata, download_abstracts', type: Boolean
     _ longOpt: 'decompose-entities', 'If the label of an entity (group class in the label file) appears in a string, decompose it in a new label', type: Boolean
 
     // all options
@@ -184,14 +184,22 @@ def run(cliBuilder, args) {
       def theseLabels = [:]
       def priority = 1
       if(o['priority']) { priority = o['priority'] }
-      entities.each { e -> theseLabels[e.class] = KomentLib.AOExtractNames(e) }
+      def i = 0
+      entities.each { e -> 
+        if(o['verbose']) { println "Synonym Expansion: ${++i}/${entities.size()}" }
+        theseLabels[e.class] = KomentLib.AOExtractNames(e)
+        if(o['expand-synonyms']) { // they will be made unique etc later
+          theseLabels[e.class] += KomentLib.AOExpandSynonyms(e.owlClass, 
+                                                             [e.label].flatten()[0].toLowerCase()) // ew
+        }
+      }
 
       def labelCount = entities.collect { e -> theseLabels[e.class].size() }.sum()
 
       println "Received $labelCount labels from ${entities.size()} classes, for query \"$q\"."
 
       theseLabels.each { c, l ->
-        if(o.e) {
+        if(o.lemmatise) {
           theseLabels[c] += Komentisto.getLemmas(l)
         }
         theseLabels[c].unique(true)
@@ -298,8 +306,10 @@ def run(cliBuilder, args) {
     GParsPool.withPool(8) { p -> 
     files.eachParallel{ f ->
       if(o['per-line']) {
+        def z = 0
         f.text.tokenize('\n').each { lineText ->
-          annotations << komentisto.annotate(f.getName(), lineText)
+          annotations << komentisto.annotate(f.getName(), lineText, z+i)
+          z++
         }
       } else {
         annotations << komentisto.annotate(f.getName(), f.text)

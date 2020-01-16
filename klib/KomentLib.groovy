@@ -74,6 +74,8 @@ class KomentLib {
          .collect { it.replaceAll('\\]', '\\\\]') }
          .collect { it.replaceAll('\\}', '\\\\}') }
          .collect { it.replaceAll('\\{', '\\\\{') }
+         .findAll { !['_', ':'].any { b -> it.indexOf(b) != -1 } }
+         .findAll { it.replaceAll('\\P{InBasic_Latin}', '').size() > 2 }
          .findAll { !BANNED_SYNONYMS.contains(it) }
   }
 

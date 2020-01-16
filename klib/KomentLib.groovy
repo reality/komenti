@@ -62,7 +62,7 @@ class KomentLib {
     names.removeAll([null])
     names.unique(true)
     
-    names.findAll { it.size() > 3 && it.size() < 35 }
+    names = names.findAll { it.size() > 3 }
          .collect { it.toLowerCase() }
          .collect { it.replaceAll('\t', '') }
          .collect { it.replaceAll('\n', '') }
@@ -74,8 +74,9 @@ class KomentLib {
          .collect { it.replaceAll('\\]', '\\\\]') }
          .collect { it.replaceAll('\\}', '\\\\}') }
          .collect { it.replaceAll('\\{', '\\\\{') }
-         .findAll { !['_', ':'].any { b -> it.indexOf(b) != -1 } }
+    names.findAll { !['_', ':'].any { b -> it.indexOf(b) != -1 } }
          .findAll { it.replaceAll('\\P{InBasic_Latin}', '').size() > 2 }
+         .findAll { it == names[0] || it.indexOf(names[0]) == -1 } // remove names that contain the first label. TODO also use preferredLabel?
          .findAll { !BANNED_SYNONYMS.contains(it) }
   }
 

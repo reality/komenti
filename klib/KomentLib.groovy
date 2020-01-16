@@ -22,8 +22,8 @@ class KomentLib {
 
   static def AOQueryNames(query, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
-    http.get(path: '/api/querynames/', query: [ query: query ]) { resp, json ->
-      cb(json.collect { k, v -> v}.flatten())
+    http.get(path: '/api/class/_find', query: [ query: query ]) { resp, json ->
+      cb(json.result)
     }
   }
 
@@ -57,7 +57,7 @@ class KomentLib {
 
   // Extract the names and labels of classes and object properties
   static def AOExtractNames(c) {
-    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.synonym + c.has_related_synonym
+    def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.Synonym
     names = names.flatten()
     names.removeAll([null])
     names.unique(true)
@@ -115,6 +115,8 @@ class KomentLib {
     def synonyms = []
     AOQueryNames(label, { nameClasses ->
       nameClasses.findAll { nCl ->
+        nCl.label += nCl.synonyms
+        nCl.label.removeAll([null])
         nCl.label.collect { it.toLowerCase() }.contains(label)
       }.each { nCl ->
         synonyms += AOExtractNames(nCl)

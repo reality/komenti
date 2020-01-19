@@ -27,7 +27,7 @@ cliBuilder.with {
     // query options
 	o longOpt: 'ontology', 'Which ontology to query.', args: 1
 	q longOpt: 'query', 'A Manchester OWL Syntax query, the result of which will be the set of NER labels.', args: '+'
-    c longOpt: 'class-list', 'A list of classes to get subclasses of', args: 1
+    c longOpt: 'class-list', 'A list of classes to query. You can also pass a file, one label per line.', args: 1
     _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
     _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
     _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
@@ -176,22 +176,25 @@ def run(cliBuilder, args) {
       run(cliBuilder, newArgs)
     }
   } else if(command == 'query') {
-    if(!o.o || (!o['object-properties'] && (!o.q && !o.c))) { cliBuilder.usage() ; System.exit(1) }
+    if((!o['object-properties'] && (!o.q && !o.c))) { cliBuilder.usage() ; System.exit(1) }
     if(o['object-properties'] && (o.q || o.c)) { println "Cannot pass a query or class list for --object-properties query" ; System.exit(1) }
 
     def labelOut = []
     def processEntities = { q, entities ->
-      def theseLabels = [:]
+      ConcurrentHashMap theseLabels = [:]
       def priority = 1
       if(o['priority']) { priority = o['priority'] }
       def i = 0
-      entities.each { e -> 
+      GParsPool.withPool(8) { p ->  // im a monster
+      entities.eachParallel{ e ->
+      //entities.each { e -> 
         if(o['verbose']) { println "Synonym Expansion: ${++i}/${entities.size()}" }
         theseLabels[e.class] = KomentLib.AOExtractNames(e)
         if(o['expand-synonyms']) { // they will be made unique etc later
           theseLabels[e.class] += KomentLib.AOExpandSynonyms(e.owlClass, 
                                                              [e.label].flatten()[0].toLowerCase()) // ew
         }
+      }
       }
 
       def labelCount = entities.collect { e -> theseLabels[e.class].size() }.sum()
@@ -217,7 +220,12 @@ def run(cliBuilder, args) {
     } else { // regular class query
       def queries = [o.q]
       if(o.c) {
-        queries = o.c.split(',')
+        def f = new File(o.c)
+        if(f.exists()) {
+          queries = f.text.split('\n')
+        } else {
+          queries = o.c.split(',')
+        }
         queries = queries.collect{ if(it.indexOf(' ') != -1) { it = "'" + it + "'" } ; it }
       }
       

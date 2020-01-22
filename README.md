@@ -66,7 +66,7 @@ Annotate text using labels using Stanford CoreNLP.
 
 ### Parameters
 
-* -t/--text can be a file or a directory
+* -t/--text can be a file or a directory. The files can be text files, or PDF files (whose text will automatically be extracted)
 
 ## Summarise Entity Pairs
 

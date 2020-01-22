@@ -5,6 +5,7 @@
 @Grab(group='edu.stanford.nlp', module='stanford-corenlp', version='3.7.0', classifier='models')
 @Grab(group='edu.stanford.nlp', module='stanford-parser', version='3.7.0')
 @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
+@Grab(group='org.apache.pdfbox', module='pdfbox', version='2.0.15')
 
 import groovy.json.*
 import klib.*
@@ -225,11 +226,13 @@ def run(cliBuilder, args) {
         } else {
           queries = o.c.split(',')
         }
-        queries = queries.collect{ if(it.indexOf(' ') != -1) { it = "'" + it + "'" } ; it }
       }
       
       queries.each { q ->
-        KomentLib.AOSemanticQuery(q, o.o, o['query-type'], { classes ->
+        def ont = o.o
+        if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') }
+        if(q.indexOf(' ') != -1) { q = "'" + q + "'" }
+        KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
           labelOut += processEntities(q, classes)
         })
       }
@@ -302,8 +305,6 @@ def run(cliBuilder, args) {
     }
     files = processFileOrDir([], target)
 
-    println files
-
     def komentisto = new Komentisto(o.l)
 
     println "Annotating ${files.size()} files ..."
@@ -312,14 +313,15 @@ def run(cliBuilder, args) {
     def annotations = []
     GParsPool.withPool(8) { p -> 
     files.eachParallel{ f ->
+      def (name, text) = [f.getName(), f.text]
+      if(name =~ /(?i)pdf/) { text = new PDFReader(f).getText() }
+
       if(o['per-line']) {
-        def z = 0
-        f.text.tokenize('\n').each { lineText ->
-          annotations << komentisto.annotate(f.getName(), lineText, z+i)
-          z++
+        text.tokenize('\n').eachWithIndex { lineText, z ->
+          annotations << komentisto.annotate(name, lineText, z+i)
         }
       } else {
-        annotations << komentisto.annotate(f.getName(), f.text)
+        annotations << komentisto.annotate(name, text)
       }
       if(o.verbose) {
         println "${++i}/${files.size()}"

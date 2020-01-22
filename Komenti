@@ -182,8 +182,7 @@ def run(cliBuilder, args) {
     def labelOut = []
     def processEntities = { q, entities ->
       ConcurrentHashMap theseLabels = [:]
-      def priority = 1
-      if(o['priority']) { priority = o['priority'] }
+      def priority = o['priority'] ?: 1
       def i = 0
       GParsPool.withPool(8) { p ->  // im a monster
       entities.eachParallel{ e ->

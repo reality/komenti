@@ -16,7 +16,7 @@ Commands should be able to run in any command line interface, including on the W
 
 ### Semantic
 
-Get labels for a semantic subclass query.
+Get labels for a semantic subclass + equivalent query.
 
 ```bash
 ./Komenti query -q "'part of' some 'apoptotic process'" -o GO --out labels.txt
@@ -32,6 +32,7 @@ Get labels for a semantic subclass query.
 
 * The labels can be extended by the power of lemmatisation, by passing --lemmatise
 * Synonyms can be expanded used name and semantic matching over AberOWL by passing --expand-synonyms
+* --query-type allows you to run either subclass, equivalent, subeq, or superclass queries (the default is subeq)
 
 ## Get Abstracts
 

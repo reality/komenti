@@ -40,6 +40,7 @@ cliBuilder.with {
     l longOpt: 'labels', 'Annotation labels file.', args: 1
     _ longOpt: 'file-list', 'A file containing a list of strings file names in the directory given by -t/--text must contain to be annotated (e.g. pmcids)', args: 1
     _ longOpt: 'per-line', 'Process each line of each file seperately (useful for field-based data e.g. downloaded with get_metadata)', type: Boolean
+    _ longOpt: 'disable-modifiers', 'Don\'t evaluate negation and uncertainty. The reason for this is: it takes a lot of time!', type: Boolean
 
     // summary options
     a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1
@@ -71,6 +72,7 @@ cliBuilder.with {
     _ longOpt: 'id-list-only', 'Only download a file list of', type: Boolean
     _ longOpt: 'lemmatise', 'Lemmatise the downloaded information. Can be used on query, download_metadata, download_abstracts', type: Boolean
     _ longOpt: 'decompose-entities', 'If the label of an entity (group class in the label file) appears in a string, decompose it in a new label', type: Boolean
+    _ longOpt: 'count-only', 'Only provide the hit counts for the articles. This does not suffer from the article limit that downloads do!', type: Boolean
 
     // all options
     _ longOpt: 'out', 'Where to write the annotation results.', args: 1
@@ -306,13 +308,13 @@ def run(cliBuilder, args) {
     }
     files = processFileOrDir([], target)
 
-    def komentisto = new Komentisto(o.l)
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'])
 
     println "Annotating ${files.size()} files ..."
 
     def i = 0
     def annotations = []
-    GParsPool.withPool(8) { p -> 
+    GParsPool.withPool(4) { p -> 
     files.eachParallel{ f ->
       def (name, text) = [f.getName(), f.text]
       if(name =~ /(?i)pdf/) { text = new PDFReader(f).getText() }
@@ -369,7 +371,7 @@ def run(cliBuilder, args) {
     def aids = []
     if(o.conjunction) {
       def query = '(' + classLabels.collect { c, l -> '"' + l.join('" OR "') + '"' }.join(') AND (') + ')'
-      KomentLib.PMCSearch(query, { result -> aids << result })
+      KomentLib.PMCSearch(query, o['count-only'], { result -> aids << result })
     } else { // disjunction (default)
       def newLabels = []
       def thisLabelGroup = []
@@ -380,45 +382,50 @@ def run(cliBuilder, args) {
           thisLabelGroup = []
         }
       }
+      newLabels << thisLabelGroup.flatten()
 
       def i = 0
       newLabels.each { labels ->
-        KomentLib.PMCSearchTerms(labels, { result -> aids << result })
+        KomentLib.PMCSearchTerms(labels, o['count-only'], { result -> aids << result })
         println "${++i}/${newLabels.size()}"
       }
     }
 
     aids = aids.flatten()
 
-    println "Found ${aids.size()} articles ..."
-
-    if(o.limit) { 
-      aids = aids.subList(0, o.limit)
-    }
-
-    println "Downloading abstracts for ${aids.size()} articles ..."
-
-    if(o['id-list-only']) {
-      writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
+    if(o['count-only']) {
+      println "Found ${aids.sum()} articles ..."
     } else {
-      def komentisto = new Komentisto(o.l)
-      def abstracts = []
-      aids.each { pmcid ->
-        KomentLib.PMCGetAbstracts(pmcid, { a -> 
-          if(a) { 
-            if(o['lemmatise']) {
-              a = komentisto.lemmatise(a)
-            }
-            abstracts << [ id: pmcid, text: a ]
-          }
-        })
+      println "Found ${aids.size()} articles ..."
+
+      if(o.limit) { 
+        aids = aids.subList(0, o.limit)
       }
 
-      println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
+      println "Downloading abstracts for ${aids.size()} articles ..."
 
-      abstracts.each { a ->
-        new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
-      } 
+      if(o['id-list-only']) {
+        writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
+      } else {
+        def komentisto = new Komentisto(o.l, o['disable-modifiers'])
+        def abstracts = []
+        aids.each { pmcid ->
+          KomentLib.PMCGetAbstracts(pmcid, { a -> 
+            if(a) { 
+              if(o['lemmatise']) {
+                a = komentisto.lemmatise(a)
+              }
+              abstracts << [ id: pmcid, text: a ]
+            }
+          })
+        }
+
+        println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
+
+        abstracts.each { a ->
+          new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
+        } 
+      }
     }
   } else if(command == 'summarise_entity_pair') {
     if(!o.l || !o.a || !o.c) { cliBuilder.usage() ; System.exit(1) }
@@ -620,7 +627,7 @@ def loadClassLabels(o) {
 
 def getOutDir(o) {
   def outDir = new File(o.out)
-  if(!o['id-list-only']) {
+  if(!o['id-list-only'] && !o['count-only']) {
     if(!outDir.exists()) { outDir.mkdir() }
     if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
   }

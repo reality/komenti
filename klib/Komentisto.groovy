@@ -12,8 +12,9 @@ public class Komentisto {
   def basicPipeline
   def entities
   def uncertainTerms
+  def disableModifiers
 
-  def Komentisto(labelFilePath) {
+  def Komentisto(labelFilePath, disableModifiers) {
     def labelFile = new File(labelFilePath)
 
     entities = [:]
@@ -26,7 +27,14 @@ public class Komentisto {
     uncertainTerms = new File(UNC_WORDS_FILE).text.split('\n')
     
     def props = new Properties()
-    props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions, depparse")
+
+
+    if(!disableModifiers) {
+      props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions, depparse")
+    } else {
+      props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
+    }
+
     props.put("parse.maxtime", "20000")
     addRegexNERProps(props, labelFile)
     props.put("regexner.ignorecase", "true")
@@ -42,13 +50,16 @@ public class Komentisto {
     def basicCoreNLP = new StanfordCoreNLP(props)
     basicPipeline = new AnnotationPipeline()
     basicPipeline.addAnnotator(basicCoreNLP)
+
+    this.disableModifiers = disableModifiers
   }
 
   def addRegexNERProps(props, labelFile) { // i feel like it should be easier than this to make custom rows. some kind of 'ignore, or N/A' header, perhaps
     props.put("regexner.mapping", labelFile.getAbsolutePath())
     props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
     props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
-    props.put("regexner.mapping.field.ontology", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
+    props.put("regexner.mapping.field.ontology", 
+      'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.ignorecase", "true")
   }
 
@@ -69,11 +80,12 @@ public class Komentisto {
         if(entities.containsKey(ner)) {
           def a = [ f: id, c: ner, tags: [], text: sentence.toString(), sid: sentenceCount ]
 
-          def klSentence = new Sentence(sentence.toString(), id)
-          klSentence.genTypeDeps(advancedCoreNLP, entities[ner], REP_TOKEN) 
-
-          if(klSentence.isNegated([REP_TOKEN])) { a.tags << 'negated' }
-          if(klSentence.isUncertain([REP_TOKEN], uncertainTerms)) { a.tags << 'uncertain' }
+          if(!disableModifiers) {
+            def klSentence = new Sentence(sentence.toString(), id)
+            klSentence.genTypeDeps(advancedCoreNLP, entities[ner], REP_TOKEN) 
+            if(klSentence.isNegated([REP_TOKEN])) { a.tags << 'negated' }
+            if(klSentence.isUncertain([REP_TOKEN], uncertainTerms)) { a.tags << 'uncertain' }
+          }
 
           results << a
         }

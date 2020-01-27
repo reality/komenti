@@ -626,7 +626,8 @@ def loadClassLabels(o) {
 }
 
 def getOutDir(o) {
-  def outDir = new File(o.out)
+  def outDir
+  if(!o['count-only']) { outDir = new File(o.out) }
   if(!o['id-list-only'] && !o['count-only']) {
     if(!outDir.exists()) { outDir.mkdir() }
     if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }

@@ -142,8 +142,6 @@ class KomentLib {
     searchString = searchString.replaceAll('\\\\', '')
     def qs = [ format: 'json', query: searchString, synonym: 'TRUE', pageSize: 1000, resultType: 'idlist' ]
 
-    println qs
-
     http.get(path: '/europepmc/webservices/rest/search', query: qs) { resp, json ->
       if(countOnly) {
         cb(json.hitCount) 

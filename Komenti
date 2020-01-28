@@ -42,7 +42,7 @@ cliBuilder.with {
     _ longOpt: 'per-line', 'Process each line of each file seperately (useful for field-based data e.g. downloaded with get_metadata)', type: Boolean
     _ longOpt: 'disable-modifiers', 'Don\'t evaluate negation and uncertainty. The reason for this is: it takes a lot of time!', type: Boolean
 
-    // summary options
+    // summary, add_modifiers options
     a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1
 
     // auto option
@@ -346,6 +346,26 @@ def run(cliBuilder, args) {
       ].join('\t')
     }.join('\n')
     writeOutput(out, o, "Saved annotations to $o.out!")
+  } else if(command == 'add_modifiers') {
+    if(!o.out || !o.a || !o.l) { println "Must provide annotation file via -a, and labels file with -l, and output filename via --out" ; System.exit(1) }
+    def komentisto = new Komentisto(o.l, false)
+
+    def newAnnotations = []
+    def i = 0
+    def aSize = new File(o.a).text.split('\n').size() // ugly
+
+    new File(o.a).splitEachLine('\t') {
+      def res = komentisto.evaluateSentenceConcept(it[5], it[1])
+      def tags = []
+      if(res.negated) { tags << 'negated' }
+      if(res.uncertain) { tags << 'uncertain' }
+      it[3] = tags.join(',')
+
+      newAnnotations << it.join('\t')
+      if(o.verbose) { println "Adding modifiers (${++i}/$aSize)" }
+    }
+
+    writeOutput(newAnnotations.join('\n'), o, "Saved annotations to $o.out!")
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 

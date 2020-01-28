@@ -187,7 +187,7 @@ def run(cliBuilder, args) {
       ConcurrentHashMap theseLabels = [:]
       def priority = o['priority'] ?: 1
       def i = 0
-      GParsPool.withPool(8) { p ->  // im a monster
+      GParsPool.withPool(85) { p ->  // im a monster
       entities.eachParallel{ e ->
       //entities.each { e -> 
         if(o['verbose']) { println "Synonym Expansion: ${++i}/${entities.size()}" }
@@ -293,6 +293,8 @@ def run(cliBuilder, args) {
       fList = new File(o['file-list']).text.split('\n').collect { it + '.txt' }
     }
 
+    def outWriter = new BufferedWriter(new FileWriter(o.out, true))
+
     def target = new File(o.t)
     def processFileOrDir
     processFileOrDir = { f, item -> 
@@ -307,30 +309,53 @@ def run(cliBuilder, args) {
     }
     files = processFileOrDir([], target)
 
-    def komentisto = new Komentisto(o.l, o['disable-modifiers'])
 
     println "Annotating ${files.size()} files ..."
-
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'])
+      
     def i = 0
-    def annotations = []
-    GParsPool.withPool(4) { p -> 
+    GParsPool.withPool(90) { p -> 
     files.eachParallel{ f ->
       def (name, text) = [f.getName(), f.text]
       if(name =~ /(?i)pdf/) { text = new PDFReader(f).getText() }
 
       if(o['per-line']) {
         text.tokenize('\n').eachWithIndex { lineText, z ->
-          annotations << komentisto.annotate(name, lineText, z+i)
+          def annotations = komentisto.annotate(name, lineText, z+i)
+          annotations.each { a ->
+           outWriter.write([ a.f, 
+              a.c,
+              classLabels[a.c].l[0],
+              a.tags.join(','),
+              a.sid,
+              a.text.replaceAll('\n', '')
+            ].join('\t') + '\n')
+          }
         }
-      } else {
-        annotations << komentisto.annotate(name, text)
+      } else { 
+        def annotations = komentisto.annotate(name, text)
+        annotations.each { a ->
+         outWriter.write([ a.f, 
+            a.c,
+            classLabels[a.c].l[0],
+            a.tags.join(','),
+            a.sid,
+            a.text.replaceAll('\n', '')
+          ].join('\t') + '\n')
+        }
       }
+      i++
+      if((i % 500) == 0) { outWriter.flush() }
       if(o.verbose) {
-        println "${++i}/${files.size()}"
+        println "${i}/${files.size()}"
       }
     }
     }
-    annotations = annotations.flatten()
+
+    outWriter.flush()
+    outWriter.close()
+
+    /*annotations = annotations.flatten()
     annotations.removeAll([null])
 
     println "Found ${annotations.size()} annotations"
@@ -344,7 +369,7 @@ def run(cliBuilder, args) {
         a.text.replaceAll('\n', '')
       ].join('\t')
     }.join('\n')
-    writeOutput(out, o, "Saved annotations to $o.out!")
+    writeOutput(out, o, "Saved annotations to $o.out!")*/
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 

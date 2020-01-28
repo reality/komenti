@@ -35,12 +35,12 @@ public class Komentisto {
       props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
     }
 
-    props.put("parse.maxtime", "20000")
+    props.put("parse.maxtime", "5000")
     addRegexNERProps(props, labelFile)
     props.put("regexner.ignorecase", "true")
-    props.put("depparse.nthreads", 8)
-    props.put("ner.nthreads", 8)
-    props.put("parse.nthreads", 8)
+    props.put("depparse.nthreads", 90)
+    props.put("ner.nthreads", 90)
+    props.put("parse.nthreads", 90)
     advancedCoreNLP = new StanfordCoreNLP(props)
 
     props = new Properties()

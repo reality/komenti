@@ -42,7 +42,7 @@ class KomentLib {
       direct: false 
     ] 
     if(!ontology) { params.remove('ontology') }
-    http.get(path: '/api/dlquery/', query: params) { r, json ->
+    http.get(path: '/api/dlquery', query: params) { r, json ->
       cb(json.result) 
     }
   }
@@ -136,21 +136,25 @@ class KomentLib {
     synonyms
   }
 
-  static def PMCSearch(searchString, cb) {
+  static def PMCSearch(searchString, countOnly, cb) {
     def http = new HTTPBuilder('https://www.ebi.ac.uk/')
     searchString = searchString.replaceAll('-', ' ')
     searchString = searchString.replaceAll('\\\\', '')
     def qs = [ format: 'json', query: searchString, synonym: 'TRUE', pageSize: 1000, resultType: 'idlist' ]
 
     http.get(path: '/europepmc/webservices/rest/search', query: qs) { resp, json ->
-      def pmcids = json.resultList.result.collect { it.pmcid }
-      pmcids.removeAll([null])
-      cb(pmcids)
+      if(countOnly) {
+        cb(json.hitCount) 
+      } else {
+        def pmcids = json.resultList.result.collect { it.pmcid }
+        pmcids.removeAll([null])
+        cb(pmcids)
+      }
     }
   }
 
-  static def PMCSearchTerms(terms, cb) {
-    PMCSearch('"'+terms.join('" OR "')+'"', cb)
+  static def PMCSearchTerms(terms, countOnly, cb) {
+    PMCSearch('"'+terms.join('" OR "')+'"', countOnly, cb)
   }
 
   static def PMCGetAbstracts(id, cb) {

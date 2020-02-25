@@ -1,6 +1,6 @@
 # Komenti
 
-Komenti is a tool for semantic query and annotation of text using ontologies. 
+Komenti is a tool for semantic query, annotation, and analysis of text using ontologies. 
 
 
 The following software is required: 

@@ -16,7 +16,7 @@ Commands should be able to run in any command line interface, including on the W
 
 ### Semantic
 
-Get labels for a semantic subclass + equivalent query.
+Get classes and labels satisfying a complex class description using Manchester OWL Syntax.
 
 ```bash
 ./Komenti query -q "'part of' some 'apoptotic process'" -o GO --out labels.txt
@@ -36,7 +36,7 @@ Get labels for a semantic subclass + equivalent query.
 
 ## Get Abstracts
 
-Get abstracts from EBI PMCSearch matching any class label.
+Get abstracts from EBI PMCSearch matching any class label (using, as input, the output of the 'query' sub-command).
 
 ```bash
 ./Komenti get_abstracts -l labels.txt --out abstracts/

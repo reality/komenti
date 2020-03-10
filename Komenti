@@ -290,10 +290,10 @@ def run(cliBuilder, args) {
     def classLabels = loadClassLabels(o)
     def fList
     if(o['file-list']) {
-      fList = new File(o['file-list']).text.split('\n').collect { it + '.txt' }
+      fList = new File(o['file-list']).text.split('\n')
     }
 
-    def outWriter = new BufferedWriter(new FileWriter(o.out, true))
+    def outWriter = new BufferedWriter(new FileWriter(o.out))
 
     def target = new File(o.t)
     def processFileOrDir

@@ -35,13 +35,14 @@ class KomentLib {
     def http = new HTTPBuilder(ABEROWL_ROOT)
     if(!isIRI(query)) { query = query.toLowerCase() }
     def params = [
-      labels: !isIRI(query),
-      ontology: ontology, 
+      labels: true, 
       type: type, 
+      ontology: ontology,
       query: query,
       direct: false 
     ] 
     if(!ontology) { params.remove('ontology') }
+    if(isIRI(query)) { params.remove('labels') }
     http.get(path: '/api/dlquery', query: params) { r, json ->
       cb(json.result) 
     }
@@ -122,12 +123,15 @@ class KomentLib {
         nCl.label.removeAll([null])
         nCl.label.collect { it.toLowerCase() }.contains(label)
       }.each { nCl ->
+        //println '(lex): ' + nCl.ontology + ': ' + AOExtractNames(nCl)
         synonyms += AOExtractNames(nCl)
       }
     })
     AOSemanticQuery(iri, 'equivalent', { eqClasses ->
       eqClasses.each { eqCl ->
+      println eqCl
         if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
+          //println '(eq): ' + eqCl.ontology + ': ' + AOExtractNames(eqCl)
           synonyms += AOExtractNames(eqCl)
         }
       }

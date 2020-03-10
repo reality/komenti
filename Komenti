@@ -291,7 +291,7 @@ def run(cliBuilder, args) {
     def classLabels = loadClassLabels(o)
     def fList
     if(o['file-list']) {
-      fList = new File(o['file-list']).text.split('\n').collect { it + '.txt' }
+      fList = new File(o['file-list']).text.split('\n')
     }
 
     def target = new File(o.t)
@@ -354,18 +354,33 @@ def run(cliBuilder, args) {
     def i = 0
     def aSize = new File(o.a).text.split('\n').size() // ugly
 
-    new File(o.a).splitEachLine('\t') {
-      def res = komentisto.evaluateSentenceConcept(it[5], it[1])
-      def tags = []
-      if(res.negated) { tags << 'negated' }
-      if(res.uncertain) { tags << 'uncertain' }
-      it[3] = tags.join(',')
+    def annoFile = []
+    new File(o.a).splitEachLine('\t') { annoFile << it }
 
-      newAnnotations << it.join('\t')
-      if(o.verbose) { println "Adding modifiers (${++i}/$aSize)" }
+    def cache = []
+    new File(o.out).splitEachLine('\t') { cache << it[0] }
+
+    def outWriter = new BufferedWriter(new FileWriter(o.out, true));
+
+    GParsPool.withPool(8) { p -> 
+    annoFile.eachParallel {
+      if(!cache.contains(it[0]) && it[1] && it[5]) {
+        def res = komentisto.evaluateSentenceConcept(it[5], it[1])
+        def tags = []
+        if(res.negated) { tags << 'negated' }
+        if(res.uncertain) { tags << 'uncertain' }
+        it[3] = tags.join(',')
+
+        outWriter.write(it.join('\t') + '\n')
+        if(o.verbose) { println "Adding modifiers (${++i}/$aSize)" }
+      } else {
+        i++
+      }
+    }
     }
 
-    writeOutput(newAnnotations.join('\n'), o, "Saved annotations to $o.out!")
+    outWriter.flush()
+    outWriter.close()
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 

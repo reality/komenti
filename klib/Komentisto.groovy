@@ -130,7 +130,7 @@ public class Komentisto {
         s[0] = 'toxic'
       } 
 
-      s.collect { m.stem(it) }.join(' ')
+      s.collect { m.stem(it) }.findAll { it && it.size() > 3 }.join(' ')
     }
   }
 }

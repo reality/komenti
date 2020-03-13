@@ -5,7 +5,7 @@ import groovyx.net.http.HTTPBuilder
 class KomentLib {
   static def ABEROWL_ROOT = 'http://aber-owl.net/'
   static def ROOT_OBJECT_PROPERTY = 'http://www.w3.org/2002/07/owl#topObjectProperty'
-  static def BANNED_ONTOLOGIES = [ 'GO-PLUS', 'MONDO', 'CCONT', 'jp/bio', 'phenX', 'ontoparonmed' ]
+  static def BANNED_ONTOLOGIES = [ 'GO-PLUS', 'MONDO', 'CCONT', 'WHOFRE', 'jp/bio', 'phenX', 'ontoparonmed' ]
   static def BANNED_SYNONYMS = [
                     "europe pmc",
                     "kegg compound",
@@ -35,13 +35,14 @@ class KomentLib {
     def http = new HTTPBuilder(ABEROWL_ROOT)
     if(!isIRI(query)) { query = query.toLowerCase() }
     def params = [
-      labels: !isIRI(query),
-      ontology: ontology, 
+      labels: true, 
       type: type, 
+      ontology: ontology,
       query: query,
       direct: false 
     ] 
     if(!ontology) { params.remove('ontology') }
+    if(isIRI(query)) { params.remove('labels') }
     http.get(path: '/api/dlquery', query: params) { r, json ->
       cb(json.result) 
     }
@@ -60,7 +61,6 @@ class KomentLib {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.Synonym
     names = names.flatten()
     names.removeAll([null])
-    names.unique(true)
     
     names = names.findAll { it.size() > 3 }
          .collect { it.toLowerCase() }
@@ -78,6 +78,9 @@ class KomentLib {
          .findAll { it.replaceAll('\\P{InBasic_Latin}', '').size() > 2 }
          .findAll { it == names[0] || it.indexOf(names[0]) == -1 } // remove names that contain the first label. TODO also use preferredLabel?
          .findAll { !BANNED_SYNONYMS.contains(it) }
+    names.unique(true)
+
+    names
   }
 
   // metadata to text
@@ -122,16 +125,30 @@ class KomentLib {
         nCl.label.removeAll([null])
         nCl.label.collect { it.toLowerCase() }.contains(label)
       }.each { nCl ->
-        synonyms += AOExtractNames(nCl)
-      }
-    })
-    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
-      eqClasses.each { eqCl ->
-        if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
-          synonyms += AOExtractNames(eqCl)
+        if(!BANNED_ONTOLOGIES.contains(nCl.ontology)) {
+        def newSynonyms = AOExtractNames(nCl).findAll { it.indexOf(label) == -1 }
+        /*if(newSynonyms.size() > 0 ) { 
+        println nCl.ontology + ' : ' + newSynonyms.size()
+        println newSynonyms
+        }*/
+        synonyms += newSynonyms
         }
       }
     })
+    println 'lex: ' + synonyms.size() 
+    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
+      eqClasses.each { eqCl ->
+        if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
+          def newSynonyms = AOExtractNames(eqCl).findAll { it.indexOf(label) == -1 }
+          /*if(newSynonyms.size() > 0 ) { 
+          println eqCl.ontology + ' : ' + newSynonyms.size()
+          println newSynonyms
+          }*/
+          synonyms += newSynonyms
+        }
+      }
+    })
+    println 'eq: ' +synonyms.size()
 
     synonyms
   }

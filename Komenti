@@ -354,22 +354,41 @@ def run(cliBuilder, args) {
 
     outWriter.flush()
     outWriter.close()
+  } else if(command == 'add_modifiers') {
+    if(!o.out || !o.a || !o.l) { println "Must provide annotation file via -a, and labels file with -l, and output filename via --out" ; System.exit(1) }
+    def komentisto = new Komentisto(o.l, false)
 
-    /*annotations = annotations.flatten()
-    annotations.removeAll([null])
+    def newAnnotations = []
+    def i = 0
+    def aSize = new File(o.a).text.split('\n').size() // ugly
 
-    println "Found ${annotations.size()} annotations"
+    def annoFile = []
+    new File(o.a).splitEachLine('\t') { annoFile << it }
 
-    def out = annotations.collect { a -> 
-      [ a.f, 
-        a.c,
-        classLabels[a.c].l[0],
-        a.tags.join(','),
-        a.sid,
-        a.text.replaceAll('\n', '')
-      ].join('\t')
-    }.join('\n')
-    writeOutput(out, o, "Saved annotations to $o.out!")*/
+    def cache = []
+    new File(o.out).splitEachLine('\t') { cache << it[0] }
+
+    def outWriter = new BufferedWriter(new FileWriter(o.out, true));
+
+    GParsPool.withPool(8) { p -> 
+    annoFile.eachParallel {
+      if(!cache.contains(it[0]) && it[1] && it[5]) {
+        def res = komentisto.evaluateSentenceConcept(it[5], it[1])
+        def tags = []
+        if(res.negated) { tags << 'negated' }
+        if(res.uncertain) { tags << 'uncertain' }
+        it[3] = tags.join(',')
+
+        outWriter.write(it.join('\t') + '\n')
+        if(o.verbose) { println "Adding modifiers (${++i}/$aSize)" }
+      } else {
+        i++
+      }
+    }
+    }
+
+    outWriter.flush()
+    outWriter.close()
   } else if(command == 'get_abstracts') {
     if(!o.l) { cliBuilder.usage() ; System.exit(1) }
 

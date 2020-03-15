@@ -81,10 +81,9 @@ public class Komentisto {
           def a = [ f: id, c: ner, tags: [], text: sentence.toString(), sid: sentenceCount ]
 
           if(!disableModifiers) {
-            def klSentence = new Sentence(sentence.toString(), id)
-            klSentence.genTypeDeps(advancedCoreNLP, entities[ner], REP_TOKEN) 
-            if(klSentence.isNegated([REP_TOKEN])) { a.tags << 'negated' }
-            if(klSentence.isUncertain([REP_TOKEN], uncertainTerms)) { a.tags << 'uncertain' }
+            def tags = evaluateSentenceConcept(sentence.toString(), ner)
+            if(tags.negated) { a.tags << 'negated' }
+            if(tags.uncertain) { a.tags << 'uncertain' }
           }
 
           results << a
@@ -93,6 +92,17 @@ public class Komentisto {
     }
 
     results
+  }
+
+  // Evaluate for negation and uncertainty
+  def evaluateSentenceConcept(text, concept) {
+    def klSentence = new Sentence(text, 0) // placeholder zero, no purpose
+    klSentence.genTypeDeps(advancedCoreNLP, entities[concept], REP_TOKEN) 
+
+    [
+      negated: klSentence.isNegated([REP_TOKEN]),
+      uncertain: klSentence.isUncertain([REP_TOKEN], uncertainTerms)
+    ]
   }
 
   def lemmatise(text) {
@@ -120,7 +130,7 @@ public class Komentisto {
         s[0] = 'toxic'
       } 
 
-      s.collect { m.stem(it) }.join(' ')
-    }
+      s.collect { m.stem(it) ?: it }.join(' ')
+    }.findAll { it.size() > 3 }
   }
 }

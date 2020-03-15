@@ -1,7 +1,8 @@
 # Komenti
 
-Komenti is a tool for semantic query and annotation of text using ontologies. 
+Komenti is a tool for semantic query, annotation, and analysis of text using ontologies. 
 
+It enables querying multiple ontologies with complex class descriptions using AberOWL. These can be used to build a vocabulary for text annotation, including new methods for synonym and label expansion. Annotation is performed using Stanford CoreNLP, and include novel methods for the detection and disambiguation of concept negation and uncertainty. Annotations of text corpora can be used for analysis, within or without Komenti. These components are in development, but currently include summarisation of the co-ocurrence of groups of concepts across text, and use of annotations to suggest description logic axioms for classes. These more complex uses can be described by series of parameters to be passed to the tool in the form of a serialised 'roster,' defining a natural language processing pipeline.
 
 The following software is required: 
 * Groovy
@@ -16,7 +17,7 @@ Commands should be able to run in any command line interface, including on the W
 
 ### Semantic
 
-Get labels for a semantic subclass + equivalent query.
+Get classes and labels satisfying a complex class description using Manchester OWL Syntax.
 
 ```bash
 ./Komenti query -q "'part of' some 'apoptotic process'" -o GO --out labels.txt
@@ -36,7 +37,7 @@ Get labels for a semantic subclass + equivalent query.
 
 ## Get Abstracts
 
-Get abstracts from EBI PMCSearch matching any class label.
+Get abstracts from EBI PMCSearch matching any class label (using, as input, the output of the 'query' sub-command).
 
 ```bash
 ./Komenti get_abstracts -l labels.txt --out abstracts/

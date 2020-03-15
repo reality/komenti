@@ -30,7 +30,7 @@ cliBuilder.with {
   q longOpt: 'query', 'A Manchester OWL Syntax query, the result of which will be the set of NER labels.', args: '+'
   c longOpt: 'class-list', 'A list of classes to query. You can also pass a file, one label per line.', args: 1
   _ longOpt: 'object-properties', 'Query object properties (do not pass --query/-q or -c/--classes)', type: Boolean
-  _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1, defaultValue: 'subeq'
+  _ longOpt: 'query-type', 'Type of query to run. Either equivalent, subeq, superclass, subclass. Default is subeq', args: 1
   _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
   _ longOpt: 'priority', 'RegexNER priority in output. Default is 1.', args: 1
   _ longOpt: 'expand-synonyms', 'Expand synonyms using AberOWL', type: Boolean
@@ -78,7 +78,7 @@ cliBuilder.with {
   _ longOpt: 'out', 'Where to write the annotation results.', args: 1
   _ longOpt: 'append', 'Append output file, instead of replacing it', type: Boolean
   _ longOpt: 'verbose', 'Verbose output, mostly progress', type: Boolean
-  _ longOpt: 'threads', 'Number of cores to use', type: Integer, args: 1, default: 1
+  _ longOpt: 'threads', 'Number of threads to use for query/annotation processes', type: Integer
 }
 
 run(cliBuilder, args)
@@ -188,7 +188,7 @@ def run(cliBuilder, args) {
       ConcurrentHashMap theseLabels = [:]
       def priority = o['priority'] ?: 1
       def i = 0
-      GParsPool.withPool(o['threads']) { p ->
+      GParsPool.withPool(o['threads'] ?: 1) { p ->
       entities.eachParallel{ e ->
         if(o['verbose']) { println "Synonym Expansion: ${++i}/${entities.size()}" }
         theseLabels[e.class] = KomentLib.AOExtractNames(e)
@@ -247,7 +247,7 @@ def run(cliBuilder, args) {
 
     def outDir = getOutDir(o)
     def files = [:]
-    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'])
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'] ?: 1)
 
     def excludeGroups = []
     def entityLabels = []
@@ -309,12 +309,11 @@ def run(cliBuilder, args) {
     }
     files = processFileOrDir([], target)
 
-
     println "Annotating ${files.size()} files ..."
-    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'])
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'] ?: 1)
       
     def i = 0
-    GParsPool.withPool(o['threads']) { p -> 
+    GParsPool.withPool(o['threads'] ?: 1) { p -> 
     files.eachParallel{ f ->
       def (name, text) = [f.getName(), f.text]
       if(name =~ /(?i)pdf/) { text = new PDFReader(f).getText() }
@@ -450,7 +449,7 @@ def run(cliBuilder, args) {
       if(o['id-list-only']) {
         writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
       } else {
-        def komentisto = new Komentisto(o.l, o['disable-modifiers'], threads)
+        def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'] ?: 1)
         def abstracts = []
         aids.each { pmcid ->
           KomentLib.PMCGetAbstracts(pmcid, { a -> 

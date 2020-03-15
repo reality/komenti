@@ -14,7 +14,7 @@ public class Komentisto {
   def uncertainTerms
   def disableModifiers
 
-  def Komentisto(labelFilePath, disableModifiers) {
+  def Komentisto(labelFilePath, disableModifiers, threads) {
     def labelFile = new File(labelFilePath)
 
     entities = [:]
@@ -38,9 +38,9 @@ public class Komentisto {
     props.put("parse.maxtime", "5000")
     addRegexNERProps(props, labelFile)
     props.put("regexner.ignorecase", "true")
-    props.put("depparse.nthreads", 90)
-    props.put("ner.nthreads", 90)
-    props.put("parse.nthreads", 90)
+    props.put("depparse.nthreads", threads)
+    props.put("ner.nthreads", threads)
+    props.put("parse.nthreads", threads)
     advancedCoreNLP = new StanfordCoreNLP(props)
 
     props = new Properties()

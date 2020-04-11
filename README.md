@@ -91,6 +91,18 @@ themselves.
 ./Komenti diagnose_documents -l labels.txt -a annotations.txt --out diagnoses.txt
 ```
 
+The output will be tabular, describing each family and non-family statuses for
+each concept. The data describes triples, but is formatted in this way to be
+easier to read (for example, including both the IRI and first label of the
+concept, and not creating a new predicate to assign family status to an
+assertion).
+
+```
+id	concept iri	concept label	family	status
+0001.txt	I50	hypertension	true	negated
+0001.txt	I50	hypertension	false	affirmed
+```
+
 ## Generating and Running Rosters
 
 Rosters are files that determine the parameters for series of commands in

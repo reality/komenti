@@ -77,6 +77,20 @@ Summarise the co-occurence of two groups of concepts that have been annotated in
 ./Komenti summarise_entity_pairs -l labels.txt -a annotation.txt -c asbestos,toxicity
 ```
 
+## Diagnose Documents
+
+This analysis tool takes an annotation file as input. It assumes that each
+annotation file describes one entity, and then for each distinct concept
+annotated in that file, it decides its overall status with respect to that
+concept. For example, is hypertension, overall, negated in this document? Or
+uncertain? If there are separate family flags, then these will have their own
+separate decision, e.g. a patient may have family history of HCM, but not HCM
+themselves.
+
+```bash
+./Komenti diagnose_documents -l labels.txt -a annotations.txt --out diagnoses.txt
+```
+
 ## Generating and Running Rosters
 
 Rosters are files that determine the parameters for series of commands in

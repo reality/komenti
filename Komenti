@@ -647,7 +647,7 @@ def run(cliBuilder, args) {
       //def bestRelation = relationCounts.inject { s, iri, c -> c.count > s.count ? c : s }
     }
   } else if(command == 'diagnose') {
-    if(!o.l || !o.a) { println 'Must provide a --label file and a --annotations file to diagnose' ; System.exit(1) }
+    if(!o.a) { println 'Must provide a --annotations file to diagnose' ; System.exit(1) }
 
     // so we first want to organise things into sentences per concept and per family_concept
 
@@ -693,35 +693,40 @@ def run(cliBuilder, args) {
       if(s.tags.contains('family')) { target = 'family' }
 
       if(s.tags.contains('negated')) {
-        documents[s.documentid][s.conceptIri][target].negated++
+        documents[s.documentId][s.conceptIri][target].negated++
       }
       if(s.tags.contains('uncertain')) {
-        documents[s.documentid][s.conceptIri][target].uncertain++
+        documents[s.documentId][s.conceptIri][target].uncertain++
       }
       if(!s.tags.contains('negated') && !s.tags.contains('uncertain')) {
-        documents[s.documentid][s.conceptIri][target].affirmed++
+        documents[s.documentId][s.conceptIri][target].affirmed++
       }
-      documents[s.documentid][s.conceptIri][target].total++
+      documents[s.documentId][s.conceptIri][target].total++
     }
 
     def results = []
-    documents.each { docId, concepts ->
-      concepts.each { cIri, targets ->
+    documents.each { docId, eConcepts ->
+      eConcepts.each { cIri, targets ->
         targets.each { target, counts ->
-          def value = 'affirmed'
+          def value = 'unmentioned'
+          if(counts.total > 0) { value = 'affirmed' }
           if(counts.uncertain > 0) {
             if(counts.uncertain + counts.negated >= counts.total) {
               value = 'uncertain'
             }
-          } else {
+          } else if(counts.negated > 0) {
             if(counts.uncertain + counts.negated >= counts.total) {
               value = 'negated' 
             }
           }
-          results << [docId, cIri, concepts[cIri], target, value]
+          if(value != 'unmentioned') {
+            results << [docId, cIri, concepts[cIri], target, value].join('\t')
+          }
         }
       }
     }
+
+    writeOutput(results.join('\n'), o, "Wrote diagnoses to ${o.out}!")
   }
 }
 

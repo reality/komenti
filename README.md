@@ -92,7 +92,7 @@ separate decision, e.g. a patient may have family history of HCM, but not HCM
 themselves.
 
 ```bash
-./Komenti diagnose_documents -l labels.txt -a annotations.txt --out diagnoses.txt
+./Komenti diagnose_documents -a annotations.txt --out diagnoses.txt
 ```
 
 The output will be tabular, describing the status for each 'target.' The only
@@ -100,7 +100,7 @@ targets currently implemented are 'self' and 'family'. The data describes
 triples, but is formatted in this way to be
 easier to read (for example, including both the IRI and first label of the
 concept, and not creating a new predicate to assign the target to an
-assertion).
+assertion). If the concept is not mentioned, it will not be included.
 
 ```
 id	concept iri	concept label	target	status

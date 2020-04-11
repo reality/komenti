@@ -41,6 +41,7 @@ cliBuilder.with {
   _ longOpt: 'file-list', 'A file containing a list of strings file names in the directory given by -t/--text must contain to be annotated (e.g. pmcids)', args: 1
   _ longOpt: 'per-line', 'Process each line of each file seperately (useful for field-based data e.g. downloaded with get_metadata)', type: Boolean
   _ longOpt: 'disable-modifiers', 'Don\'t evaluate negation and uncertainty. The reason for this is: it takes a lot of time!', type: Boolean
+  _ longOpt: 'family-modifier', 'Evaluate sentences for whether or not they mention a family member.', type: Boolean
 
   // summary options
   a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1
@@ -247,7 +248,7 @@ def run(cliBuilder, args) {
 
     def outDir = getOutDir(o)
     def files = [:]
-    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'] ?: 1)
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
 
     def excludeGroups = []
     def entityLabels = []
@@ -310,7 +311,7 @@ def run(cliBuilder, args) {
     files = processFileOrDir([], target)
 
     println "Annotating ${files.size()} files ..."
-    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'] ?: 1)
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
       
     def i = 0
     GParsPool.withPool(o['threads'] ?: 1) { p -> 
@@ -449,7 +450,7 @@ def run(cliBuilder, args) {
       if(o['id-list-only']) {
         writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
       } else {
-        def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['threads'] ?: 1)
+        def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
         def abstracts = []
         aids.each { pmcid ->
           KomentLib.PMCGetAbstracts(pmcid, { a -> 

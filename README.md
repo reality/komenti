@@ -68,6 +68,10 @@ Annotate text using labels using Stanford CoreNLP.
 ### Parameters
 
 * -t/--text can be a file or a directory. The files can be text files, or PDF files (whose text will automatically be extracted)
+* --family-modifier will add an additional modifier tag for each sentence, indicating whether the sentence mentions a family member (that is, it includes one of the words in the family word list).
+* --per-line Annotate each line of each file seperately. This is useful for field-based data, which doesn't have clear line boundaries.
+* --disable-modifiers Don't evaluate the annotations for modifiers. These can be added to an annotation file later, using the add_modifiers command.
+* --file-list Instead of using --text, you can pass a text file that contains a list of files and directories to annotate, one on each line.
 
 ## Summarise Entity Pairs
 

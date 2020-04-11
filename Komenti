@@ -726,18 +726,24 @@ def run(cliBuilder, args) {
       }
     }
 
-    writeOutput(results.join('\n'), o, "Wrote diagnoses to ${o.out}!")
+    writeOutput(results.join('\n'), o, "Diagnosis calculation complete!")
   }
 }
 
 def writeOutput(text, o, success) {
-  def oFile = new File(o.out)
-  if(o.append) { text = oFile.text + '\n' + text }
+  def printErr = System.err.&println
+  if(o.out) {
+    def oFile = new File(o.out)
+    if(o.append) { text = oFile.text + '\n' + text }
 
-  try {
-    oFile.text = text
-    println success
-  } catch(e) { println 'Error: ' + e.getMessage() }
+    try {
+      oFile.text = text
+      println success
+    } catch(e) { println 'Error: ' + e.getMessage() }
+  } else {
+    println text
+    printErr success
+  }
 }
 
 def loadClassLabels(o) {

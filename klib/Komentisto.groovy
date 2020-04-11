@@ -7,14 +7,17 @@ import edu.stanford.nlp.semgraph.*
 public class Komentisto {
   def REP_TOKEN = 'biscuit'
   def UNC_WORDS_FILE = './words/uncertain.txt'
+  def FAM_WORDS_FILE = './words/family.txt'
 
   def advancedCoreNLP
   def basicPipeline
   def entities
   def uncertainTerms
+  def familyTerms
   def disableModifiers
+  def familyModifier
 
-  def Komentisto(labelFilePath, disableModifiers, threads) {
+  def Komentisto(labelFilePath, disableModifiers, familyModifier, threads) {
     def labelFile = new File(labelFilePath)
 
     entities = [:]
@@ -25,9 +28,9 @@ public class Komentisto {
     }
 
     uncertainTerms = new File(UNC_WORDS_FILE).text.split('\n')
+    familyTerms = new File(FAM_WORDS_FILE).text.split('\n')
     
     def props = new Properties()
-
 
     if(!disableModifiers) {
       props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions, depparse")
@@ -52,6 +55,7 @@ public class Komentisto {
     basicPipeline.addAnnotator(basicCoreNLP)
 
     this.disableModifiers = disableModifiers
+    this.familyModifier = familyModifier
   }
 
   def addRegexNERProps(props, labelFile) { // i feel like it should be easier than this to make custom rows. some kind of 'ignore, or N/A' header, perhaps
@@ -81,9 +85,8 @@ public class Komentisto {
           def a = [ f: id, c: ner, tags: [], text: sentence.toString(), sid: sentenceCount ]
 
           if(!disableModifiers) {
-            def tags = evaluateSentenceConcept(sentence.toString(), ner)
-            if(tags.negated) { a.tags << 'negated' }
-            if(tags.uncertain) { a.tags << 'uncertain' }
+            def tags = evaluateSentenceConcept(sentence, ner) // add all tags that returned true
+            a.tags = tags.findAll { it.getValue() }.collect { it.getKey() }
           }
 
           results << a
@@ -95,14 +98,25 @@ public class Komentisto {
   }
 
   // Evaluate for negation and uncertainty
-  def evaluateSentenceConcept(text, concept) {
+  def evaluateSentenceConcept(sentence, concept) {
+    def text = sentence.toString()
     def klSentence = new Sentence(text, 0) // placeholder zero, no purpose
     klSentence.genTypeDeps(advancedCoreNLP, entities[concept], REP_TOKEN) 
 
-    [
+    def out = [
       negated: klSentence.isNegated([REP_TOKEN]),
       uncertain: klSentence.isUncertain([REP_TOKEN], uncertainTerms)
     ]
+
+    if(familyModifier) {
+      out.family = sentence.get(CoreAnnotations.TokensAnnotation.class).collect {
+        [it.toString(), it.lemma()]
+      }.flatten().any {
+        familyTerms.contains(it) 
+      }
+    }
+
+    out
   }
 
   def lemmatise(text) {

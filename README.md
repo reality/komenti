@@ -95,16 +95,17 @@ themselves.
 ./Komenti diagnose_documents -l labels.txt -a annotations.txt --out diagnoses.txt
 ```
 
-The output will be tabular, describing each family and non-family statuses for
-each concept. The data describes triples, but is formatted in this way to be
+The output will be tabular, describing the status for each 'target.' The only
+targets currently implemented are 'self' and 'family'. The data describes 
+triples, but is formatted in this way to be
 easier to read (for example, including both the IRI and first label of the
-concept, and not creating a new predicate to assign family status to an
+concept, and not creating a new predicate to assign the target to an
 assertion).
 
 ```
-id	concept iri	concept label	family	status
-0001.txt	I50	hypertension	true	negated
-0001.txt	I50	hypertension	false	affirmed
+id	concept iri	concept label	target	status
+0001.txt	I50	hypertension	self	negated
+0001.txt	I50	hypertension	family	affirmed
 ```
 
 ## Generating and Running Rosters

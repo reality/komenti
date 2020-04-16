@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 @Grab(group='commons-cli', module='commons-cli', version='1.4')
 @Grab(group='org.apache.commons', module='commons-lang3', version='3.4')
-@Grab(group='edu.stanford.nlp', module='stanford-corenlp', version='3.7.0')
-@Grab(group='edu.stanford.nlp', module='stanford-corenlp', version='3.7.0', classifier='models')
-@Grab(group='edu.stanford.nlp', module='stanford-parser', version='3.7.0')
+@Grab(group='edu.stanford.nlp', module='stanford-corenlp', version='3.9.2')
+@Grab(group='edu.stanford.nlp', module='stanford-corenlp', version='3.9.2', classifier='models')
+@Grab(group='edu.stanford.nlp', module='stanford-parser', version='3.9.2')
 @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
 @Grab(group='org.apache.pdfbox', module='pdfbox', version='2.0.15')
 
@@ -79,7 +79,7 @@ cliBuilder.with {
   _ longOpt: 'out', 'Where to write the annotation results.', args: 1
   _ longOpt: 'append', 'Append output file, instead of replacing it', type: Boolean
   _ longOpt: 'verbose', 'Verbose output, mostly progress', type: Boolean
-  _ longOpt: 'threads', 'Number of threads to use for query/annotation processes', type: Integer
+  _ longOpt: 'threads', 'Number of threads to use for query/annotation processes', type: Integer, args: 1
 }
 
 run(cliBuilder, args)
@@ -189,7 +189,7 @@ def run(cliBuilder, args) {
       ConcurrentHashMap theseLabels = [:]
       def priority = o['priority'] ?: 1
       def i = 0
-      GParsPool.withPool(o['threads'] ?: 1) { p ->
+      GParsPool.withPool(Integer.parseInt(o['threads'] ?: 1)) { p ->
       entities.eachParallel{ e ->
         if(o['verbose']) { println "Synonym Expansion: ${++i}/${entities.size()}" }
         theseLabels[e.class] = KomentLib.AOExtractNames(e)
@@ -248,7 +248,7 @@ def run(cliBuilder, args) {
 
     def outDir = getOutDir(o)
     def files = [:]
-    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], Integer.parseInt(o['threads'] ?: 1))
 
     def excludeGroups = []
     def entityLabels = []
@@ -311,10 +311,10 @@ def run(cliBuilder, args) {
     files = processFileOrDir([], target)
 
     println "Annotating ${files.size()} files ..."
-    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], Integer.parseInt(o['threads'] ?: 1))
       
     def i = 0
-    GParsPool.withPool(o['threads'] ?: 1) { p -> 
+    GParsPool.withPool(Integer.parseInt(o['threads'] ?: 1)) { p -> 
     files.eachParallel{ f ->
       def (name, text) = [f.getName(), f.text]
       if(name =~ /(?i)pdf/) { text = new PDFReader(f).getText() }
@@ -450,7 +450,7 @@ def run(cliBuilder, args) {
       if(o['id-list-only']) {
         writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
       } else {
-        def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
+        def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], Integer.parseInt(o['threads'] ?: 1))
         def abstracts = []
         aids.each { pmcid ->
           KomentLib.PMCGetAbstracts(pmcid, { a -> 

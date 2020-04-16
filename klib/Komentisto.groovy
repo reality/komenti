@@ -38,6 +38,8 @@ public class Komentisto {
       props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
     }
 
+    props.put("ner.useSUTime", "false")
+
     props.put("parse.maxtime", "5000")
     addRegexNERProps(props, labelFile)
     props.put("regexner.ignorecase", "true")

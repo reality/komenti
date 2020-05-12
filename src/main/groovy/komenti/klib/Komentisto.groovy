@@ -6,8 +6,8 @@ import edu.stanford.nlp.semgraph.*
 
 public class Komentisto {
   def REP_TOKEN = 'biscuit'
-  def UNC_WORDS_FILE = './words/uncertain.txt'
-  def FAM_WORDS_FILE = './words/family.txt'
+  def UNC_WORDS_FILE = ClassLoader.getSystemClassLoader().getResource('./words/uncertain.txt')
+  def FAM_WORDS_FILE = ClassLoader.getSystemClassLoader().getResource('./words/family.txt')
 
   def advancedCoreNLP
   def basicPipeline

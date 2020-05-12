@@ -24,22 +24,22 @@ public class Komenti {
       if(!o['with-abstracts-download'] && !o['with-metadata-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts, metadata, or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
       if(o['mine-relationship'] && (!o.c || (o.c && o.c.split(',').size() != 2))) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
       if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
-      if(o['suggest-axiom'] && (!o.c || (o.c && o.c.split(',').size() != 1) || !o.entity || !o.quality) || !o['default-entity'] || !o['default-relation'])  { println "to --suggest-axiom you must pass class lists for each -c, --entity, --quality. You must also pass --default-relation and --default-entity." ; System.exit(1) }
+      if(o['suggest-axiom'] && (!o.c || (o.c && o.c.split(',').size() != 1) || (!o.entity || !o.quality) || !o['default-entity'] || !o['default-relation']))  { println "to --suggest-axiom you must pass class lists for each -c, --entity, --quality. You must also pass --default-relation and --default-entity." ; System.exit(1) }
 
-      def cLoader = ClassLoader.getSystemClassLoader()
+      def cLoader = getClass()
 
-      def templateFile = new File(cLoader.getResource('templates/roster.json'))
+      def templateFile = cLoader.getResourceAsStream('/templates/roster.json')
       if(o['with-abstracts-download']) {
-        templateFile = new File(cLoader.getResource('templates/roster_with_abstract_download.json'))
+        templateFile = cLoader.getResourceAsStream('/templates/roster_with_abstract_download.json')
       }
       if(o['mine-relationship']) {
-        templateFile = new File(cLoader.getResource('templates/roster_mine_relationship.json'))
+        templateFile = cLoader.getResourceAsStream('/templates/roster_mine_relationship.json')
       }
       if(o['suggest-axiom']) {
-        templateFile = new File(cLoader.getResource('templates/roster_suggest_axiom.json'))
+        templateFile = cLoader.getResourceAsStream('/templates/roster_suggest_axiom.json')
       }
 
-      def roster = new JsonSlurper().parse(templateFile)
+      def roster = new JsonSlurper().parseText(templateFile.getText())
       
       // TODO this can probably mostly be automated
       if(o.q) {

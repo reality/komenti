@@ -1,17 +1,8 @@
-#!/usr/bin/env groovy
-@Grab(group='commons-cli', module='commons-cli', version='1.4')
-@Grab(group='org.apache.commons', module='commons-lang3', version='3.4')
-@Grab(group='edu.stanford.nlp', module='stanford-corenlp', version='3.9.2')
-@Grab(group='edu.stanford.nlp', module='stanford-corenlp', version='3.9.2', classifier='models')
-@Grab(group='edu.stanford.nlp', module='stanford-parser', version='3.9.2')
-@Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.7.1')
-@Grab(group='org.apache.pdfbox', module='pdfbox', version='2.0.15')
-
-import groovy.json.*
 import klib.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*
 import groovyx.gpars.*
+import groovy.json.*
 import org.codehaus.gpars.*
 
 /**

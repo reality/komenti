@@ -41,3 +41,24 @@ application {
     // Define the main class for the application.
     mainClassName = 'komenti.App'
 }
+
+task distribution {
+    doLast {
+        println "We build the zip with version=$version"
+    }
+}
+
+task release {
+    dependsOn 'distribution'
+    doLast {
+        println 'We release now'
+    }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.hasTask(":release")) {
+        version = '0.0.1'
+    } else {
+        version = '0.0.1-SNAPSHOT'
+    }
+}

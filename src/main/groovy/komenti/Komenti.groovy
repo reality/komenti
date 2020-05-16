@@ -162,7 +162,7 @@ public class Komenti {
         queries.each { q ->
           def ont = o.o
           if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') }
-          if(q.indexOf(' ') != -1) { q = "'" + q + "'" }
+          //if(q.indexOf(' ') != -1) { q = "'" + q + "'" }
           KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
             labelOut += processEntities(q, classes)
           })

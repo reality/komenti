@@ -413,26 +413,11 @@ public class Komenti {
         } 
       }
 
-      def fids = []
-      def annotations = []
-      new File(o.a).splitEachLine('\t') {  // TODO just use file headers for this
-        annotations << [
-          f: it[0],
-          iri: it[1],
-          label: it[2],
-          match: it[3],
-          tags: it[4],
-          sid: it[5],
-          text: it[6],
-          group: classGroups[it[1]]
-        ]
-        fids << it[0]
-      }
+      def annotations = AnnotationLoader.loadFile(o.a)
+      def fids = annotations.collect { it.f }.unique(false)
 
-      fids.unique(true)
-
-      def g1A = annotations.findAll { it.group == g1 }
-      def g2A = annotations.findAll { it.group == g2 }
+      def g1A = annotations.findAll { classGroup[it.termIri] == g1 }
+      def g2A = annotations.findAll { classGroup[it.termIri] == g2 }
 
       println "$g1 is mentioned ${g1A.size()} times"
       println "$g2 is mentioned ${g2A.size()} times"
@@ -503,25 +488,13 @@ public class Komenti {
       if(!relation) { println "Could not find default relation in label file." ; System.exit(1) }
       if(!entity) { println "Could not find default entity in label file." ; System.exit(1) }
 
-      // TODO put this into a load annotations
-      // by files, sentences, annotation 
-  //    def annotations = [:]
       def sentences = [:]
-      new File(o.a).splitEachLine('\t') {
-        def sid = it[0] + ':' + it[4]
+      AnnotationLoader.loadFile(o.a).each {
+        def sid = it.f ':' + it.sid
         if(!sentences.containsKey(sid)) { sentences[sid] = [] }
-        sentences[sid] << [
-          f: it[0],
-          iri: it[1],
-          label: it[2].replaceAll('\\\\',''),
-          match: it[3],
-          tags: it[4],
-          sid: it[5],
-          text: it[6],
-          group: groupClasses[it[1]],
-        ]
+        sentences[sid] << ann
       }
-
+      
       if(o['class-list']) { def cl = o['class-list'].split(',') ; classes = classes.findAll { cIRI, cLabel -> cl.contains(cLabel) } }
 
       classes.each { cIRI, cLabel ->
@@ -533,19 +506,19 @@ public class Komenti {
         // files that mention our class ...
         def classFiles = sentences.findAll { i, s -> s.any { it.f.indexOf(cLabel) != -1 } }.collect { i, s -> s.f }
         sentences.findAll { i, s -> classFiles.contains(s.f) }.each { id, annotations ->
-          annotations.findAll { it.group == 'entity' }.each { tentity ->
+          annotations.findAll { groupClasses[it.termIri] == 'entity' }.each { tentity ->
             if(!entityCounts.containsKey(tentity.iri)) { entityCounts[tentity.iri] = [ iri: tentity.iri, label: tentity.label, sids: [], count: 0] }
             entityCounts[tentity.iri].count++
             entityCounts[tentity.iri].sids << id
           }
-          annotations.findAll { it.group == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }.each { quality ->
+          annotations.findAll { groupClasses[it.termIri] == 'quality' && it.iri != cIRI && it.label.indexOf(entity.label) == -1 }.each { quality ->
             if(quality) {
               if(!qualityCounts.containsKey(quality.iri)) { qualityCounts[quality.iri] = [ iri: quality.iri, label: quality.label, sids: [], count: 0] }
               qualityCounts[quality.iri].count++
               qualityCounts[quality.iri].sids << id
             }
           }
-          annotations.findAll { it.group == 'relation' }.each { trelation ->
+          annotations.findAll { groupClasses[it.termIri] == 'relation' }.each { trelation ->
             if(trelation) {
               if(!relationCounts.containsKey(relation.iri)) { relationCounts[relation.iri] = [ iri: relation.iri, label: relation.label, sids: [], count: 0] }
               relationCounts[relation.iri].count++
@@ -575,30 +548,21 @@ public class Komenti {
 
       // so we first want to organise things into sentences per concept and per family_concept
 
+      def annotations = AnnotationLoader.loadFile(o.a)
       def documents = [:]
       def concepts = [:]
 
-      new File(o.a).splitEachLine('\t') {
-        def s = [
-          documentId: it[0],
-          conceptIri: it[1],
-          conceptLabel: it[2].replaceAll('\\\\',''),
-          matchedText: it[3],
-          tags: it[4],
-          sentenceId: it[5],
-          text: it[6]
-        ]
-
-        if(!concepts.containsKey(s.conceptIri)) {
-          concepts[s.conceptIri] = s.conceptLabel
+      annotations.each { s ->
+        if(!concepts.containsKey(s.termIri)) {
+          concepts[s.termIri] = s.conceptLabel
         }
 
         if(!documents.containsKey(s.documentId)) {
           documents[s.documentId] = [:]
         }
 
-        if(!documents[s.documentId].containsKey(s.conceptIri)) {
-          documents[s.documentId][s.conceptIri] = [
+        if(!documents[s.documentId].containsKey(s.termIri)) {
+          documents[s.documentId][s.termIri] = [
             self: [
               affirmed: 0,
               negated: 0,
@@ -618,15 +582,15 @@ public class Komenti {
         if(s.tags.contains('family')) { target = 'family' }
 
         if(s.tags.contains('negated')) {
-          documents[s.documentId][s.conceptIri][target].negated++
+          documents[s.documentId][s.termIri][target].negated++
         }
         if(s.tags.contains('uncertain')) {
-          documents[s.documentId][s.conceptIri][target].uncertain++
+          documents[s.documentId][s.termIri][target].uncertain++
         }
         if(!s.tags.contains('negated') && !s.tags.contains('uncertain')) {
-          documents[s.documentId][s.conceptIri][target].affirmed++
+          documents[s.documentId][s.termIri][target].affirmed++
         }
-        documents[s.documentId][s.conceptIri][target].total++
+        documents[s.documentId][s.termIri][target].total++
       }
 
       def results = []

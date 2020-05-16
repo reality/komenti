@@ -30,6 +30,7 @@ class App {
       _ longOpt: 'per-line', 'Process each line of each file seperately (useful for field-based data e.g. downloaded with get_metadata)', type: Boolean
       _ longOpt: 'disable-modifiers', 'Don\'t evaluate negation and uncertainty. The reason for this is: it takes a lot of time!', type: Boolean
       _ longOpt: 'family-modifier', 'Evaluate sentences for whether or not they mention a family member.', type: Boolean
+      _ longOpt: 'exclude', 'A list of phrases, which when matched in a sentence, will cause that sentence not to be annotated. One phrase per line.', args: 1
 
       // summary options
       a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1

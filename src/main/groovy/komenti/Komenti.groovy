@@ -174,7 +174,7 @@ public class Komenti {
 
       def outDir = getOutDir(o)
       def files = [:]
-      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
+      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['exclude']. o['threads'] ?: 1)
 
       def excludeGroups = []
       def entityLabels = []
@@ -237,7 +237,7 @@ public class Komenti {
       def files = processFileOrDir([], target)
 
       println "Annotating ${files.size()} files ..."
-      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
+      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['exclude'], o['threads'] ?: 1)
         
       def i = 0
       GParsPool.withPool(o['threads'] ?: 1) { p -> 
@@ -376,7 +376,7 @@ public class Komenti {
         if(o['id-list-only']) {
           writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
         } else {
-          def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['threads'] ?: 1)
+          def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['exclude'], o['threads'] ?: 1)
           def abstracts = []
           aids.each { pmcid ->
             KomentLib.PMCGetAbstracts(pmcid, { a -> 

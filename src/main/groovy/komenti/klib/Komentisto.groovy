@@ -14,10 +14,11 @@ public class Komentisto {
   def entities
   def uncertainTerms
   def familyTerms
+  def excludeTerms = []
   def disableModifiers
   def familyModifier
 
-  def Komentisto(labelFilePath, disableModifiers, familyModifier, threads) {
+  def Komentisto(labelFilePath, disableModifiers, familyModifier, excludeFile, threads) {
     def labelFile = new File(labelFilePath)
 
     entities = [:]
@@ -29,6 +30,9 @@ public class Komentisto {
 
     uncertainTerms = UNC_WORDS_FILE.getText().split('\n')
     familyTerms = FAM_WORDS_FILE.getText().split('\n')
+    if(excludeFile) {
+      excludeTerms = new File(excludeFile).text.split('\n').collect { it.toLowerCase() }  
+    }
     
     def props = new Properties()
 
@@ -39,9 +43,9 @@ public class Komentisto {
     }
 
     props.put("ner.useSUTime", "false")
-
     props.put("parse.maxtime", "5000")
     addRegexNERProps(props, labelFile)
+
     props.put("regexner.ignorecase", "true")
     props.put("depparse.nthreads", threads)
     props.put("ner.nthreads", threads)
@@ -84,7 +88,8 @@ public class Komentisto {
       for(entityMention in sentence.get(CoreAnnotations.MentionsAnnotation.class)) {
         def ner = entityMention.get(CoreAnnotations.NamedEntityTagAnnotation.class)
         if(entities.containsKey(ner)) {
-          def a = [ f: id, c: ner, tags: [], text: sentence.toString(), sid: sentenceCount ]
+          def a = [ f: id, c: ner, m: entityMention, tags: [], text: sentence.toString(), sid: sentenceCount ]
+          if(excludeTerms.any { a.text =~ it }) { continue; }
 
           if(!disableModifiers) {
             def tags = evaluateSentenceConcept(sentence, ner) // add all tags that returned true

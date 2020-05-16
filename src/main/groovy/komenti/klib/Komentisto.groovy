@@ -88,7 +88,7 @@ public class Komentisto {
       for(entityMention in sentence.get(CoreAnnotations.MentionsAnnotation.class)) {
         def ner = entityMention.get(CoreAnnotations.NamedEntityTagAnnotation.class)
         if(entities.containsKey(ner)) {
-          def a = [ f: id, c: ner, tags: [], text: sentence.toString(), sid: sentenceCount ]
+          def a = [ f: id, c: ner, m: entityMention, tags: [], text: sentence.toString(), sid: sentenceCount ]
           if(excludeTerms.any { a.text =~ it }) { continue; }
 
           if(!disableModifiers) {

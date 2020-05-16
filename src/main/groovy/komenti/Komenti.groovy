@@ -11,7 +11,9 @@ public class Komenti {
   static def run(cliBuilder, args) {
     if(!args) { println "Must provide command." ; cliBuilder.usage() ; System.exit(1) }
 
-    println args
+    if(args.contains('--verbose')) {
+      println args
+    }
 
     def command = args[0]
     def o = cliBuilder.parse(args.drop(1))
@@ -245,31 +247,25 @@ public class Komenti {
         def (name, text) = [f.getName(), f.text]
         if(name =~ /(?i)pdf/) { text = new PDFReader(f).getText() }
 
+        def annotations
         if(o['per-line']) {
           text.tokenize('\n').eachWithIndex { lineText, z ->
-            def annotations = komentisto.annotate(name, lineText, z+i)
-            annotations.each { a ->
-             outWriter.write([ a.f, 
-                a.c,
-                classLabels[a.c].l[0],
-                a.tags.join(','),
-                a.sid,
-                a.text.replaceAll('\n', '')
-              ].join('\t') + '\n')
-            }
+            annotations = komentisto.annotate(name, lineText, z+i)
           }
-        } else { 
-          def annotations = komentisto.annotate(name, text)
-          annotations.each { a ->
-           outWriter.write([ a.f, 
-              a.c,
-              classLabels[a.c].l[0],
-              a.tags.join(','),
-              a.sid,
-              a.text.replaceAll('\n', '')
-            ].join('\t') + '\n')
-          }
+        } else {
+          annotations = komentisto.annotate(name, text)
         }
+        annotations.each { a ->
+          outWriter.write([ a.f, 
+            a.c,
+            classLabels[a.c].l[0],
+            a.m,
+            a.tags.join(','),
+            a.sid,
+            a.text.replaceAll('\n', '')
+          ].join('\t') + '\n')
+        }
+        
         i++
         if((i % 500) == 0) { outWriter.flush() }
         if(o.verbose) {
@@ -424,9 +420,10 @@ public class Komenti {
           f: it[0],
           iri: it[1],
           label: it[2],
-          tags: it[3],
-          sid: it[4],
-          text: it[5],
+          match: it[3],
+          tags: it[4],
+          sid: it[5],
+          text: it[6],
           group: classGroups[it[1]]
         ]
         fids << it[0]
@@ -517,9 +514,10 @@ public class Komenti {
           f: it[0],
           iri: it[1],
           label: it[2].replaceAll('\\\\',''),
-          tags: it[3],
-          sid: it[4],
-          text: it[5],
+          match: it[3],
+          tags: it[4],
+          sid: it[5],
+          text: it[6],
           group: groupClasses[it[1]],
         ]
       }
@@ -585,9 +583,10 @@ public class Komenti {
           documentId: it[0],
           conceptIri: it[1],
           conceptLabel: it[2].replaceAll('\\\\',''),
-          tags: it[3],
-          sentenceId: it[4],
-          text: it[5]
+          matchedText: it[3],
+          tags: it[4],
+          sentenceId: it[5],
+          text: it[6]
         ]
 
         if(!concepts.containsKey(s.conceptIri)) {

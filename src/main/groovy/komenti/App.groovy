@@ -64,6 +64,9 @@ class App {
       _ longOpt: 'decompose-entities', 'If the label of an entity (group class in the label file) appears in a string, decompose it in a new label', type: Boolean
       _ longOpt: 'count-only', 'Only provide the hit counts for the articles. This does not suffer from the article limit that downloads do!', type: Boolean
 
+      // diagnose options
+      _ longOpt: 'by-group', 'Group items for diagnosis by the query group, rather than by term IRI', type: Boolean
+
       // all options
       _ longOpt: 'out', 'Where to write the annotation results.', args: 1
       _ longOpt: 'append', 'Append output file, instead of replacing it', type: Boolean

@@ -547,11 +547,14 @@ public class Komenti {
     } else if(command == 'diagnose') {
       if(!o.a) { println 'Must provide a --annotations file to diagnose' ; System.exit(1) }
 
-      // so we first want to organise things into sentences per concept and per family_concept
-
       def annotations = AnnotationLoader.loadFile(o.a)
       def documents = [:]
       def concepts = [:]
+
+      def conceptFactor = 'termIri'
+      if(o['by-group']) {
+        conceptFactor = 'group'
+      }
 
       annotations.each { s ->
         if(!concepts.containsKey(s.termIri)) {
@@ -562,8 +565,8 @@ public class Komenti {
           documents[s.documentId] = [:]
         }
 
-        if(!documents[s.documentId].containsKey(s.termIri)) {
-          documents[s.documentId][s.termIri] = [
+        if(!documents[s.documentId].containsKey(s[conceptFactor])) {
+          documents[s.documentId][s[conceptFactor]] = [
             self: [
               affirmed: 0,
               negated: 0,
@@ -583,20 +586,20 @@ public class Komenti {
         if(s.tags.contains('family')) { target = 'family' }
 
         if(s.tags.contains('negated')) {
-          documents[s.documentId][s.termIri][target].negated++
+          documents[s.documentId][s[conceptFactor]][target].negated++
         }
         if(s.tags.contains('uncertain')) {
-          documents[s.documentId][s.termIri][target].uncertain++
+          documents[s.documentId][s[conceptFactor]][target].uncertain++
         }
         if(!s.tags.contains('negated') && !s.tags.contains('uncertain')) {
-          documents[s.documentId][s.termIri][target].affirmed++
+          documents[s.documentId][s[conceptFactor]][target].affirmed++
         }
-        documents[s.documentId][s.termIri][target].total++
+        documents[s.documentId][s[conceptFactor]][target].total++
       }
 
       def results = []
       documents.each { docId, eConcepts ->
-        eConcepts.each { cIri, targets ->
+        eConcepts.each { cIri, targets -> // cIri in this case may also be the group name
           targets.each { target, counts ->
             def value = 'unmentioned'
             if(counts.total > 0) { value = 'affirmed' }

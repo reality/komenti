@@ -57,8 +57,8 @@ task release {
 
 gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.hasTask(":release")) {
-        version = '0.0.3'
+        version = '0.0.4'
     } else {
-        version = '0.0.3-SNAPSHOT'
+        version = '0.0.4-SNAPSHOT'
     }
 }

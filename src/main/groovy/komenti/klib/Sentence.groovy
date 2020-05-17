@@ -60,7 +60,7 @@ class Sentence {
       }
     } 
 
-    def aDocument = new Annotation(tText)
+    def aDocument = new edu.stanford.nlp.pipeline.Annotation(tText)
     tParser.annotate(aDocument)
 
     def sentences = aDocument.get(CoreAnnotations.SentencesAnnotation.class)

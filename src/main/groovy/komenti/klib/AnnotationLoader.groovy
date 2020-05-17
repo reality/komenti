@@ -6,7 +6,7 @@ class AnnotationLoader {
       it = it.split('\t')
       new Annotation(
         documentId: it[0],
-        conceptIri: it[1],
+        termIri: it[1],
         conceptLabel: it[2].replaceAll('\\\\',''),
         matchedText: it[3],
         group: it[4],

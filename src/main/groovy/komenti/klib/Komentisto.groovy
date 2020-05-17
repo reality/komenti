@@ -78,7 +78,10 @@ public class Komentisto {
   }
 
   def annotate(id, text, sentenceCount) {
-    def aDocument = new Annotation(text.toLowerCase())
+    // Due to clash with klib.Annotation. Not sure what the best way to solve it is
+    //  (although realistically I suppose the Stanford folk probably have a bit more
+    //  of a claim to the Annotation name than I)
+    def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
     basicPipeline.annotate(aDocument)
 
     def results = []

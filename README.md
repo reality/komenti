@@ -6,7 +6,7 @@ It enables querying multiple ontologies with complex class descriptions using Ab
 
 ## Installation
 
-You can find the latest release here: https://github.com/reality/komenti/releases/tag/0.0.3-SNAPSHOT-1
+You can find the latest release here: https://github.com/reality/komenti/releases/tag/0.0.4-SNAPSHOT-1
 
 You can add the bin/ directory to your PATH, to be able to use it easily from anywhere. It should also work on Windows, but I haven't tested that.
 
@@ -89,7 +89,7 @@ separate decision, e.g. a patient may have family history of HCM, but not HCM
 themselves.
 
 ```bash
-komenti diagnose_documents -a annotations.txt --out diagnoses.txt
+komenti diagnose -a annotations.txt --out diagnoses.txt
 ```
 
 The output will be tabular, describing the status for each 'target.' The only
@@ -104,6 +104,10 @@ id	concept iri	concept label	target	status
 0001.txt	I50	hypertension	self	negated
 0001.txt	I50	hypertension	family	affirmed
 ```
+
+### Parameters
+
+* --by-group Instead of doing a diagnosis per IRI, a diagnosis per-group will be done. The 'label' column of the output, in this case, will be null.
 
 ## Generating and Running Rosters
 

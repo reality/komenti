@@ -6,7 +6,7 @@ It enables querying multiple ontologies with complex class descriptions using Ab
 
 ## Installation
 
-You can find the latest release here: https://github.com/reality/komenti/releases/tag/0.0.2-SNAPSHOT
+You can find the latest release here: https://github.com/reality/komenti/releases/tag/0.0.3-SNAPSHOT-1
 
 You can add the bin/ directory to your PATH, to be able to use it easily from anywhere. It should also work on Windows, but I haven't tested that.
 

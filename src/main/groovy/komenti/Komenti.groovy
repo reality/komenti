@@ -260,6 +260,7 @@ public class Komenti {
             a.c,
             classLabels[a.c].l[0],
             a.m,
+            classLabels[a.c].g,
             a.tags.join(','),
             a.sid,
             a.text.replaceAll('\n', '')
@@ -674,7 +675,7 @@ public class Komenti {
   static def loadClassLabels(o) {
     def classLabels = [:]
     new File(o.l).splitEachLine('\t') {
-      if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [ l: [], o: it[3] ] }
+      if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [ l: [], o: it[3], g: it[2] ] }
       classLabels[it[1]].l << it[0]
     }
     classLabels

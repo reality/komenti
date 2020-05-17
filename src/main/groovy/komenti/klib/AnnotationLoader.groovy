@@ -9,9 +9,10 @@ class AnnotationLoader {
         conceptIri: it[1],
         conceptLabel: it[2].replaceAll('\\\\',''),
         matchedText: it[3],
-        tags: it[4].split(','),
-        sentenceId: it[5],
-        text: it[6]
+        group: it[4],
+        tags: it[5].split(','),
+        sentenceId: it[6],
+        text: it[7]
       )
     }
   }

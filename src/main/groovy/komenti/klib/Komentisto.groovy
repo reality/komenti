@@ -87,6 +87,7 @@ public class Komentisto {
           def a = new Annotation(
             documentId: id,
             termIri: ner,
+            conceptLabel: vocabulary.termLabel(ner),
             matchedText: entityMention,
             group: vocabulary.termGroup(ner),
             tags: [],

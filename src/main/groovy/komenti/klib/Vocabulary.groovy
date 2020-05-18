@@ -14,6 +14,10 @@ class Vocabulary implements Iterable<Label> {
     entities[iri][0].group
   }
 
+  def termLabel(iri) {
+    entities[iri][0].label
+  }
+
   def entityLabels(iri) {
     entities[iri].collect { it.label }
   }

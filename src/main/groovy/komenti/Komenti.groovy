@@ -112,41 +112,11 @@ public class Komenti {
       if((!o['object-properties'] && (!o.q && !o.c))) { cliBuilder.usage() ; System.exit(1) }
       if(o['object-properties'] && (o.q || o.c)) { println "Cannot pass a query or class list for --object-properties query" ; System.exit(1) }
 
-      def labelOut = []
-      def processEntities = { q, entities ->
-        ConcurrentHashMap theseLabels = [:]
-        def priority = o['priority'] ?: 1
-        def i = 0
-        GParsPool.withPool(o['threads'] ?: 1) { p ->
-        entities.eachParallel{ e ->
-          if(o['verbose']) { println "Synonym Expansion: ${++i}/${entities.size()}" }
-          theseLabels[e.class] = KomentLib.AOExtractNames(e)
-          if(o['expand-synonyms']) { // they will be made unique etc later
-            theseLabels[e.class] += KomentLib.AOExpandSynonyms(e.owlClass, 
-                                                               [e.label].flatten()[0].toLowerCase()) // ew
-          }
-        }
-        }
-
-        def labelCount = entities.collect { e -> theseLabels[e.class].size() }.sum()
-
-        println "Received $labelCount labels from ${entities.size()} classes, for query \"$q\"."
-
-        theseLabels.each { c, l ->
-          if(o.lemmatise) {
-            theseLabels[c] += Komentisto.getLemmas(l)
-          }
-          theseLabels[c].unique(true)
-          theseLabels[c].findAll { it != '' }
-        }
-
-        if(o['override-group']) { q = o['override-group'] }
-        theseLabels.collect { c, ls -> ls.collect { l -> "$l\t$c\t$q\t$o.o\t$priority" } }.flatten()
-      }
+      def vocabulary = new Vocabulary(o.out)
 
       if(o['object-properties']) {
         KomentLib.AOGetObjectProperties(o.o, { oProps ->
-          labelOut += processEntities('object-properties', oProps)
+          labelOut += KomentLib.buildEntityNames(vocabulary, 'object-properties', o, oProps)
         })
       } else { // regular class query
         def queries = [o.q]
@@ -162,15 +132,16 @@ public class Komenti {
         queries.each { q ->
           def ont = o.o
           if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') }
-          //if(q.indexOf(' ') != -1) { q = "'" + q + "'" }
           KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
-            labelOut += processEntities(q, classes)
+            KomentLib.buildEntityNames(vocabulary, q, o, classes)
           })
         }
       }
 
-      writeOutput(labelOut.join('\n'), o,
-                  "Saved ${labelOut.size()} labels to $o.out!")
+      vocabulary.write(o['append'])
+      if(o.out) {
+        println "Saved ${vocabulary.labelSize()} labels for ${vocabulary.size()} terms to ${o.out}"
+      }
     } else if(command == 'get_metadata') {
       if(!o.l) { println "Must pass label file" ; cliBuilder.usage() ; System.exit(1) }
 

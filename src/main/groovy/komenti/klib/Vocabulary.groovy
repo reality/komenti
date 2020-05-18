@@ -1,13 +1,31 @@
 package klib
 
-class Vocabulary implements Iterable<Label> {
-  def entities = [:]
-  File labelFile
+import java.util.concurrent.*
 
-  Vocabulary(lbls, labelFile) {
+class Vocabulary implements Iterable<Label> {
+  ConcurrentHashMap entities = [:]
+  def labelPath
+
+  Vocabulary(lbls, labelPath) {
+    this(labelPath)
     entities = lbls.groupBy {it.iri }
             .collectEntries({ [(it.getKey()): it.getValue()] })
-    this.labelFile = labelFile
+  }
+
+  Vocabulary(labelPath) {
+    this.labelPath = labelPath;
+  }
+
+  def add(iri, Label label) {
+    if(label.label == '') { return; }
+    if(!entities.containsKey(iri)) { entities[iri] = [] }
+    if(!entities[iri].contains(label)) {
+      entities[iri] << label
+    }
+  }
+
+  def add(iri, List<Label> labels) {
+    labels.each { label -> add(iri, label) } 
   }
 
   def termGroup(iri) {
@@ -27,6 +45,27 @@ class Vocabulary implements Iterable<Label> {
     entities.iterator()
   }
 
+  def write(append) {
+    def newText = entities.collect { iri, labels ->
+      labels.collect { l -> l.toString() }
+    }.flatten().join('\n')
+
+    if(labelPath) {
+      def labelFile = new File(labelPath)
+      if(append) {
+        labelFile.text += '\n' + newText
+      } else {
+        labelFile.text = newText
+      }
+    } else {
+      println newText
+    }
+  }
+
+  def labelSize() {
+    entities.collect { it.getValue().size() }.sum()
+  }
+
   static def loadFile(fileName) {
     def lbls = new File(fileName).text.split('\n').collect {
       it = it.split('\t')
@@ -39,6 +78,6 @@ class Vocabulary implements Iterable<Label> {
       )
     }
 
-    new Vocabulary(lbls, new File(fileName))
+    new Vocabulary(lbls, fileName)
   }
 }

@@ -1,6 +1,7 @@
 package klib
 
 import groovyx.net.http.HTTPBuilder
+import groovyx.gpars.GParsPool
 
 class KomentLib {
   static def ABEROWL_ROOT = 'http://aber-owl.net/'
@@ -57,7 +58,7 @@ class KomentLib {
   }
 
   // Extract the names and labels of classes and object properties
-  static def AOExtractNames(c) {
+  static def AOExtractNames(c, group, priority) {
     def names = [c.label] + c.synonyms + c.hasExactSynonym + c.alternative_term + c.Synonym
     names = names.flatten()
     names.removeAll([null])
@@ -79,6 +80,15 @@ class KomentLib {
          .findAll { it == names[0] || it.indexOf(names[0]) == -1 } // remove names that contain the first label. TODO also use preferredLabel?
          .findAll { !BANNED_SYNONYMS.contains(it) }
          .unique(false)
+         .collect {
+            new Label(
+              label: it,
+              iri: c.class,
+              group: group,
+              ontology: c.ontology,
+              priority: priority
+            )
+         }
   }
 
   // metadata to text
@@ -115,7 +125,7 @@ class KomentLib {
     out
   }
 
-  static AOExpandSynonyms(iri, label) {
+  static AOExpandSynonyms(iri, label, group, priority) {
     def synonyms = []
     AOQueryNames(label, { nameClasses ->
       nameClasses.findAll { nCl ->
@@ -124,29 +134,20 @@ class KomentLib {
         nCl.label.collect { it.toLowerCase() }.contains(label)
       }.each { nCl ->
         if(!BANNED_ONTOLOGIES.contains(nCl.ontology)) {
-        def newSynonyms = AOExtractNames(nCl).findAll { it.indexOf(label) == -1 }
-        /*if(newSynonyms.size() > 0 ) { 
-        println nCl.ontology + ' : ' + newSynonyms.size()
-        println newSynonyms
-        }*/
-        synonyms += newSynonyms
-        }
-      }
-    })
-    println 'lex: ' + synonyms.size() 
-    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
-      eqClasses.each { eqCl ->
-        if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
-          def newSynonyms = AOExtractNames(eqCl).findAll { it.indexOf(label) == -1 }
-          /*if(newSynonyms.size() > 0 ) { 
-          println eqCl.ontology + ' : ' + newSynonyms.size()
-          println newSynonyms
-          }*/
+          def newSynonyms = AOExtractNames(nCl, group, priority).findAll { it.label.indexOf(label) == -1 }
           synonyms += newSynonyms
         }
       }
     })
-    println 'eq: ' +synonyms.size()
+
+    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
+      eqClasses.each { eqCl ->
+        if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
+          def newSynonyms = AOExtractNames(eqCl, group, priority).findAll { it.label.indexOf(label) == -1 }
+          synonyms += newSynonyms
+        }
+      }
+    })
 
     synonyms
   }
@@ -191,6 +192,31 @@ class KomentLib {
       }
     } catch(e) {
       cb(null)
+    }
+  }
+
+  // Probably not the best place for this
+  static def buildEntityNames(vocabulary, q, o, entities) {
+    def group = o['override-group'] ?: q
+    def priority = o['priority'] ?: 1
+
+    def i = 0
+    GParsPool.withPool(o['threads'] ?: 1) { p ->
+    entities.eachParallel { e ->
+      if(o['verbose']) { println "Processing entity: ${++i}/${entities.size()}" }
+
+      vocabulary.add(e.class, KomentLib.AOExtractNames(e, group, priority))
+      if(o['expand-synonyms']) { // they will be made unique etc later
+        def newLabels = KomentLib.AOExpandSynonyms(e.owlClass, vocabulary.termLabel(e.class), group, priority)
+        vocabulary.add(e.class, newLabels)
+      }
+    }
+    }
+
+    vocabulary.entities.each { c, l ->
+      if(o.lemmatise) {
+        vocabulary.add(c, Komentisto.getLemmas(l.label))
+      }
     }
   }
 }

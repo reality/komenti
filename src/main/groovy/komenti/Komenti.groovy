@@ -414,7 +414,7 @@ public class Komenti {
         } 
       }
 
-      def annotations = AnnotationLoader.loadFile(o.a)
+      def annotations = AnnotationList.loadFile(o.a)
       def fids = annotations.collect { it.f }.unique(false)
 
       def g1A = annotations.findAll { classGroup[it.termIri] == g1 }
@@ -490,7 +490,7 @@ public class Komenti {
       if(!entity) { println "Could not find default entity in label file." ; System.exit(1) }
 
       def sentences = [:]
-      AnnotationLoader.loadFile(o.a).each {
+      AnnotationList.loadFile(o.a).each {
         def sid = it.f ':' + it.sid
         if(!sentences.containsKey(sid)) { sentences[sid] = [] }
         sentences[sid] << ann
@@ -547,7 +547,7 @@ public class Komenti {
     } else if(command == 'diagnose') {
       if(!o.a) { println 'Must provide a --annotations file to diagnose' ; System.exit(1) }
 
-      def annotations = AnnotationLoader.loadFile(o.a)
+      def annotations = AnnotationList.loadFile(o.a)
       def documents = [:]
       def concepts = [:]
 

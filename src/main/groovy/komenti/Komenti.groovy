@@ -216,7 +216,8 @@ public class Komenti {
       if(!o.t || !o.l) { cliBuilder.usage() ; System.exit(1) }
       if(!o.out) { println "Must provide output filename via --out" ; System.exit(1) }
 
-      def classLabels = loadClassLabels(o)
+      def vocab = Vocabulary.loadFile(o.l)
+
       def fList
       if(o['file-list']) {
         fList = new File(o['file-list']).text.split('\n')
@@ -224,6 +225,7 @@ public class Komenti {
 
       def outWriter = new BufferedWriter(new FileWriter(o.out))
 
+      // TODO move this somewhere else
       def target = new File(o.t)
       def processFileOrDir
       processFileOrDir = { f, item -> 
@@ -239,7 +241,11 @@ public class Komenti {
       def files = processFileOrDir([], target)
 
       println "Annotating ${files.size()} files ..."
-      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['exclude'], o['threads'] ?: 1)
+      def komentisto = new Komentisto(vocab, 
+        o['disable-modifiers'], 
+        o['family-modifier'], 
+        o['exclude'], 
+        o['threads'] ?: 1)
         
       def i = 0
       GParsPool.withPool(o['threads'] ?: 1) { p -> 
@@ -256,15 +262,7 @@ public class Komenti {
           annotations = komentisto.annotate(name, text)
         }
         annotations.each { a ->
-          outWriter.write([ a.f, 
-            a.c,
-            classLabels[a.c].l[0],
-            a.m,
-            classLabels[a.c].g,
-            a.tags.join(','),
-            a.sid,
-            a.text.replaceAll('\n', '')
-          ].join('\t') + '\n')
+          outWriter.write(a.toString() + '\n')
         }
         
         i++
@@ -293,7 +291,7 @@ public class Komenti {
 
       def outWriter = new BufferedWriter(new FileWriter(o.out, true));
 
-      GParsPool.withPool(8) { p -> 
+      GParsPool.withPool(o['threads'] ?: 1) { p -> 
       annoFile.eachParallel {
         if(!cache.contains(it[0]) && it[1] && it[5]) {
           def res = komentisto.evaluateSentenceConcept(it[5], it[1])

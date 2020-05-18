@@ -11,23 +11,16 @@ public class Komentisto {
 
   def advancedCoreNLP
   def basicPipeline
-  def entities
   def uncertainTerms
   def familyTerms
   def excludeTerms = []
   def disableModifiers
   def familyModifier
+  def vocabulary
 
-  def Komentisto(labelFilePath, disableModifiers, familyModifier, excludeFile, threads) {
-    def labelFile = new File(labelFilePath)
-
-    entities = [:]
-    labelFile.text.split('\n').each { 
-      it = it.split('\t')
-      if(!entities.containsKey(it[1])) { entities[it[1]] = [] }
-      entities[it[1]] << it[0].toLowerCase()
-    }
-
+  def Komentisto(vocabulary, disableModifiers, familyModifier, excludeFile, threads) {
+    this.vocabulary = vocabulary
+ 
     uncertainTerms = UNC_WORDS_FILE.getText().split('\n')
     familyTerms = FAM_WORDS_FILE.getText().split('\n')
     if(excludeFile) {
@@ -44,7 +37,7 @@ public class Komentisto {
 
     props.put("ner.useSUTime", "false")
     props.put("parse.maxtime", "5000")
-    addRegexNERProps(props, labelFile)
+    addRegexNERProps(props)
 
     props.put("regexner.ignorecase", "true")
     props.put("depparse.nthreads", threads)
@@ -54,7 +47,7 @@ public class Komentisto {
 
     props = new Properties()
     props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
-    addRegexNERProps(props, labelFile)
+    addRegexNERProps(props)
 
     def basicCoreNLP = new StanfordCoreNLP(props)
     basicPipeline = new AnnotationPipeline()
@@ -64,8 +57,8 @@ public class Komentisto {
     this.familyModifier = familyModifier
   }
 
-  def addRegexNERProps(props, labelFile) { // i feel like it should be easier than this to make custom rows. some kind of 'ignore, or N/A' header, perhaps
-    props.put("regexner.mapping", labelFile.getAbsolutePath())
+  def addRegexNERProps(props) {
+    props.put("regexner.mapping", vocabulary.labelFile.getAbsolutePath())
     props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
     props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.mapping.field.ontology", 
@@ -90,8 +83,17 @@ public class Komentisto {
 
       for(entityMention in sentence.get(CoreAnnotations.MentionsAnnotation.class)) {
         def ner = entityMention.get(CoreAnnotations.NamedEntityTagAnnotation.class)
-        if(entities.containsKey(ner)) {
-          def a = [ f: id, c: ner, m: entityMention, tags: [], text: sentence.toString(), sid: sentenceCount ]
+        if(vocabulary.entities.containsKey(ner)) {
+          def a = new Annotation(
+            documentId: id,
+            termIri: ner,
+            matchedText: entityMention,
+            group: vocabulary.termGroup(ner),
+            tags: [],
+            sentenceId: sentenceCount,
+            text: sentence.toString()
+          ) 
+
           if(excludeTerms.any { a.text =~ it }) { continue; }
 
           if(!disableModifiers) {
@@ -111,7 +113,7 @@ public class Komentisto {
   def evaluateSentenceConcept(sentence, concept) {
     def text = sentence.toString()
     def klSentence = new Sentence(text, 0) // placeholder zero, no purpose
-    klSentence.genTypeDeps(advancedCoreNLP, entities[concept], REP_TOKEN) 
+    klSentence.genTypeDeps(advancedCoreNLP, vocabulary.entityLabels(concept), REP_TOKEN) 
 
     def out = [
       negated: klSentence.isNegated([REP_TOKEN]),

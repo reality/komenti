@@ -184,7 +184,7 @@ public class Komenti {
 
       println "Done"
     } else if(command == 'annotate') {
-      if(!o.t || !o.l) { cliBuilder.usage() ; System.exit(1) }
+      if((!o.t && !o['file-list']) || !o.l) { cliBuilder.usage() ; System.exit(1) }
       if(!o.out) { println "Must provide output filename via --out" ; System.exit(1) }
 
       def vocab = Vocabulary.loadFile(o.l)
@@ -196,20 +196,22 @@ public class Komenti {
 
       def outWriter = new BufferedWriter(new FileWriter(o.out))
 
-      // TODO move this somewhere else
-      def target = new File(o.t)
-      def processFileOrDir
-      processFileOrDir = { f, item -> 
-        if(item.isDirectory()) {
-          item.eachFile { processFileOrDir(f, it) }
-        } else { 
-          if(!fList || (fList && fList.contains(item.getName()))) {
-            f << item
+      def files = fList
+      if(o.t) {
+        def target = new File(o.t)
+        def processFileOrDir
+        processFileOrDir = { f, item -> 
+          if(item.isDirectory()) {
+            item.eachFile { processFileOrDir(f, it) }
+          } else { 
+            if(!fList || (fList && fList.contains(item.getName()))) {
+              f << item
+            }
           }
+          f
         }
-        f
+        files = processFileOrDir([], target)
       }
-      def files = processFileOrDir([], target)
 
       println "Annotating ${files.size()} files ..."
       def komentisto = new Komentisto(vocab, 
@@ -222,7 +224,14 @@ public class Komenti {
       GParsPool.withPool(o['threads'] ?: 1) { p -> 
       files.eachParallel{ f ->
         def (name, text) = [f.getName(), f.text]
-        if(name =~ /(?i)pdf/) { text = new PDFReader(f).getText() }
+        if(name =~ /(?i)pdf/) { 
+          text = new PDFReader(f).getText() 
+          if(o['write-pdfs-to-dir']) {
+            def dir = new File(o['write-pdfs-to-dir'])
+            if(!dir.exists()) { dir.mkdir() }
+            new File(dir, f.getName() + '.txt').text = text
+          }
+        }
 
         def annotations
         if(o['per-line']) {

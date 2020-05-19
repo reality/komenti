@@ -58,7 +58,7 @@ public class Komentisto {
   }
 
   def addRegexNERProps(props) {
-    props.put("regexner.mapping", vocabulary.labelFile.getAbsolutePath())
+    props.put("regexner.mapping", new File(vocabulary.labelPath).getAbsolutePath())
     props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
     props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.mapping.field.ontology", 

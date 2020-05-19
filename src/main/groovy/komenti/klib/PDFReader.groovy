@@ -20,11 +20,14 @@ public class PDFReader {
 
         text = text.replaceAll('\u2022', '.  ')
         text = text.replaceAll('â€“', '. ')
-        text = text.replaceAll('-', '.  ')
-        text = text.replaceAll('– ', '. ')
+        text = text.replaceAll('\b-', '.  ')
+        text = text.replaceAll('\b–', '. ')
+        text = text.replaceAll('-\b', '.  ')
+        text = text.replaceAll('–\b', '. ')
         text = text.replaceAll('\\s+', ' ')
         text = text.replaceAll(', \\?', '. ?')
         text = text.replaceAll('\\.', '. ')
+        text = text.replaceAll('\n\n', '. ')
 
         pages << text
       }

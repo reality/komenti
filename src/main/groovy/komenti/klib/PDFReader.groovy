@@ -18,6 +18,7 @@ public class PDFReader {
 
         def text = stripper.getText(reader).toLowerCase()
 
+        text = text.replaceAll('\n\n', '. ')
         text = text.replaceAll('\u2022', '.  ')
         text = text.replaceAll('â€“', '. ')
         text = text.replaceAll('\b-', '.  ')
@@ -27,7 +28,6 @@ public class PDFReader {
         text = text.replaceAll('\\s+', ' ')
         text = text.replaceAll(', \\?', '. ?')
         text = text.replaceAll('\\.', '. ')
-        text = text.replaceAll('\n\n', '. ')
 
         pages << text
       }

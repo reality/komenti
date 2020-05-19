@@ -191,7 +191,7 @@ public class Komenti {
 
       def fList
       if(o['file-list']) {
-        fList = new File(o['file-list']).text.split('\n')
+        fList = new File(o['file-list']).text.split('\n').collect { new File(it) }
       }
 
       def outWriter = new BufferedWriter(new FileWriter(o.out))

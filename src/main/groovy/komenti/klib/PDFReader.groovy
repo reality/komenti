@@ -21,13 +21,18 @@ public class PDFReader {
         text = text.replaceAll('\n\n', '. ')
         text = text.replaceAll('\u2022', '.  ')
         text = text.replaceAll('â€“', '. ')
-        text = text.replaceAll('\b-', '.  ')
-        text = text.replaceAll('\b–', '. ')
-        text = text.replaceAll('-\b', '.  ')
-        text = text.replaceAll('–\b', '. ')
+        text = text.replaceAll('\\s-', '.  ')
+        text = text.replaceAll('–\\s', '. ')
+        text = text.replaceAll('\\s-', '.  ')
+        text = text.replaceAll('–\\s', '. ')
         text = text.replaceAll('\\s+', ' ')
         text = text.replaceAll(', \\?', '. ?')
         text = text.replaceAll('\\.', '. ')
+
+        // this sucks
+        text = text.replaceAll('m edications', '. medication')
+        text = text.replaceAll('a llergies', '. allergies')
+        text = text.replaceAll('p ast', '. past')
 
         pages << text
       }

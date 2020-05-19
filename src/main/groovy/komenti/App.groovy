@@ -74,6 +74,64 @@ class App {
       _ longOpt: 'threads', 'Number of threads to use for query/annotation processes', type: Integer, args: 1
     }
 
-    Komenti.run(cliBuilder, args)
+
+    if(args.contains('--verbose')) {
+      println args
+    }
+
+    if(!args[0]) { println "Must provide command." ; cliBuilder.usage() ; System.exit(1) }
+    def command = args[0]
+    def o = cliBuilder.parse(args.drop(1))
+    
+    if(o.h) { cliBuilder.usage() ; return; }
+
+    def aCheck = checkArguments(command, o)
+    if(!aCheck) { System.exit(1) }
+
+    Komenti."$command"(o)
+  }
+
+  static def checkArguments(command, o) {
+    def success = true
+    if(!f.metaClass.respondsTo(Komenti, command)) {
+      println "Command ${command} not found." ; success = false
+    }
+
+    if(command == 'gen_roster') {
+      if(!o.q && !o.c) { println "You must provide a --query or --class-list" ; success = false }
+
+      // Check that the roster is being generated with some text (annotation mode) or with an analysis method
+      if(!o['with-abstracts-download'] && !o['with-metadata-download'] && !o['mine-relationship'] && !o.t) { 
+        println "Must either download abstracts, metadata, or provide text to annotate"
+        success = false 
+      }
+
+      if(o['mine-relationship']) {
+        if(!o.c || (o.c && o.c.split(',').size() != 2)) { 
+          println "to --mine-relationship you must pass exactly two concept names with -c/--class-list"
+          success = false
+        }
+      }
+
+      if(o['suggest-axiom']) {
+        if(!o.o) { 
+          println "Must pass an ontology to query with -o/--ontology"
+          success = false
+        }
+
+        if((!o.c || (o.c && o.c.split(',').size() != 1))) {
+          println "You must pass a class into -c to suggest axiom"
+          success = false
+        } 
+
+        if(!o.entity || !o.quality || !o['default-entity'] || !o['default-relation'])  { 
+          println "To suggest axiom you must pass class lists with --entity, --quality. You must also pass --default-relation and --default-entity."
+          success = false
+        }
+      }
+    } else if(command == 'auto') {
+      if(!o.r) { cliBuilder.usage() ; System.exit(1) }
+    }
+    success
   }
 }

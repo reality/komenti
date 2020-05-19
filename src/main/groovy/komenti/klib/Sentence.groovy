@@ -18,7 +18,7 @@ class Sentence {
   def rText
   def nWords
   def negated = null
-  def NEG_MODS = [ 'negative', 'exclude', 'without', 'no', 'excluded', 'not', 'denies', 'free', 'deny', 'denied', 'stop', 'stopped' ]
+  def NEG_MODS = [ 'negative', 'excluding', 'exclude', 'without', 'no', 'excluded', 'not', 'denies', 'free', 'deny', 'denied', 'stop', 'stopped' ]
 
   def Sentence(text, fileName) {
     this.text = text

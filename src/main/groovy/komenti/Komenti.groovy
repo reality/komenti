@@ -8,107 +8,94 @@ import groovy.json.*
 import groovyx.gpars.GParsPool
 
 public class Komenti {
-  static def run(cliBuilder, args) {
-    if(!args) { println "Must provide command." ; cliBuilder.usage() ; System.exit(1) }
-
-    if(args.contains('--verbose')) {
-      println args
+  static def gen_roster(o) {
+    def cLoader = getClass()
+    def templateFile = cLoader.getResourceAsStream('/templates/roster.json')
+    if(o['with-abstracts-download']) {
+      templateFile = cLoader.getResourceAsStream('/templates/roster_with_abstract_download.json')
+    }
+    if(o['mine-relationship']) {
+      templateFile = cLoader.getResourceAsStream('/templates/roster_mine_relationship.json')
+    }
+    if(o['suggest-axiom']) {
+      templateFile = cLoader.getResourceAsStream('/templates/roster_suggest_axiom.json')
     }
 
-    def command = args[0]
-    def o = cliBuilder.parse(args.drop(1))
+    def roster = new JsonSlurper().parseText(templateFile.getText())
+    
+    // TODO this can probably mostly be automated
+    if(o.q) {
+      roster.commands.find { it.id == 'class_query' }.args.query = o.q
+    } else {
+      roster.commands.find { it.id == 'class_query' }.args['class-list'] = o.c
+    }
+    if(o.o) { roster.commands.find { it.id == 'class_query' }.args.ontology = o.o }
 
-    if(o.h) { cliBuilder.usage() ; System.exit(0) }
+    if(o['with-abstracts-download']) {
+      if(o.l) { roster.commands.find { it.command == 'get_abstracts' }.args.limit = o.l }
+    }
 
-    if(command == 'gen_roster') {
-      if(!o.q && !o.c) { println "You must provide a query or class-list" ; cliBuilder.usage() ; System.exit(1) }
-      if(!o.out) { println "Must provide place to save roster" ; cliBuilder.usage() ; System.exit(1) }
-      if(!o['with-abstracts-download'] && !o['with-metadata-download'] && !o['mine-relationship'] && !o.t) { println "Must either download abstracts, metadata, or provide text to annotate" ; cliBuilder.usage() ; System.exit(1) }
-      if(o['mine-relationship'] && (!o.c || (o.c && o.c.split(',').size() != 2))) { println "to --mine-relationship you must pass exactly two concept names with -c/--class-list" ; System.exit(1) }
-      if(!o.o) { println "Must pass an ontology to query with -o/--ontology" ; System.exit(1) }
-      if(o['suggest-axiom'] && (!o.c || (o.c && o.c.split(',').size() != 1) || (!o.entity || !o.quality) || !o['default-entity'] || !o['default-relation']))  { println "to --suggest-axiom you must pass class lists for each -c, --entity, --quality. You must also pass --default-relation and --default-entity." ; System.exit(1) }
+    if(!o['with-abstracts-download'] && !o['with-metadata-download']) {
+     roster.commands = roster.commands.findAll { it.command != 'get_abstracts' && it.command != 'get_metadata' }
+     roster.commands.find { it.command == 'annotate' }.text = o.t 
+    } else if(!o['with-abstracts-download']) {
+     roster.commands = roster.commands.findAll { it.command != 'get_abstracts' }
+    } else if(!o['with-metadata-download']) {
+     roster.commands = roster.commands.findAll { it.command != 'get_metadata' }
+    }
 
-      def cLoader = getClass()
+    if(o['mine-relationship']) {
+      roster.commands.find { it.command == 'summarise_entity_pair' }.args['class-list'] = o.c
+    }
 
-      def templateFile = cLoader.getResourceAsStream('/templates/roster.json')
-      if(o['with-abstracts-download']) {
-        templateFile = cLoader.getResourceAsStream('/templates/roster_with_abstract_download.json')
-      }
-      if(o['mine-relationship']) {
-        templateFile = cLoader.getResourceAsStream('/templates/roster_mine_relationship.json')
-      }
-      if(o['suggest-axiom']) {
-        templateFile = cLoader.getResourceAsStream('/templates/roster_suggest_axiom.json')
-      }
+    if(o['suggest-axiom']) {
+      def cq = roster.commands.find { it.id == 'class_query' }
+      cq.args['class-list'] = o.c
+      cq.args['ontology'] = o.o
 
-      def roster = new JsonSlurper().parseText(templateFile.getText())
+      def eq = roster.commands.find { it.id == 'entity_query' }
+      eq.args['class-list'] = o.entity
+      eq.args['ontology'] = o.eo ? o.eo : o.o
+
+      def rq = roster.commands.find { it.id == 'relation_query' }
+      rq.args['ontology'] = o.oo ? o.oo : o.o
+
+      def qq = roster.commands.find { it.id == 'quality_query' }
+      qq.args['class-list'] = o.quality
+      qq.args['ontology'] = o.qo ? o.qo : o.o
+
+      def sa = roster.commands.find { it.command == 'suggest_axiom' }
+      sa.args['default-relation'] = o['default-relation']
+      sa.args['default-entity'] = o['default-entity']
+    }
+
+    new File(o.out).text = JsonOutput.prettyPrint(JsonOutput.toJson(roster))
+    println "Roster file saved to $o.out, where you can edit it manually. You can run it with 'groovy Komenti auto -r $o.out'"
+  }
+
+  static def auto(o) {
+    def roster = new JsonSlurper().parse(new File(o.r))
+
+    roster.commands.each { item ->
+      def newArgs = [item.command] + item.args.collect { k, v -> 
+        if(k.size() == 1) { k = "-$k" } else { k = "--$k" } 
+        if(v instanceof String && v.split(' ').size() > 1 && v[0] != '"') { v = '"' + v + '"' }
+        if(v instanceof Integer || v instanceof Boolean) { v = "$v" } // foolish cliBuilder ...
+
+        [k, v] 
+      }.flatten()
+      newArgs.removeAll("true")
+
+      App.main(newArgs)
+    }
+  }
       
-      // TODO this can probably mostly be automated
-      if(o.q) {
-        roster.commands.find { it.id == 'class_query' }.args.query = o.q
-      } else {
-        roster.commands.find { it.id == 'class_query' }.args['class-list'] = o.c
-      }
-      if(o.o) { roster.commands.find { it.id == 'class_query' }.args.ontology = o.o }
 
-      if(o['with-abstracts-download']) {
-        if(o.l) { roster.commands.find { it.command == 'get_abstracts' }.args.limit = o.l }
-      }
+  }
 
-      if(!o['with-abstracts-download'] && !o['with-metadata-download']) {
-       roster.commands = roster.commands.findAll { it.command != 'get_abstracts' && it.command != 'get_metadata' }
-       roster.commands.find { it.command == 'annotate' }.text = o.t 
-      } else if(!o['with-abstracts-download']) {
-       roster.commands = roster.commands.findAll { it.command != 'get_abstracts' }
-      } else if(!o['with-metadata-download']) {
-       roster.commands = roster.commands.findAll { it.command != 'get_metadata' }
-      }
-
-      if(o['mine-relationship']) {
-        roster.commands.find { it.command == 'summarise_entity_pair' }.args['class-list'] = o.c
-      }
-
-      if(o['suggest-axiom']) {
-        def cq = roster.commands.find { it.id == 'class_query' }
-        cq.args['class-list'] = o.c
-        cq.args['ontology'] = o.o
-
-        def eq = roster.commands.find { it.id == 'entity_query' }
-        eq.args['class-list'] = o.entity
-        eq.args['ontology'] = o.eo ? o.eo : o.o
-
-        def rq = roster.commands.find { it.id == 'relation_query' }
-        rq.args['ontology'] = o.oo ? o.oo : o.o
-
-        def qq = roster.commands.find { it.id == 'quality_query' }
-        qq.args['class-list'] = o.quality
-        qq.args['ontology'] = o.qo ? o.qo : o.o
-
-        def sa = roster.commands.find { it.command == 'suggest_axiom' }
-        sa.args['default-relation'] = o['default-relation']
-        sa.args['default-entity'] = o['default-entity']
-      }
-
-      new File(o.out).text = JsonOutput.prettyPrint(JsonOutput.toJson(roster))
-      println "Roster file saved to $o.out, where you can edit it manually. You can run it with 'groovy Komenti auto -r $o.out'"
-    } else if(command == 'auto') {
-      if(!o.r) { cliBuilder.usage() ; System.exit(1) }
-
-      def roster = new JsonSlurper().parse(new File(o.r))
-
-      roster.commands.each { item ->
-        def newArgs = [item.command] + item.args.collect { k, v -> 
-          if(k.size() == 1) { k = "-$k" } else { k = "--$k" } 
-          if(v instanceof String && v.split(' ').size() > 1 && v[0] != '"') { v = '"' + v + '"' }
-          if(v instanceof Integer || v instanceof Boolean) { v = "$v" } // foolish cliBuilder ...
-
-          [k, v] 
-        }.flatten()
-        newArgs.removeAll("true")
-
-        run(cliBuilder, newArgs)
-      }
-    } else if(command == 'query') {
+  static def run(cliBuilder, o) {
+    if(command == 'gen_roster') {
+          } else if(command == 'query') {
       if((!o['object-properties'] && (!o.q && !o.c))) { cliBuilder.usage() ; System.exit(1) }
       if(o['object-properties'] && (o.q || o.c)) { println "Cannot pass a query or class list for --object-properties query" ; System.exit(1) }
 

@@ -11,6 +11,7 @@ public class PDFReader {
     try {
       reader = PDDocument.load(file)
       def stripper = new PDFTextStripper()
+      stripper.setAddMoreFormatting(true)
 
       (1..reader.getNumberOfPages()).each {
         stripper.setStartPage(it)
@@ -30,9 +31,9 @@ public class PDFReader {
         text = text.replaceAll('\\.', '. ')
 
         // this sucks
-        text = text.replaceAll('m edications', '. medication')
-        text = text.replaceAll('a llergies', '. allergies')
-        text = text.replaceAll('p ast', '. past')
+        text = text.replaceAll('m edications', 'medication')
+        text = text.replaceAll('a llergies', 'allergies')
+        text = text.replaceAll('p ast', 'past')
 
         pages << text
       }

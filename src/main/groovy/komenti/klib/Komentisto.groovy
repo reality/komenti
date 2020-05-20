@@ -8,6 +8,7 @@ public class Komentisto {
   def REP_TOKEN = 'biscuit'
   def UNC_WORDS_FILE = getClass().getResourceAsStream('/words/uncertain.txt')
   def FAM_WORDS_FILE = getClass().getResourceAsStream('/words/family.txt')
+  def ALLERGY_PATTERN = "allerg" // should be fine
 
   def advancedCoreNLP
   def basicPipeline
@@ -16,9 +17,10 @@ public class Komentisto {
   def excludeTerms = []
   def disableModifiers
   def familyModifier
+  def allergyModifier
   def vocabulary
 
-  def Komentisto(vocabulary, disableModifiers, familyModifier, excludeFile, threads) {
+  def Komentisto(vocabulary, disableModifiers, familyModifier, allergyModifier, excludeFile, threads) {
     this.vocabulary = vocabulary
  
     uncertainTerms = UNC_WORDS_FILE.getText().split('\n')
@@ -55,6 +57,7 @@ public class Komentisto {
 
     this.disableModifiers = disableModifiers
     this.familyModifier = familyModifier
+    this.allergyModifier = allergyModifier
   }
 
   def addRegexNERProps(props) {
@@ -130,6 +133,10 @@ public class Komentisto {
       }.flatten().any {
         familyTerms.contains(it) 
       }
+    }
+
+    if(allergyModifier) {
+      out.allergy = text =~ ALLERGY_PATTERN
     }
 
     out

@@ -147,7 +147,7 @@ public class Komenti {
 
       def outDir = getOutDir(o)
       def files = [:]
-      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['exclude']. o['threads'] ?: 1)
+      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['allergy-modifier'], o['exclude'], o['threads'] ?: 1)
 
       def excludeGroups = []
       def entityLabels = []
@@ -217,6 +217,7 @@ public class Komenti {
       def komentisto = new Komentisto(vocab, 
         o['disable-modifiers'], 
         o['family-modifier'], 
+        o['allergy-modifier'],
         o['exclude'], 
         o['threads'] ?: 1)
         
@@ -556,12 +557,19 @@ public class Komenti {
               negated: 0,
               uncertain: 0,
               total: 0
+            ],
+            allergy: [
+              affirmed: 0,
+              negated: 0,
+              uncertain: 0,
+              total: 0
             ]
           ]
         }
 
         def target = 'self'
         if(s.tags.contains('family')) { target = 'family' }
+        if(s.tags.contains('allergy')) { target = 'allergy' }
 
         if(s.tags.contains('negated')) {
           documents[s.documentId][s[conceptFactor]][target].negated++

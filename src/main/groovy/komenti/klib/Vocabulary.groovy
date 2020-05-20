@@ -36,6 +36,11 @@ class Vocabulary implements Iterable<Label> {
     entities[iri][0].label
   }
 
+  def labelIri(label) {
+    def e = entities.find { k, v -> v.find { it.label == label }  }
+    if(e) { return e.getKey() }
+  }
+
   def entityLabels(iri) {
     entities[iri].collect { it.label }
   }

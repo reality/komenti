@@ -224,7 +224,7 @@ public class Komenti {
       GParsPool.withPool(o['threads'] ?: 1) { p -> 
       files.eachParallel{ f ->
         def (name, text) = [f.getName(), f.text]
-        if(name =~ /(?i)pdf/) { 
+        if(name =~ /(?i)pdf$/) { 
           text = new PDFReader(f).getText() 
           if(o['write-pdfs-to-dir']) {
             def dir = new File(o['write-pdfs-to-dir'])

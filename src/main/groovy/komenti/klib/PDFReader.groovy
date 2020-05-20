@@ -19,7 +19,7 @@ public class PDFReader {
 
         def text = stripper.getText(reader).toLowerCase()
 
-        text = text.replaceAll('\n\n', '. ')
+        text = text.replaceAll('\n\n\n', '. ')
         text = text.replaceAll('\u2022', '.  ')
         text = text.replaceAll('â€“', '. ')
         text = text.replaceAll('\\s-', '.  ')
@@ -31,9 +31,14 @@ public class PDFReader {
         text = text.replaceAll('\\.', '. ')
 
         // this sucks
-        text = text.replaceAll('m edications', 'medication')
+        text = text.replaceAll('m edication', 'medication')
         text = text.replaceAll('a llergies', 'allergies')
         text = text.replaceAll('p ast', 'past')
+        
+        text = text.replaceAll('past', '. past')
+        text = text.replaceAll('medication', '. medication')
+        text = text.replaceAll('allergies', '. allergies')
+
 
         pages << text
       }

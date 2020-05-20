@@ -83,7 +83,10 @@ public class Komentisto {
 
       for(entityMention in sentence.get(CoreAnnotations.MentionsAnnotation.class)) {
         def ner = entityMention.get(CoreAnnotations.NamedEntityTagAnnotation.class)
-        if(vocabulary.entities.containsKey(ner)) {
+        if(!vocabulary.entities.containsKey(ner)) { // Fix for inability to overwrite internal tags ... WTF
+          ner = vocabulary.labelIri(entityMention.toString())
+        }
+        if(ner && vocabulary.entities.containsKey(ner)) {
           def a = new Annotation(
             documentId: id,
             termIri: ner,

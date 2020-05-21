@@ -9,7 +9,7 @@ class KomentistoTest extends Specification {
   @Shared komentisto
 
   def setupSpec() {
-    def testFile = getClass().getResource('/go_labels_test.txt').toURI()
+    def testFile = getClass().getResource('/go_triple_vocab.txt').toURI()
     def vocabulary = Vocabulary.loadFile(testFile)
 
     komentisto = new Komentisto(vocabulary, 

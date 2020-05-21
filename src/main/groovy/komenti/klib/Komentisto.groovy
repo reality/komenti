@@ -93,7 +93,7 @@ public class Komentisto {
             documentId: id,
             termIri: ner,
             conceptLabel: vocabulary.termLabel(ner),
-            matchedText: entityMention,
+            matchedText: entityMention.toString(),
             group: vocabulary.termGroup(ner),
             tags: [],
             sentenceId: sentenceCount,
@@ -132,9 +132,35 @@ public class Komentisto {
             triple.subjectLemmaGloss() + "\t" +
             triple.relationLemmaGloss() + "\t" +
             triple.objectLemmaGloss());
-        def subjectAnn = annotate(id, triple.subjectLemmaGloss())
-        def relationAnn = annotate(id, triple.relationLemmaGloss()).findAll { it.group == 'relation'}
-        def objectAnn = annotate(id, triple.objectLemmaGloss())
+
+        def subject = triple.subjectLemmaGloss().toString()
+        def relation = triple.relationLemmaGloss().toString()
+        def object = triple.objectLemmaGloss().toString()
+
+        def subjectAnn = annotate(id, subject).findAll {
+        println it.matchedText
+        println subject
+          it.group == 'terms' && it.matchedText.size() == subject.size()
+        }
+
+        def relationAnn = annotate(id, relation).findAll { 
+          it.group == 'object-properties' && it.matchedText.size() == relation.size()
+        }
+        
+        def objectAnn = annotate(id, object).findAll { 
+          it.group == 'terms' && it.matchedText.size() == object.size()
+        }
+
+        println subjectAnn
+        println relationAnn
+        println objectAnn
+
+        if(subjectAnn && relationAnn && objectAnn) {
+          println 'YEAH!'
+        }
+
+        println ''
+
       }
     }
 
@@ -165,10 +191,6 @@ public class Komentisto {
     }
 
     out
-  }
-
-  def extractTriples() {
-
   }
 
   def lemmatise(text) {

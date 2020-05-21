@@ -7,16 +7,18 @@ import klib.*
 
 class AppTest extends Specification {
   @Shared buffer
-  @Shared labelFile
 
   def setupSpec() {
     buffer = new ByteArrayOutputStream()
     System.out = new PrintStream(buffer)
-    labelFile = "labels.txt"
   }
 
   def toArg(q) { // thanks i hate it
     q.toArray(new String[0])
+  }
+
+  def resourceToPass(r) {
+    getClass().getResource(r).toURI().toString().replace('file:','')
   }
 
   def "startup"() {
@@ -28,6 +30,7 @@ class AppTest extends Specification {
 
   def "query"() {
     when:
+      def labelFile = "labels.txt"
       def q = ["query", "-q", "'part of' some 'apoptotic process'", "-o", "GO", "--out", labelFile]
       App.main(toArg(q))
     then:
@@ -42,7 +45,8 @@ class AppTest extends Specification {
 
   def "annotate"() {
     def outFile = 'annotation_file.txt'
-    def textFile = 'to_annotate.txt'
+    def labelFile = resourceToPass('/go_labels_test.txt')
+    def textFile = resourceToPass('/annotate_this.txt')
 
     when:
       def q = ["annotate", "-l", labelFile, "-t", textFile, "--out", outFile, "--threads", "1"]

@@ -73,7 +73,7 @@ public class Komentisto {
     //  (although realistically I suppose the Stanford folk probably have a bit more
     //  of a claim to the Annotation name than I)
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
-    basicPipeline.annotate(aDocument)
+    coreNLP.annotate(aDocument)
 
     def results = []
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
@@ -139,7 +139,7 @@ public class Komentisto {
 
   def lemmatise(text) {
     def aDocument = new Annotation(text.toLowerCase())
-    basicPipeline.annotate(aDocument)
+    coreNLP.annotate(aDocument)
 
     def newText = ''
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->

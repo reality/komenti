@@ -40,15 +40,12 @@ class AppTest extends Specification {
     true
   }
 
-  /**
-  It gets angry about memory
-
   def "annotate"() {
     def outFile = 'annotation_file.txt'
     def textFile = 'to_annotate.txt'
 
     when:
-      def q = ["annotate", "-l", labelFile, "-t", textFile, "--out", outFile]
+      def q = ["annotate", "-l", labelFile, "-t", textFile, "--out", outFile, "--threads", "1"]
       App.main(toArg(q))
     then:
       buffer.toString() =~ "Annotation complete"
@@ -59,5 +56,4 @@ class AppTest extends Specification {
   def "check_annotate_output"() {
     true
   }
-  **/
 }

@@ -4,7 +4,7 @@
 package komenti
 
 class App {
- static int main(String[] args) {
+ static void main(args) {
     def cliBuilder = new CliBuilder(
       usage: 'komenti <command> [<options>]',
       header: 'Options:'
@@ -80,28 +80,28 @@ class App {
       println args
     }
 
-    if(!args[0]) { println "Must provide command." ; return 0; }
+    if(!args[0]) { println "Must provide command." }
     if(args[0] == '-h' || args[0] == '--help') {
-      cliBuilder.usage() ; return 0;
+      cliBuilder.usage(); return;
     }
 
     def command = args[0]
     def o = cliBuilder.parse(args.drop(1))
     
     if(o.h) { 
-      cliBuilder.usage() ; return 0;
+      cliBuilder.usage()
     }
 
     def aCheck = checkArguments(command, o)
-    if(!aCheck) { return 1; }
-
-    Komenti."$command"(o)
+    if(aCheck) {
+      Komenti."$command"(o)
+    }
   }
 
   // TODO this could be a bit smarter, eh
   static def checkArguments(command, o) {
     def success = true
-    if(!Komenti.metaClass.respondsTo(command)) {
+    if(!Komenti.metaClass.getMetaMethod(command)) {
       println "Command ${command} not found." ; success = false
     }
 

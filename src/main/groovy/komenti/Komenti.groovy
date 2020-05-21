@@ -95,7 +95,7 @@ public class Komenti {
 
     if(o['object-properties']) {
       KomentLib.AOGetObjectProperties(o.o, { oProps ->
-        labelOut += KomentLib.buildEntityNames(vocabulary, 'object-properties', o, oProps)
+        KomentLib.buildEntityNames(vocabulary, 'object-properties', o, oProps)
       })
     } else { // regular class query
       def queries = [o.q]
@@ -126,7 +126,7 @@ public class Komenti {
   static def get_metadata(o) {
     def outDir = getOutDir(o)
     def files = [:]
-    def komentisto = new Komentisto(o.l, true, o['family-modifier'], o['allergy-modifier'], o['exclude'], o['threads'] ?: 1)
+    def komentisto = new Komentisto(o.l, true, o['family-modifier'], o['allergy-modifier'], false,  o['exclude'], o['threads'] ?: 1)
 
     def excludeGroups = []
     def entityLabels = []
@@ -165,37 +165,16 @@ public class Komenti {
   }
 
   static def annotate(o) {
-    def vocab = Vocabulary.loadFile(o.l)
-
-    def fList
-    if(o['file-list']) {
-      fList = new File(o['file-list']).text.split('\n').collect { new File(it) }
-    }
-
+    def vocab = Vocabulary.loadFile(o.l) 
     def outWriter = new BufferedWriter(new FileWriter(o.out))
-
-    def files = fList
-    if(o.t) {
-      def target = new File(o.t)
-      def processFileOrDir
-      processFileOrDir = { f, item -> 
-        if(item.isDirectory()) {
-          item.eachFile { processFileOrDir(f, it) }
-        } else { 
-          if(!fList || (fList && fList.contains(item.getName()))) {
-            f << item
-          }
-        }
-        f
-      }
-      files = processFileOrDir([], target)
-    }
+    def files = getFileList(o)
 
     println "Annotating ${files.size()} files ..."
     def komentisto = new Komentisto(vocab, 
       o['disable-modifiers'], 
       o['family-modifier'], 
       o['allergy-modifier'],
+      false,
       o['exclude'], 
       o['threads'] ?: 1)
       
@@ -624,6 +603,31 @@ public class Komenti {
       if(!outDir.isDirectory()) { println "Must pass output directory (existing or not)" }
     }
     outDir
+  }
+
+  static def getFileList(o) {
+    def fList
+    if(o['file-list']) {
+      fList = new File(o['file-list']).text.split('\n').collect { new File(it) }
+    }
+
+    def files = fList
+    if(o.t) {
+      def target = new File(o.t)
+      def processFileOrDir
+      processFileOrDir = { f, item -> 
+        if(item.isDirectory()) {
+          item.eachFile { processFileOrDir(f, it) }
+        } else { 
+          if(!fList || (fList && fList.contains(item.getName()))) {
+            f << item
+          }
+        }
+        f
+      }
+      files = processFileOrDir([], target)
+    }
+    files;
   }
 
 }

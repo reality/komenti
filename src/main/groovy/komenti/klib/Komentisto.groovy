@@ -3,6 +3,9 @@ package klib
 import edu.stanford.nlp.pipeline.*
 import edu.stanford.nlp.ling.*
 import edu.stanford.nlp.semgraph.*
+import edu.stanford.nlp.ie.util.RelationTriple 
+import edu.stanford.nlp.util.*
+import edu.stanford.nlp.naturalli.*
 
 public class Komentisto {
   def REP_TOKEN = 'biscuit'
@@ -17,10 +20,11 @@ public class Komentisto {
   def disableModifiers
   def familyModifier
   def allergyModifier
+  def enableIE
   def vocabulary
   def threads
 
-  def Komentisto(vocabulary, disableModifiers, familyModifier, allergyModifier, excludeFile, threads) {
+  def Komentisto(vocabulary, disableModifiers, familyModifier, allergyModifier, enableIE, excludeFile, threads) {
     this.vocabulary = vocabulary
  
     uncertainTerms = UNC_WORDS_FILE.getText().split('\n')
@@ -33,6 +37,7 @@ public class Komentisto {
     this.disableModifiers = disableModifiers
     this.familyModifier = familyModifier
     this.allergyModifier = allergyModifier
+    this.enableIE = enableIE
     this.threads = threads
 
     initialiseCoreNLP()
@@ -45,6 +50,8 @@ public class Komentisto {
     if(disableModifiers) {
       aList.remove("depparse")
     }
+    if(enableIE) { aList += ["natlog", "openie"] }
+    println aList
     props.put("annotators", aList.join(', '))
 
     props.put("ner.useSUTime", "false")
@@ -69,9 +76,6 @@ public class Komentisto {
   }
 
   def annotate(id, text, sentenceCount) {
-    // Due to clash with klib.Annotation. Not sure what the best way to solve it is
-    //  (although realistically I suppose the Stanford folk probably have a bit more
-    //  of a claim to the Annotation name than I)
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
     coreNLP.annotate(aDocument)
 
@@ -111,6 +115,32 @@ public class Komentisto {
     results
   }
 
+  def extractTriples(id, text) { extractTriples(id, text, 0) }
+
+  def extractTriples(id, text, sentenceCount) {
+    def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
+    coreNLP.annotate(aDocument)
+
+    def allTriples = []
+
+    
+    // Loop over sentences in the document
+    aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
+      sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class).each{ triple ->
+        allTriples << triple
+        System.out.println(triple.confidence + "\t" +
+            triple.subjectLemmaGloss() + "\t" +
+            triple.relationLemmaGloss() + "\t" +
+            triple.objectLemmaGloss());
+        def subjectAnn = annotate(id, triple.subjectLemmaGloss())
+        def relationAnn = annotate(id, triple.relationLemmaGloss()).findAll { it.group == 'relation'}
+        def objectAnn = annotate(id, triple.objectLemmaGloss())
+      }
+    }
+
+    allTriples
+  }
+
   // Evaluate for negation and uncertainty
   def evaluateSentenceConcept(sentence, concept) {
     def text = sentence.toString()
@@ -135,6 +165,10 @@ public class Komentisto {
     }
 
     out
+  }
+
+  def extractTriples() {
+
   }
 
   def lemmatise(text) {
@@ -163,6 +197,6 @@ public class Komentisto {
       } 
 
       s.collect { m.stem(it) ?: it }.join(' ')
-    }.findAll { it.size() > 3 }
+    }.findAll { it.size() > 3 }.unique(false)
   }
 }

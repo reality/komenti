@@ -213,9 +213,20 @@ class KomentLib {
     }
     }
 
-    vocabulary.entities.each { c, l ->
-      if(o.lemmatise) {
-        vocabulary.add(c, Komentisto.getLemmas(l.label))
+    if(o.lemmatise) {
+      vocabulary.entities.each { c, l ->
+        Komentisto.getLemmas(l.label).each {
+          if(l.any { ls -> ls.label == it}) { return; }
+          vocabulary.add(c,
+            new Label(
+              label: it,
+              iri: c,
+              group: group,
+              ontology: l[0].ontology,
+              priority: priority
+            )
+          )
+        }
       }
     }
   }

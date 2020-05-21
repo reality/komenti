@@ -89,342 +89,333 @@ public class Komenti {
       App.main(newArgs)
     }
   }
-      
 
+  static def query(o) {
+    def vocabulary = new Vocabulary(o.out)
+
+    if(o['object-properties']) {
+      KomentLib.AOGetObjectProperties(o.o, { oProps ->
+        labelOut += KomentLib.buildEntityNames(vocabulary, 'object-properties', o, oProps)
+      })
+    } else { // regular class query
+      def queries = [o.q]
+      if(o.c) {
+        def f = new File(o.c)
+        if(f.exists()) {
+          queries = f.text.split('\n')
+        } else {
+          queries = o.c.split(',')
+        }
+      }
+      
+      queries.each { q ->
+        def ont = o.o
+        if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') }
+        KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
+          KomentLib.buildEntityNames(vocabulary, q, o, classes)
+        })
+      }
+    }
+
+    vocabulary.write(o['append'])
+    if(o.out) {
+      println "Saved ${vocabulary.labelSize()} labels for ${vocabulary.size()} terms to ${o.out}"
+    }
   }
 
-  static def run(cliBuilder, o) {
-    if(command == 'gen_roster') {
-          } else if(command == 'query') {
-      if((!o['object-properties'] && (!o.q && !o.c))) { cliBuilder.usage() ; System.exit(1) }
-      if(o['object-properties'] && (o.q || o.c)) { println "Cannot pass a query or class list for --object-properties query" ; System.exit(1) }
+  static def get_metadata(o) {
+    def outDir = getOutDir(o)
+    def files = [:]
+    def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['allergy-modifier'], o['exclude'], o['threads'] ?: 1)
 
-      def vocabulary = new Vocabulary(o.out)
+    def excludeGroups = []
+    def entityLabels = []
+    def classLabels = [:]
+    if(o['exclude-groups']) {
+      excludeGroups = o['exclude-groups'].split(',')
+    }
+    new File(o.l).splitEachLine('\t') { // TODO: integrate this into loadClassLabels
+      if(it[2] == 'entity') { entityLabels << it[0].replaceAll('\\\\', '') }
+      if(!excludeGroups.contains(it[2])) {
+        if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [ l: [], o: it[3] ] }
+          classLabels[it[1]].l << it[0]
+        }
+      }
 
-      if(o['object-properties']) {
-        KomentLib.AOGetObjectProperties(o.o, { oProps ->
-          labelOut += KomentLib.buildEntityNames(vocabulary, 'object-properties', o, oProps)
-        })
-      } else { // regular class query
-        def queries = [o.q]
-        if(o.c) {
-          def f = new File(o.c)
-          if(f.exists()) {
-            queries = f.text.split('\n')
-          } else {
-            queries = o.c.split(',')
+    if(!o['decompose-entities']) { entityLabels = [] }
+
+    classLabels.each { iri, l ->
+      KomentLib.AOSemanticQuery("<$iri>", l.o, "equivalent", { classes ->
+        // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
+        def c = classes.find { it.class == iri }
+        def metadata = KomentLib.AOExtractMetadata(c, entityLabels)
+        if(o['lemmatise']) { // we do it per line here, since it's a field based document
+          metadata = metadata.split('\n').collect { komentisto.lemmatise(it) }.join('\n')
+        }
+        files[l.l[0]] = metadata
+      })
+    }
+
+    println "Writing metadata files for ${files.size()} classes."
+    files.each { n, c ->
+      new File(outDir.getAbsolutePath() + '/' + n.replaceAll('/','') + '.txt').text = c
+    } 
+
+    println "Done"
+  }
+
+  static def annotate(o) {
+    def vocab = Vocabulary.loadFile(o.l)
+
+    def fList
+    if(o['file-list']) {
+      fList = new File(o['file-list']).text.split('\n').collect { new File(it) }
+    }
+
+    def outWriter = new BufferedWriter(new FileWriter(o.out))
+
+    def files = fList
+    if(o.t) {
+      def target = new File(o.t)
+      def processFileOrDir
+      processFileOrDir = { f, item -> 
+        if(item.isDirectory()) {
+          item.eachFile { processFileOrDir(f, it) }
+        } else { 
+          if(!fList || (fList && fList.contains(item.getName()))) {
+            f << item
           }
         }
-        
-        queries.each { q ->
-          def ont = o.o
-          if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') }
-          KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
-            KomentLib.buildEntityNames(vocabulary, q, o, classes)
+        f
+      }
+      files = processFileOrDir([], target)
+    }
+
+    println "Annotating ${files.size()} files ..."
+    def komentisto = new Komentisto(vocab, 
+      o['disable-modifiers'], 
+      o['family-modifier'], 
+      o['allergy-modifier'],
+      o['exclude'], 
+      o['threads'] ?: 1)
+      
+    def i = 0
+    GParsPool.withPool(o['threads'] ?: 1) { p -> 
+    files.eachParallel{ f ->
+      def (name, text) = [f.getName(), f.text]
+      if(name =~ /(?i)pdf$/) { 
+        text = new PDFReader(f).getText() 
+        if(o['write-pdfs-to-dir']) {
+          def dir = new File(o['write-pdfs-to-dir'])
+          if(!dir.exists()) { dir.mkdir() }
+          new File(dir, f.getName() + '.txt').text = text
+        }
+      }
+
+      def annotations
+      if(o['per-line']) {
+        text.tokenize('\n').eachWithIndex { lineText, z ->
+          annotations = komentisto.annotate(name, lineText, z+i)
+        }
+      } else {
+        annotations = komentisto.annotate(name, text)
+      }
+      annotations.each { a ->
+        outWriter.write(a.toString() + '\n')
+      }
+      
+      i++
+      if((i % 500) == 0) { outWriter.flush() }
+      if(o.verbose) {
+        println "${i}/${files.size()}"
+      }
+    }
+    }
+
+    outWriter.flush()
+    outWriter.close()
+  }
+
+  // TODO needs to use Annotation class
+  static def add_modifier(o) {
+    def komentisto = new Komentisto(o.l, false)
+
+    def newAnnotations = []
+    def i = 0
+    def aSize = new File(o.a).text.split('\n').size() // ugly
+
+    def annoFile = []
+    new File(o.a).splitEachLine('\t') { annoFile << it }
+
+    def cache = []
+    new File(o.out).splitEachLine('\t') { cache << it[0] }
+
+    def outWriter = new BufferedWriter(new FileWriter(o.out, true));
+
+    GParsPool.withPool(o['threads'] ?: 1) { p -> 
+    annoFile.eachParallel {
+      if(!cache.contains(it[0]) && it[1] && it[5]) {
+        def res = komentisto.evaluateSentenceConcept(it[5], it[1])
+        def tags = res.findAll { it.getValue() }.collect { it.getValue() }.join(',')
+
+        outWriter.write(it.join('\t') + '\n')
+        if(o.verbose) { println "Adding modifiers (${++i}/$aSize)" }
+      } else {
+        i++
+      }
+    }
+    }
+
+    outWriter.flush()
+    outWriter.close()
+  }
+
+  static def get_abstracts(o) {
+    def outDir = getOutDir(o)
+    def classLabels = [:] // TODO integrate this gIndex etc with the loadClassLabels function
+    def gIndex = 1
+    def excludeGroups = []
+    if(o['exclude-groups']) {
+      excludeGroups = o['exclude-groups'].split(',')
+    }
+    if(o['group-by-query']) {
+      gIndex = 2
+    }
+    new File(o.l).splitEachLine('\t') { // TODO: integrate this into loadClassLabels
+      if(!excludeGroups.contains(it[2])) {
+        if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
+        classLabels[it[gIndex]] << it[0]
+      }
+    }
+
+    println "Finding articles for ${classLabels.size()} classes ..."
+
+    def aids = []
+    if(o.conjunction) {
+      def query = '(' + classLabels.collect { c, l -> '"' + l.join('" OR "') + '"' }.join(') AND (') + ')'
+      KomentLib.PMCSearch(query, o['count-only'], { result -> aids << result })
+    } else { // disjunction (default)
+      def newLabels = []
+      def thisLabelGroup = []
+      classLabels.each { cls, labels ->
+        thisLabelGroup << labels
+        if(thisLabelGroup.size() == 10) {
+          newLabels << thisLabelGroup.flatten()
+          thisLabelGroup = []
+        }
+      }
+      newLabels << thisLabelGroup.flatten()
+
+      def i = 0
+      newLabels.each { labels ->
+        KomentLib.PMCSearchTerms(labels, o['count-only'], { result -> aids << result })
+        println "${++i}/${newLabels.size()}"
+      }
+    }
+
+    aids = aids.flatten()
+
+    if(o['count-only']) {
+      println "Found ${aids.sum()} articles ..."
+    } else {
+      println "Found ${aids.size()} articles ..."
+
+      if(o.limit) { 
+        aids = aids.subList(0, o.limit)
+      }
+
+      println "Downloading abstracts for ${aids.size()} articles ..."
+
+      if(o['id-list-only']) {
+        writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
+      } else {
+        def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['exclude'], o['threads'] ?: 1)
+        def abstracts = []
+        aids.each { pmcid ->
+          KomentLib.PMCGetAbstracts(pmcid, { a -> 
+            if(a) { 
+              if(o['lemmatise']) {
+                a = komentisto.lemmatise(a)
+              }
+              abstracts << [ id: pmcid, text: a ]
+            }
           })
         }
-      }
 
-      vocabulary.write(o['append'])
-      if(o.out) {
-        println "Saved ${vocabulary.labelSize()} labels for ${vocabulary.size()} terms to ${o.out}"
-      }
-    } else if(command == 'get_metadata') {
-      if(!o.l) { println "Must pass label file" ; cliBuilder.usage() ; System.exit(1) }
+        println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
 
-      def outDir = getOutDir(o)
-      def files = [:]
-      def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['allergy-modifier'], o['exclude'], o['threads'] ?: 1)
-
-      def excludeGroups = []
-      def entityLabels = []
-      def classLabels = [:]
-      if(o['exclude-groups']) {
-        excludeGroups = o['exclude-groups'].split(',')
-      }
-      new File(o.l).splitEachLine('\t') { // TODO: integrate this into loadClassLabels
-        if(it[2] == 'entity') { entityLabels << it[0].replaceAll('\\\\', '') }
-        if(!excludeGroups.contains(it[2])) {
-          if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [ l: [], o: it[3] ] }
-            classLabels[it[1]].l << it[0]
-          }
-        }
-
-      if(!o['decompose-entities']) { entityLabels = [] }
-
-      classLabels.each { iri, l ->
-        KomentLib.AOSemanticQuery("<$iri>", l.o, "equivalent", { classes ->
-          // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
-          def c = classes.find { it.class == iri }
-          def metadata = KomentLib.AOExtractMetadata(c, entityLabels)
-          if(o['lemmatise']) { // we do it per line here, since it's a field based document
-            metadata = metadata.split('\n').collect { komentisto.lemmatise(it) }.join('\n')
-          }
-          files[l.l[0]] = metadata
-        })
-      }
-
-      println "Writing metadata files for ${files.size()} classes."
-      files.each { n, c ->
-        new File(outDir.getAbsolutePath() + '/' + n.replaceAll('/','') + '.txt').text = c
-      } 
-
-      println "Done"
-    } else if(command == 'annotate') {
-      if((!o.t && !o['file-list']) || !o.l) { cliBuilder.usage() ; System.exit(1) }
-      if(!o.out) { println "Must provide output filename via --out" ; System.exit(1) }
-
-      def vocab = Vocabulary.loadFile(o.l)
-
-      def fList
-      if(o['file-list']) {
-        fList = new File(o['file-list']).text.split('\n').collect { new File(it) }
-      }
-
-      def outWriter = new BufferedWriter(new FileWriter(o.out))
-
-      def files = fList
-      if(o.t) {
-        def target = new File(o.t)
-        def processFileOrDir
-        processFileOrDir = { f, item -> 
-          if(item.isDirectory()) {
-            item.eachFile { processFileOrDir(f, it) }
-          } else { 
-            if(!fList || (fList && fList.contains(item.getName()))) {
-              f << item
-            }
-          }
-          f
-        }
-        files = processFileOrDir([], target)
-      }
-
-      println "Annotating ${files.size()} files ..."
-      def komentisto = new Komentisto(vocab, 
-        o['disable-modifiers'], 
-        o['family-modifier'], 
-        o['allergy-modifier'],
-        o['exclude'], 
-        o['threads'] ?: 1)
-        
-      def i = 0
-      GParsPool.withPool(o['threads'] ?: 1) { p -> 
-      files.eachParallel{ f ->
-        def (name, text) = [f.getName(), f.text]
-        if(name =~ /(?i)pdf$/) { 
-          text = new PDFReader(f).getText() 
-          if(o['write-pdfs-to-dir']) {
-            def dir = new File(o['write-pdfs-to-dir'])
-            if(!dir.exists()) { dir.mkdir() }
-            new File(dir, f.getName() + '.txt').text = text
-          }
-        }
-
-        def annotations
-        if(o['per-line']) {
-          text.tokenize('\n').eachWithIndex { lineText, z ->
-            annotations = komentisto.annotate(name, lineText, z+i)
-          }
-        } else {
-          annotations = komentisto.annotate(name, text)
-        }
-        annotations.each { a ->
-          outWriter.write(a.toString() + '\n')
-        }
-        
-        i++
-        if((i % 500) == 0) { outWriter.flush() }
-        if(o.verbose) {
-          println "${i}/${files.size()}"
-        }
-      }
-      }
-
-      outWriter.flush()
-      outWriter.close()
-    } else if(command == 'add_modifiers') {
-      if(!o.out || !o.a || !o.l) { println "Must provide annotation file via -a, and labels file with -l, and output filename via --out" ; System.exit(1) }
-      def komentisto = new Komentisto(o.l, false)
-
-      def newAnnotations = []
-      def i = 0
-      def aSize = new File(o.a).text.split('\n').size() // ugly
-
-      def annoFile = []
-      new File(o.a).splitEachLine('\t') { annoFile << it }
-
-      def cache = []
-      new File(o.out).splitEachLine('\t') { cache << it[0] }
-
-      def outWriter = new BufferedWriter(new FileWriter(o.out, true));
-
-      GParsPool.withPool(o['threads'] ?: 1) { p -> 
-      annoFile.eachParallel {
-        if(!cache.contains(it[0]) && it[1] && it[5]) {
-          def res = komentisto.evaluateSentenceConcept(it[5], it[1])
-          def tags = []
-          if(res.negated) { tags << 'negated' }
-          if(res.uncertain) { tags << 'uncertain' }
-          it[3] = tags.join(',')
-
-          outWriter.write(it.join('\t') + '\n')
-          if(o.verbose) { println "Adding modifiers (${++i}/$aSize)" }
-        } else {
-          i++
-        }
-      }
-      }
-
-      outWriter.flush()
-      outWriter.close()
-    } else if(command == 'get_abstracts') {
-      if(!o.l) { cliBuilder.usage() ; System.exit(1) }
-
-      def outDir = getOutDir(o)
-      def classLabels = [:] // TODO integrate this gIndex etc with the loadClassLabels function
-      def gIndex = 1
-      def excludeGroups = []
-      if(o['exclude-groups']) {
-        excludeGroups = o['exclude-groups'].split(',')
-      }
-      if(o['group-by-query']) {
-        gIndex = 2
-      }
-      new File(o.l).splitEachLine('\t') { // TODO: integrate this into loadClassLabels
-        if(!excludeGroups.contains(it[2])) {
-          if(!classLabels.containsKey(it[gIndex])) { classLabels[it[gIndex]] = [] }
-          classLabels[it[gIndex]] << it[0]
-        }
-      }
-
-      println "Finding articles for ${classLabels.size()} classes ..."
-
-      def aids = []
-      if(o.conjunction) {
-        def query = '(' + classLabels.collect { c, l -> '"' + l.join('" OR "') + '"' }.join(') AND (') + ')'
-        KomentLib.PMCSearch(query, o['count-only'], { result -> aids << result })
-      } else { // disjunction (default)
-        def newLabels = []
-        def thisLabelGroup = []
-        classLabels.each { cls, labels ->
-          thisLabelGroup << labels
-          if(thisLabelGroup.size() == 10) {
-            newLabels << thisLabelGroup.flatten()
-            thisLabelGroup = []
-          }
-        }
-        newLabels << thisLabelGroup.flatten()
-
-        def i = 0
-        newLabels.each { labels ->
-          KomentLib.PMCSearchTerms(labels, o['count-only'], { result -> aids << result })
-          println "${++i}/${newLabels.size()}"
-        }
-      }
-
-      aids = aids.flatten()
-
-      if(o['count-only']) {
-        println "Found ${aids.sum()} articles ..."
-      } else {
-        println "Found ${aids.size()} articles ..."
-
-        if(o.limit) { 
-          aids = aids.subList(0, o.limit)
-        }
-
-        println "Downloading abstracts for ${aids.size()} articles ..."
-
-        if(o['id-list-only']) {
-          writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
-        } else {
-          def komentisto = new Komentisto(o.l, o['disable-modifiers'], o['family-modifier'], o['exclude'], o['threads'] ?: 1)
-          def abstracts = []
-          aids.each { pmcid ->
-            KomentLib.PMCGetAbstracts(pmcid, { a -> 
-              if(a) { 
-                if(o['lemmatise']) {
-                  a = komentisto.lemmatise(a)
-                }
-                abstracts << [ id: pmcid, text: a ]
-              }
-            })
-          }
-
-          println "Saving ${abstracts.size()} abstracts to ${outDir.getPath()}"
-
-          abstracts.each { a ->
-            new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
-          } 
-        }
-      }
-    } else if(command == 'summarise_entity_pair') {
-      if(!o.l || !o.a || !o.c) { cliBuilder.usage() ; System.exit(1) }
-      def classes = o.c.split(',')
-      def g1 = classes[0]
-      def g2 = classes[1]
-
-      def groupLabels = [:]
-      def classLabels = [:]
-      def classGroups = [:]
-      new File(o.l).splitEachLine('\t') {
-        if(it[2] == g1 || it[2] == g2) {
-          if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [] }
-          classLabels[it[1]] << it[0]
-
-          if(!groupLabels.containsKey(it[2])) { groupLabels[it[2]] = [] }
-          groupLabels[it[2]] << it[1]
-
-          classGroups[it[1]] = it[2]
+        abstracts.each { a ->
+          new File(outDir.getAbsolutePath() + '/' + a.id + '.txt').text = a.text
         } 
       }
+    }
+  }
 
-      def annotations = AnnotationList.loadFile(o.a)
-      def fids = annotations.collect { it.f }.unique(false)
+  static def summarise_entity_pair(o) {
+    def classes = o.c.split(',')
+    def g1 = classes[0]
+    def g2 = classes[1]
 
-      def g1A = annotations.findAll { classGroup[it.termIri] == g1 }
-      def g2A = annotations.findAll { classGroup[it.termIri] == g2 }
+    def groupLabels = [:]
+    def classLabels = [:]
+    def classGroups = [:]
+    new File(o.l).splitEachLine('\t') {
+      if(it[2] == g1 || it[2] == g2) {
+        if(!classLabels.containsKey(it[1])) { classLabels[it[1]] = [] }
+        classLabels[it[1]] << it[0]
 
-      println "$g1 is mentioned ${g1A.size()} times"
-      println "$g2 is mentioned ${g2A.size()} times"
+        if(!groupLabels.containsKey(it[2])) { groupLabels[it[2]] = [] }
+        groupLabels[it[2]] << it[1]
 
-      // Group mentions by files
+        classGroups[it[1]] = it[2]
+      } 
+    }
 
-      def g1F = g1A.findAll { a -> g2A.find { it.f == a.f } }
-      def bothMentionFiles = []
+    def annotations = AnnotationList.loadFile(o.a)
+    def fids = annotations.collect { it.f }.unique(false)
 
-      g1F.each { a1 ->
-        g2A.findAll { it.f == a1.f }.each { a2 ->
-          bothMentionFiles << [ a1, a2 ]
-        }
+    def g1A = annotations.findAll { classGroup[it.termIri] == g1 }
+    def g2A = annotations.findAll { classGroup[it.termIri] == g2 }
+
+    println "$g1 is mentioned ${g1A.size()} times"
+    println "$g2 is mentioned ${g2A.size()} times"
+
+    // Group mentions by files
+
+    def g1F = g1A.findAll { a -> g2A.find { it.f == a.f } }
+    def bothMentionFiles = []
+
+    g1F.each { a1 ->
+      g2A.findAll { it.f == a1.f }.each { a2 ->
+        bothMentionFiles << [ a1, a2 ]
       }
+    }
 
-      def bothCounts = [:]
-      bothMentionFiles.each { l ->
-        def key = l[0].label + ' and ' + l[1].label
-        if(!bothCounts.containsKey(key)) {
-          bothCounts[key] = [ count: 0, uncertain: 0, negated: 0, articles: [] ]
-        }
-        bothCounts[key].count++
-        if(l[0].tags.contains('negated') || l[1].tags.contains('negated')) {
-          bothCounts[key].negated++
-        }
-        if(l[0].tags.contains('uncertain') || l[1].tags.contains('uncertain')) {
-          bothCounts[key].uncertain++
-        }
-        if(!bothCounts[key].articles.contains(l[0].f)) { bothCounts[key].articles << l[0].f }
+    def bothCounts = [:]
+    bothMentionFiles.each { l ->
+      def key = l[0].label + ' and ' + l[1].label
+      if(!bothCounts.containsKey(key)) {
+        bothCounts[key] = [ count: 0, uncertain: 0, negated: 0, articles: [] ]
       }
-
-      println "Considered ${fids.size()} documents and ${annotations.size()} annotations"
-      println "$g1 and $g2 are mentioned together ${bothMentionFiles.size()} times."
-      bothCounts.each { key, c ->
-        println "  $key ($c.count mentions, ${c.articles.size()} articles, $c.uncertain uncertain, $c.negated negated)"
+      bothCounts[key].count++
+      if(l[0].tags.contains('negated') || l[1].tags.contains('negated')) {
+        bothCounts[key].negated++
       }
-    } else if(command == 'suggest_axiom') {
-      if(!o.l || !o.a) { println 'Must provide a --label file and a --annotations file to suggest_axiom' ; System.exit(1) }
+      if(l[0].tags.contains('uncertain') || l[1].tags.contains('uncertain')) {
+        bothCounts[key].uncertain++
+      }
+      if(!bothCounts[key].articles.contains(l[0].f)) { bothCounts[key].articles << l[0].f }
+    }
 
-      // TODO probably just put this into an Labels class, replacing the loadLabels
+    println "Considered ${fids.size()} documents and ${annotations.size()} annotations"
+    println "$g1 and $g2 are mentioned together ${bothMentionFiles.size()} times."
+    bothCounts.each { key, c ->
+      println "  $key ($c.count mentions, ${c.articles.size()} articles, $c.uncertain uncertain, $c.negated negated)"
+    }
+  }
+
+  static def suggest_axiom(o) {
+    // TODO probably just put this into an Labels class, replacing the loadLabels
       def groupClasses = [:]
       def classes = [:]
       def entity
@@ -464,6 +455,7 @@ public class Komenti {
       
       if(o['class-list']) { def cl = o['class-list'].split(',') ; classes = classes.findAll { cIRI, cLabel -> cl.contains(cLabel) } }
 
+      // what the hell have i wrought
       classes.each { cIRI, cLabel ->
         def counts = [:]
         def qualityCounts = [:]
@@ -510,90 +502,92 @@ public class Komenti {
         println ''
         //def bestRelation = relationCounts.inject { s, iri, c -> c.count > s.count ? c : s }
       }
-    } else if(command == 'diagnose') {
-      if(!o.a) { println 'Must provide a --annotations file to diagnose' ; System.exit(1) }
 
-      def annotations = AnnotationList.loadFile(o.a)
-      def documents = [:]
-      def concepts = [:]
+  }
 
-      def conceptFactor = 'termIri'
-      if(o['by-group']) {
-        conceptFactor = 'group'
+  static def diagnose(o) {
+    if(!o.a) { println 'Must provide a --annotations file to diagnose' ; System.exit(1) }
+
+    def annotations = AnnotationList.loadFile(o.a)
+    def documents = [:]
+    def concepts = [:]
+
+    def conceptFactor = 'termIri'
+    if(o['by-group']) {
+      conceptFactor = 'group'
+    }
+
+    annotations.each { s ->
+      if(!concepts.containsKey(s.termIri)) {
+        concepts[s.termIri] = s.conceptLabel
       }
 
-      annotations.each { s ->
-        if(!concepts.containsKey(s.termIri)) {
-          concepts[s.termIri] = s.conceptLabel
-        }
+      if(!documents.containsKey(s.documentId)) {
+        documents[s.documentId] = [:]
+      }
 
-        if(!documents.containsKey(s.documentId)) {
-          documents[s.documentId] = [:]
-        }
-
-        if(!documents[s.documentId].containsKey(s[conceptFactor])) {
-          documents[s.documentId][s[conceptFactor]] = [
-            self: [
-              affirmed: 0,
-              negated: 0,
-              uncertain: 0,
-              total: 0
-            ],
-            family: [
-              affirmed: 0,
-              negated: 0,
-              uncertain: 0,
-              total: 0
-            ],
-            allergy: [
-              affirmed: 0,
-              negated: 0,
-              uncertain: 0,
-              total: 0
-            ]
+      if(!documents[s.documentId].containsKey(s[conceptFactor])) {
+        documents[s.documentId][s[conceptFactor]] = [
+          self: [
+            affirmed: 0,
+            negated: 0,
+            uncertain: 0,
+            total: 0
+          ],
+          family: [
+            affirmed: 0,
+            negated: 0,
+            uncertain: 0,
+            total: 0
+          ],
+          allergy: [
+            affirmed: 0,
+            negated: 0,
+            uncertain: 0,
+            total: 0
           ]
-        }
-
-        def target = 'self'
-        if(s.tags.contains('family')) { target = 'family' }
-        if(s.tags.contains('allergy')) { target = 'allergy' }
-
-        if(s.tags.contains('negated')) {
-          documents[s.documentId][s[conceptFactor]][target].negated++
-        }
-        if(s.tags.contains('uncertain')) {
-          documents[s.documentId][s[conceptFactor]][target].uncertain++
-        }
-        if(!s.tags.contains('negated') && !s.tags.contains('uncertain')) {
-          documents[s.documentId][s[conceptFactor]][target].affirmed++
-        }
-        documents[s.documentId][s[conceptFactor]][target].total++
+        ]
       }
 
-      def results = []
-      documents.each { docId, eConcepts ->
-        eConcepts.each { cIri, targets -> // cIri in this case may also be the group name
-          targets.each { target, counts ->
-            def value = 'unmentioned'
-            if(counts.total > 0) { value = 'affirmed' }
-            if(counts.uncertain > 0) {
-              if(counts.uncertain + counts.negated >= counts.total) {
-                value = 'uncertain'
-              }
-            } else if(counts.negated > 0) {
-              if(counts.uncertain + counts.negated >= counts.total) {
-                value = 'negated' 
-              }
+      def target = 'self'
+      if(s.tags.contains('family')) { target = 'family' }
+      if(s.tags.contains('allergy')) { target = 'allergy' }
+
+      if(s.tags.contains('negated')) {
+        documents[s.documentId][s[conceptFactor]][target].negated++
+      }
+      if(s.tags.contains('uncertain')) {
+        documents[s.documentId][s[conceptFactor]][target].uncertain++
+      }
+      if(!s.tags.contains('negated') && !s.tags.contains('uncertain')) {
+        documents[s.documentId][s[conceptFactor]][target].affirmed++
+      }
+      documents[s.documentId][s[conceptFactor]][target].total++
+    }
+
+    def results = []
+    documents.each { docId, eConcepts ->
+      eConcepts.each { cIri, targets -> // cIri in this case may also be the group name
+        targets.each { target, counts ->
+          def value = 'unmentioned'
+          if(counts.total > 0) { value = 'affirmed' }
+          if(counts.uncertain > 0) {
+            if(counts.uncertain + counts.negated >= counts.total) {
+              value = 'uncertain'
             }
-            if(value != 'unmentioned') {
-              results << [docId, cIri, concepts[cIri], target, value].join('\t')
+          } else if(counts.negated > 0) {
+            if(counts.uncertain + counts.negated >= counts.total) {
+              value = 'negated' 
             }
+          }
+          if(value != 'unmentioned') {
+            results << [docId, cIri, concepts[cIri], target, value].join('\t')
           }
         }
       }
-
-      writeOutput(results.join('\n'), o, "Diagnosis calculation complete!")
     }
+
+    writeOutput(results.join('\n'), o, "Diagnosis calculation complete!")
   }
 
   static def writeOutput(text, o, success) {

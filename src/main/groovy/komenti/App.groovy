@@ -93,6 +93,7 @@ class App {
     Komenti."$command"(o)
   }
 
+  // TODO this could be a bit smarter, eh
   static def checkArguments(command, o) {
     def success = true
     if(!f.metaClass.respondsTo(Komenti, command)) {
@@ -133,7 +134,56 @@ class App {
       }
     } else if(command == 'auto') {
       if(!o.r) { cliBuilder.usage() ; System.exit(1) }
+    } else if(command == 'query') {
+      if((!o['object-properties'] && (!o.q && !o.c))) { 
+        println "You must pass a query or class list"
+        success = false
+      }
+      if(o['object-properties'] && (o.q || o.c)) { 
+        println "Cannot pass a query or class list for --object-properties query"
+        success = false
+      }
+    } else if (command == 'get_metadata') { // TODO: needs to be expanded
+      if(!o.l) { 
+        println "Must pass label file" 
+        success = false
+      }
+    } else if(command == 'annotate') {
+      if((!o.t && !o['file-list']) {
+        println "Must either pass texts to parse, or a --file-list containing paths of texts to analyse."
+        success = false
+      }
+      if(!o.l) { 
+        println "Must pass label file" 
+        success = false
+      }
+      if(!o.out) { 
+        println "Must provide output filename via --out"
+        success = false
+      }
+    } else if(command == 'add_modifiers') {
+      if(!o.out || !o.a || !o.l) { 
+        println "Must provide annotation file via -a, and labels file with -l, and output filename via --out"
+        success = false
+      }
+    } else if(command == 'get_abstracts') {
+      if(!o.l) { 
+        println "Must pass label file" 
+        success = false
+      }
+
+    } else if(command == 'summarise_entity_pair') {
+      if(!o.l || !o.a || !o.c) { 
+        println "Must provide annotation file via -a, and labels file with -l, and two classes with -c"
+        success = false
+      }
+    } else if(command == 'suggest_axiom') {
+      if(!o.l || !o.a) { 
+        println "Must provide a --label file and a --annotations file" 
+        success = false
+      }
     }
-    success
-  }
+
+    success 
+  } 
 }

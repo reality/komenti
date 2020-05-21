@@ -138,8 +138,6 @@ public class Komentisto {
         def object = triple.objectLemmaGloss().toString()
 
         def subjectAnn = annotate(id, subject).findAll {
-        println it.matchedText
-        println subject
           it.group == 'terms' && it.matchedText.size() == subject.size()
         }
 

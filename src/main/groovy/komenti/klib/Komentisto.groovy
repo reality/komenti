@@ -8,6 +8,7 @@ public class Komentisto {
   def REP_TOKEN = 'biscuit'
   def UNC_WORDS_FILE = getClass().getResourceAsStream('/words/uncertain.txt')
   def FAM_WORDS_FILE = getClass().getResourceAsStream('/words/family.txt')
+  def ALLERGY_PATTERN = "allerg" // should be fine
 
   def advancedCoreNLP
   def basicPipeline
@@ -16,9 +17,10 @@ public class Komentisto {
   def excludeTerms = []
   def disableModifiers
   def familyModifier
+  def allergyModifier
   def vocabulary
 
-  def Komentisto(vocabulary, disableModifiers, familyModifier, excludeFile, threads) {
+  def Komentisto(vocabulary, disableModifiers, familyModifier, allergyModifier, excludeFile, threads) {
     this.vocabulary = vocabulary
  
     uncertainTerms = UNC_WORDS_FILE.getText().split('\n')
@@ -55,10 +57,11 @@ public class Komentisto {
 
     this.disableModifiers = disableModifiers
     this.familyModifier = familyModifier
+    this.allergyModifier = allergyModifier
   }
 
   def addRegexNERProps(props) {
-    props.put("regexner.mapping", vocabulary.labelFile.getAbsolutePath())
+    props.put("regexner.mapping", new File(vocabulary.labelPath).getAbsolutePath())
     props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
     props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.mapping.field.ontology", 
@@ -83,7 +86,10 @@ public class Komentisto {
 
       for(entityMention in sentence.get(CoreAnnotations.MentionsAnnotation.class)) {
         def ner = entityMention.get(CoreAnnotations.NamedEntityTagAnnotation.class)
-        if(vocabulary.entities.containsKey(ner)) {
+        if(!vocabulary.entities.containsKey(ner)) { // Fix for inability to overwrite internal tags ... WTF
+          ner = vocabulary.labelIri(entityMention.toString())
+        }
+        if(ner && vocabulary.entities.containsKey(ner)) {
           def a = new Annotation(
             documentId: id,
             termIri: ner,
@@ -127,6 +133,10 @@ public class Komentisto {
       }.flatten().any {
         familyTerms.contains(it) 
       }
+    }
+
+    if(allergyModifier) {
+      out.allergy = text =~ ALLERGY_PATTERN
     }
 
     out

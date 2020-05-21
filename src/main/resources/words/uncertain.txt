@@ -68,7 +68,6 @@ rarely
 regularly
 should
 tends
-usually
 abeyance
 abeyances
 almost
@@ -286,8 +285,6 @@ speculative
 speculatively
 sporadic
 sporadically
-sudden
-suddenly
 susceptibility
 tending
 tentative
@@ -369,13 +366,11 @@ investigation
 investigations
 monitor
 monitored
-development
-dissociate
 insufficient
 future
 analogous
-develop
 suggested
 look for
 imply
 unless
+may develop

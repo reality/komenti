@@ -4,7 +4,7 @@
 package komenti
 
 class App {
- static void main(String[] args) {
+ static int main(String[] args) {
     def cliBuilder = new CliBuilder(
       usage: 'komenti <command> [<options>]',
       header: 'Options:'
@@ -76,19 +76,24 @@ class App {
       _ longOpt: 'threads', 'Number of threads to use for query/annotation processes', type: Integer, args: 1
     }
 
-
     if(args.contains('--verbose')) {
       println args
     }
 
-    if(!args[0]) { println "Must provide command." ; cliBuilder.usage() ; System.exit(1) }
+    if(!args[0]) { println "Must provide command." ; return 0; }
+    if(args[0] == '-h' || args[0] == '--help') {
+      cliBuilder.usage() ; return 0;
+    }
+
     def command = args[0]
     def o = cliBuilder.parse(args.drop(1))
     
-    if(o.h) { cliBuilder.usage() ; return; }
+    if(o.h) { 
+      cliBuilder.usage() ; return 0;
+    }
 
     def aCheck = checkArguments(command, o)
-    if(!aCheck) { System.exit(1) }
+    if(!aCheck) { return 1; }
 
     Komenti."$command"(o)
   }
@@ -96,7 +101,7 @@ class App {
   // TODO this could be a bit smarter, eh
   static def checkArguments(command, o) {
     def success = true
-    if(!f.metaClass.respondsTo(Komenti, command)) {
+    if(!Komenti.metaClass.respondsTo(command)) {
       println "Command ${command} not found." ; success = false
     }
 
@@ -133,7 +138,10 @@ class App {
         }
       }
     } else if(command == 'auto') {
-      if(!o.r) { cliBuilder.usage() ; System.exit(1) }
+      if(!o.r) { 
+        println "Must pass a roster"
+        success = false
+      }
     } else if(command == 'query') {
       if((!o['object-properties'] && (!o.q && !o.c))) { 
         println "You must pass a query or class list"
@@ -149,7 +157,7 @@ class App {
         success = false
       }
     } else if(command == 'annotate') {
-      if((!o.t && !o['file-list']) {
+      if(!o.t && !o['file-list']) {
         println "Must either pass texts to parse, or a --file-list containing paths of texts to analyse."
         success = false
       }

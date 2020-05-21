@@ -4,6 +4,20 @@
 package komenti
 
 import spock.lang.Specification
+import spock.lang.Shared
 
 class AppTest extends Specification {
+  @Shared buffer
+
+  def setupSpec() {
+    buffer = new ByteArrayOutputStream()
+    System.out = new PrintStream(buffer)
+  }
+
+  def "startup"() {
+    when:
+      App.main("--help")
+    then: 
+      buffer.toString().indexOf("usage: komenti <command> [<options>]") != -1
+  }
 }

@@ -10,8 +10,7 @@ public class Komentisto {
   def FAM_WORDS_FILE = getClass().getResourceAsStream('/words/family.txt')
   def ALLERGY_PATTERN = "allerg" // should be fine
 
-  def advancedCoreNLP
-  def basicPipeline
+  def coreNLP
   def uncertainTerms
   def familyTerms
   def excludeTerms = []
@@ -19,6 +18,7 @@ public class Komentisto {
   def familyModifier
   def allergyModifier
   def vocabulary
+  def threads
 
   def Komentisto(vocabulary, disableModifiers, familyModifier, allergyModifier, excludeFile, threads) {
     this.vocabulary = vocabulary
@@ -28,45 +28,40 @@ public class Komentisto {
     if(excludeFile) {
       excludeTerms = new File(excludeFile).text.split('\n').collect { it.toLowerCase() }  
     }
-    
-    def props = new Properties()
 
-    if(!disableModifiers) {
-      props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions, depparse")
-    } else {
-      props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
-    }
-
-    props.put("ner.useSUTime", "false")
-    props.put("parse.maxtime", "5000")
-    addRegexNERProps(props)
-
-    props.put("regexner.ignorecase", "true")
-    props.put("depparse.nthreads", threads)
-    props.put("ner.nthreads", threads)
-    props.put("parse.nthreads", threads)
-    advancedCoreNLP = new StanfordCoreNLP(props)
-
-    props = new Properties()
-    props.put("annotators", "tokenize, ssplit, pos, lemma, ner, regexner, entitymentions")
-    addRegexNERProps(props)
-
-    def basicCoreNLP = new StanfordCoreNLP(props)
-    basicPipeline = new AnnotationPipeline()
-    basicPipeline.addAnnotator(basicCoreNLP)
-
+    // TODO replace with MapConstructor
     this.disableModifiers = disableModifiers
     this.familyModifier = familyModifier
     this.allergyModifier = allergyModifier
+    this.threads = threads
+
+    initialiseCoreNLP()
   }
 
-  def addRegexNERProps(props) {
+  def initialiseCoreNLP() {
+    def props = new Properties()
+
+    def aList = ["tokenize", "ssplit", "pos", "lemma", "ner", "regexner", "entitymentions", "depparse"]
+    if(disableModifiers) {
+      aList.remove("depparse")
+    }
+    props.put("annotators", aList.join(', '))
+
+    props.put("ner.useSUTime", "false")
+    props.put("parse.maxtime", "5000")
+
     props.put("regexner.mapping", new File(vocabulary.labelPath).getAbsolutePath())
     props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
     props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.mapping.field.ontology", 
       'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
     props.put("regexner.ignorecase", "true")
+
+    props.put("regexner.ignorecase", "true")
+    props.put("depparse.nthreads", threads)
+    props.put("ner.nthreads", threads)
+    props.put("parse.nthreads", threads)
+    coreNLP = new StanfordCoreNLP(props)
   }
 
   def annotate(id, text) {
@@ -120,7 +115,7 @@ public class Komentisto {
   def evaluateSentenceConcept(sentence, concept) {
     def text = sentence.toString()
     def klSentence = new Sentence(text, 0) // placeholder zero, no purpose
-    klSentence.genTypeDeps(advancedCoreNLP, vocabulary.entityLabels(concept), REP_TOKEN) 
+    klSentence.genTypeDeps(coreNLP, vocabulary.entityLabels(concept), REP_TOKEN) 
 
     def out = [
       negated: klSentence.isNegated([REP_TOKEN]),

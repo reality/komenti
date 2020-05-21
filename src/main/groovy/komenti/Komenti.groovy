@@ -234,6 +234,7 @@ public class Komenti {
 
     outWriter.flush()
     outWriter.close()
+    println "Annotation complete"
   }
 
   // TODO needs to use Annotation class

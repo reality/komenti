@@ -7,10 +7,12 @@ import klib.*
 
 class AppTest extends Specification {
   @Shared buffer
+  @Shared labelFile
 
   def setupSpec() {
     buffer = new ByteArrayOutputStream()
     System.out = new PrintStream(buffer)
+    labelFile = "labels.txt"
   }
 
   def toArg(q) { // thanks i hate it
@@ -26,12 +28,36 @@ class AppTest extends Specification {
 
   def "query"() {
     when:
-      def fName = "labels.txt"
-      def q = ["query", "-q", "'part of' some 'apoptotic process'", "-o", "GO", "--out", fName]
+      def q = ["query", "-q", "'part of' some 'apoptotic process'", "-o", "GO", "--out", labelFile]
       App.main(toArg(q))
     then:
-      buffer.toString() =~ "Saved \\d+ labels for \\d+ terms to $fName"
+      buffer.toString() =~ "Saved \\d+ labels for \\d+ terms to $labelFile"
     then:
-      new File(fName).exists()
+      new File(labelFile).exists()
   }
+
+  def "check_query_output"() {
+    true
+  }
+
+  /**
+  It gets angry about memory
+
+  def "annotate"() {
+    def outFile = 'annotation_file.txt'
+    def textFile = 'to_annotate.txt'
+
+    when:
+      def q = ["annotate", "-l", labelFile, "-t", textFile, "--out", outFile]
+      App.main(toArg(q))
+    then:
+      buffer.toString() =~ "Annotation complete"
+    then:
+      new File(outFile).exists()
+  }
+
+  def "check_annotate_output"() {
+    true
+  }
+  **/
 }

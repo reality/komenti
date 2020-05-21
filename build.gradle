@@ -62,3 +62,7 @@ gradle.taskGraph.whenReady { taskGraph ->
         version = '0.0.4-SNAPSHOT'
     }
 }
+
+test {
+  maxHeapSize = "2048m"
+}

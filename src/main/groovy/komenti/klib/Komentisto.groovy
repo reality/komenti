@@ -149,16 +149,10 @@ public class Komentisto {
           it.group == 'terms' && it.matchedText.size() == object.size()
         }
 
-        println subjectAnn
-        println relationAnn
-        println objectAnn
-
         if(subjectAnn && relationAnn && objectAnn) {
-          println 'YEAH!'
+          println 'Yeah!'
+          allTriples << new AnnotationTriple()
         }
-
-        println ''
-
       }
     }
 

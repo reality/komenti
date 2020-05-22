@@ -7,10 +7,12 @@ import klib.*
 
 class AppTest extends Specification {
   @Shared buffer
+  @Shared outFile
 
   def setupSpec() {
     buffer = new ByteArrayOutputStream()
     System.out = new PrintStream(buffer)
+    outFile = 'annotation_file.txt'
   }
 
   def toArg(q) { // thanks i hate it
@@ -44,10 +46,9 @@ class AppTest extends Specification {
   }
 
   def "annotate"() {
-    def outFile = 'annotation_file.txt'
-    def labelFile = resourceToPass('/go_labels_test.txt')
-    def textFile = resourceToPass('/annotate_this.txt')
-
+    given: 
+      def labelFile = resourceToPass('/go_labels_test.txt')
+      def textFile = resourceToPass('/annotate_this.txt')
     when:
       def q = ["annotate", "-l", labelFile, "-t", textFile, "--out", outFile, "--threads", "1"]
       App.main(toArg(q))
@@ -57,7 +58,19 @@ class AppTest extends Specification {
       new File(outFile).exists()
   }
 
+  // TODO check for another sentence with a different matchText, tags
   def "check_annotate_output"() {
-    true
+    given:
+      def anns = AnnotationList.loadFile(outFile)
+    expect:
+      anns.size() == 5
+      anns[0].documentId == "annotate_this.txt"
+      anns[0].termIri == "http://purl.obolibrary.org/obo/GO_0006309"
+      anns[0].conceptLabel == "apoptotic dna fragmentation"
+      anns[0].matchedText == "apoptotic dna fragmentation"
+      anns[0].group == "'part of' some 'apoptotic process'"
+      anns[0].tags.size() == 0
+      anns[0].sentenceId == "1"
+      anns[0].text == "apoptotic dna fragmentation is a key feature of apoptosis, a type of programmed cell death."
   }
 }

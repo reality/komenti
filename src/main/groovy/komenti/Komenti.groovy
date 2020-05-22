@@ -166,15 +166,28 @@ public class Komenti {
 
   static def annotate(o) {
     def vocab = Vocabulary.loadFile(o.l) 
-    def outWriter = new BufferedWriter(new FileWriter(o.out))
     def files = getFileList(o)
+
+    // getting a bit spaghet-ey
+    if(!o['extract-triples']) {
+      def outWriter = new BufferedWriter(new FileWriter(o.out))
+    } else {
+      def ou
+    }
+
+    def aList
+    if(o['extract-triples']) {
+      aList = new AnnotationTripleList(o.out, true) 
+    } else {
+      aList = new AnnotationList(o.out, true)
+    }
 
     println "Annotating ${files.size()} files ..."
     def komentisto = new Komentisto(vocab, 
       o['disable-modifiers'], 
       o['family-modifier'], 
       o['allergy-modifier'],
-      false,
+      o['extract-triples'],
       o['exclude'], 
       o['threads'] ?: 1)
       
@@ -194,25 +207,30 @@ public class Komenti {
       def annotations
       if(o['per-line']) {
         text.tokenize('\n').eachWithIndex { lineText, z ->
-          annotations = komentisto.annotate(name, lineText, z+i)
+          if(o['extract-triples']) {
+            annotations = komentisto.extractTriples(name, lineText, z+i)
+          } else {
+            annotations = komentisto.annotate(name, lineText, z+i)
+          }
         }
       } else {
-        annotations = komentisto.annotate(name, text)
+        if(o['extract-triples']) {
+          annotations = komentisto.extractTriples(name, text)
+        } else {
+          annotations = komentisto.annotate(name, text)
+        }
       }
-      annotations.each { a ->
-        outWriter.write(a.toString() + '\n')
-      }
-      
-      i++
-      if((i % 500) == 0) { outWriter.flush() }
+
+      aList.add(annotations)
+
       if(o.verbose) {
         println "${i}/${files.size()}"
       }
     }
     }
 
-    outWriter.flush()
-    outWriter.close()
+    aList.finishWrite() 
+
     println "Annotation complete"
   }
 

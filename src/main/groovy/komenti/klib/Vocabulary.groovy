@@ -8,7 +8,7 @@ class Vocabulary implements Iterable<Label> {
 
   Vocabulary(lbls, labelPath) {
     this(labelPath)
-    entities = lbls.groupBy {it.iri }
+    entities = lbls.groupBy { it.iri }
             .collectEntries({ [(it.getKey()): it.getValue()] })
   }
 

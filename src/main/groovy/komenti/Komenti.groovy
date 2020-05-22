@@ -175,19 +175,27 @@ public class Komenti {
       def ou
     }
 
-    def aList
+    // So the idea is that we'll only evaluate triples
+    def aList = new AnnotationList(o.out, !o['extract-triples'])
     if(o['extract-triples']) {
-      aList = new AnnotationTripleList(o.out, true) 
-    } else {
-      aList = new AnnotationList(o.out, true)
+      def tList = new AnnotationTripleList(o.out, true) 
+      println 'starting triple ann'
+      def tripleAnnotator = new Komentisto(vocab, 
+        o['disable-modifiers'], 
+        o['family-modifier'], 
+        o['allergy-modifier'],
+        true,
+        o['exclude'], 
+        o['threads'] ?: 1)
     }
 
     println "Annotating ${files.size()} files ..."
+    println 'starting notriple ann'
     def komentisto = new Komentisto(vocab, 
       o['disable-modifiers'], 
       o['family-modifier'], 
       o['allergy-modifier'],
-      o['extract-triples'],
+      false,
       o['exclude'], 
       o['threads'] ?: 1)
       
@@ -207,21 +215,31 @@ public class Komenti {
       def annotations
       if(o['per-line']) {
         text.tokenize('\n').eachWithIndex { lineText, z ->
-          if(o['extract-triples']) {
-            annotations = komentisto.extractTriples(name, lineText, z+i)
-          } else {
-            annotations = komentisto.annotate(name, lineText, z+i)
+          annotations = komentisto.annotate(name, lineText, z+i)
+        }
+      } else {
+        annotations = komentisto.annotate(name, text)
+      }
+
+      // So the idea is that we only invoke the triple annotator if
+      // the regular annotator found two terms and an object relation in the sentence. 
+      // Why? 
+      // Because it's extremely slow.
+      if(o['extract-triples']) {
+        annotations.groupBy { it.sentenceId }.each { sid, sAnns ->
+          def termAnns = sAnns.findAll { it.group == 'terms' }
+          def rAnns = sAnns.find { it.group == 'object-properties' }
+          
+          println termAnns.size()
+          println rAnns
+
+          if(termAnns.size() >= 2 && rAnns) {
+            tList.add(tripleAnnotator.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].sentence))
           }
         }
       } else {
-        if(o['extract-triples']) {
-          annotations = komentisto.extractTriples(name, text)
-        } else {
-          annotations = komentisto.annotate(name, text)
-        }
+        aList.add(annotations)
       }
-
-      aList.add(annotations)
 
       if(o.verbose) {
         println "${i}/${files.size()}"
@@ -229,7 +247,9 @@ public class Komenti {
     }
     }
 
-    aList.finishWrite() 
+    if(!o['extract-triples']) {
+      aList.finishWrite() 
+    }
 
     println "Annotation complete"
   }

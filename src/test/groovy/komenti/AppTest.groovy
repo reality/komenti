@@ -63,7 +63,7 @@ class AppTest extends Specification {
     given:
       def anns = AnnotationList.loadFile(outFile)
     expect:
-      anns.size() == 5
+      anns.size() == 6
       anns[0].documentId == "annotate_this.txt"
       anns[0].termIri == "http://purl.obolibrary.org/obo/GO_0006309"
       anns[0].conceptLabel == "apoptotic dna fragmentation"
@@ -72,5 +72,6 @@ class AppTest extends Specification {
       anns[0].tags.size() == 0
       anns[0].sentenceId == "1"
       anns[0].text == "apoptotic dna fragmentation is a key feature of apoptosis, a type of programmed cell death."
+      anns.findAll { it.tags.contains('negated') }.size() == 1
   }
 }

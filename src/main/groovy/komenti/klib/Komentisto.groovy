@@ -79,13 +79,9 @@ public class Komentisto {
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
 
     // TODO I think we may be able to use the 'Annotator.Requirement' class to determine what needs to be run
-    [ // These are the basic annotators we need for the entity extraction
-      coreNLP.getExistingAnnotator("tokenize"),
-      coreNLP.getExistingAnnotator("ssplit"),
-      coreNLP.getExistingAnnotator("ner"),
-      coreNLP.getExistingAnnotator("regexner"),
-      coreNLP.getExistingAnnotator("entitymentions")
-    ].each { it.annotate(aDocument) }
+    [ "tokenize", "ssplit", "ner", "regexner", "entitymentions" ].each {
+      coreNLP.getExistingAnnotator(it).annotate(aDocument)
+    }
 
     def results = []
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
@@ -127,8 +123,9 @@ public class Komentisto {
 
   def extractTriples(id, text, sentenceCount) {
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
-    coreNLP.annotate(aDocument)
-
+    [ "tokenize", "ssplit", "pos", "lemma", "depparse", "natlog", "openie" ].each {
+      coreNLP.getExistingAnnotator(it).annotate(aDocument)
+    }
     def allTriples = []
     
     // Loop over sentences in the document
@@ -144,6 +141,7 @@ public class Komentisto {
         def object = triple.objectLemmaGloss().toString()
         println "$subject,$relation,$object"
 
+        // it's inefficient to annotate it again, but just testing for now ...
         def subjectAnn = annotate(id, subject).findAll {
           it.group == 'terms' //&& it.matchedText.size() == subject.size()
         }
@@ -156,6 +154,10 @@ public class Komentisto {
           it.group == 'terms'// && it.matchedText.size() == object.size()
         }
 
+        println "subject: $subjectAnn"
+        println "relation: $relationAnn"
+        println "object: $objectAnn"
+
         if(subjectAnn && relationAnn && objectAnn) {
           println 'Yeah!'
           println 'HOWHWOHWHOWHOAWHOWHAONDFJKASBDHYUIASHDUIAS'
@@ -165,6 +167,8 @@ public class Komentisto {
             object: objectAnn
           )
         }
+
+        println ''
       }
     }
 

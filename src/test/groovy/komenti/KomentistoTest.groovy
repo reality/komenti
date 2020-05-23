@@ -21,7 +21,6 @@ class KomentistoTest extends Specification {
       1)
   }
 
-
   def "extract_triples"() {
     given:
       def aFile = getClass().getResource('/annotate_this.txt').toURI()

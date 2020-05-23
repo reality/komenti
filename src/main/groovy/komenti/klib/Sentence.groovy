@@ -61,12 +61,9 @@ class Sentence {
     } 
 
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(tText)
-    [
-      tParser.getExistingAnnotator("tokenize"),
-      tParser.getExistingAnnotator("ssplit"),
-      tParser.getExistingAnnotator("depparse")
-    ].each { it.annotate(aDocument) }
-
+    [ "tokenize", "ssplit", "depparse" ].each {
+      tParser.getExistingAnnotator(it).annotate(aDocument)
+    }
 
     def sentences = aDocument.get(CoreAnnotations.SentencesAnnotation.class)
     if(sentences && sentences.size() >= 1) {

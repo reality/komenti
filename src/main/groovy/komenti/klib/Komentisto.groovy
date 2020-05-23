@@ -142,15 +142,15 @@ public class Komentisto {
         println "$subject,$relation,$object"
 
         // it's inefficient to annotate it again, but just testing for now ...
-        def subjectAnn = annotate(id, subject).findAll {
+        def subjectAnn = annotate(id, subject, sentenceCount).find {
           it.group == 'terms' //&& it.matchedText.size() == subject.size()
         }
 
-        def relationAnn = annotate(id, relation).findAll { 
+        def relationAnn = annotate(id, relation, sentenceCount).find { 
           it.group == 'object-properties'// && it.matchedText.size() == relation.size()
         }
         
-        def objectAnn = annotate(id, object).findAll { 
+        def objectAnn = annotate(id, object, sentenceCount).find { 
           it.group == 'terms'// && it.matchedText.size() == object.size()
         }
 
@@ -162,14 +162,18 @@ public class Komentisto {
           if(!relationAnn && allowUnmatchedRelations) {
             relationAnn = new Annotation(
               documentId: subjectAnn.documentId,
-              termIri: 'UNMATCHED-CONCEPT',
-              conceptLabel: 'UNMATCHED-CONCEPT',
+              termIri: 'UNMATCHED_CONCEPT',
+              conceptLabel: 'UNMATCHED_CONCEPT',
               matchedText: relation,
               group: 'object-properties',
               tags: [],
               sentenceId: subjectAnn.sentenceId,
-              text: subjectAnn.text
+              text: text
             ) 
+          }
+
+          [subjectAnn, relationAnn, objectAnn].each {
+            it.text = text
           }
 
           println 'Yeah!'

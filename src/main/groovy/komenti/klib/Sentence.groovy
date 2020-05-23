@@ -61,7 +61,7 @@ class Sentence {
     } 
 
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(tText)
-    [ "tokenize", "ssplit", "depparse" ].each {
+    [ "tokenize", "ssplit", "pos", "lemma", "depparse" ].each {
       tParser.getExistingAnnotator(it).annotate(aDocument)
     }
 

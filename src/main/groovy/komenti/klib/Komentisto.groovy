@@ -183,7 +183,8 @@ public class Komentisto {
           allTriples << new AnnotationTriple(
             subject: subjectAnn, 
             relation: relationAnn, 
-            object: objectAnn
+            object: objectAnn,
+            original: "$subject -> $relation -> $object"
           )
         }
 

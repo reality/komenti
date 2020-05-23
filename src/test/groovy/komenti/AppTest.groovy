@@ -97,7 +97,7 @@ class AppTest extends Specification {
       anns.size() == 2
 
       anns[0].subject.documentId == 'annotate_this.txt_1'
-      anns[0].subject.sentenceId == 0
+      anns[0].subject.sentenceId == 1
       anns[0].subject.matchedText == 'apoptotic dna fragmentation'
       anns[0].subject.text == 'apoptotic dna fragmentation is a key feature of apoptosis, a type of programmed cell death.'
 

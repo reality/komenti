@@ -46,11 +46,11 @@ public class Komentisto {
   def initialiseCoreNLP() {
     def props = new Properties()
 
-    def aList = ["tokenize", "ssplit", "pos", "lemma", "ner", "regexner", "entitymentions", "depparse"]
-    if(disableModifiers) {
-      aList.remove("depparse")
+    def aList = ["tokenize", "ssplit", "pos", "lemma", "ner", "regexner", "entitymentions"]
+    if(!disableModifiers) {
+      aList << "depparse"
     }
-    if(enableIE) { aList += ["natlog", "openie"] }
+    if(enableIE) { aList += ["depparse", "natlog", "openie"] }
     println aList
     props.put("annotators", aList.join(', '))
 
@@ -77,7 +77,12 @@ public class Komentisto {
 
   def annotate(id, text, sentenceCount) {
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
-    coreNLP.annotate(aDocument)
+
+    def annotators = [
+      coreNLP.getExistingAnnotator("regexner"),
+      coreNLP.getExistingAnnotator("entitymentions")
+    ]
+    annotators.each { it.annotate(aDocument) }
 
     def results = []
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
@@ -122,36 +127,40 @@ public class Komentisto {
     coreNLP.annotate(aDocument)
 
     def allTriples = []
-
     
     // Loop over sentences in the document
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
       sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class).each{ triple ->
-        allTriples << triple
         System.out.println(triple.confidence + "\t" +
             triple.subjectLemmaGloss() + "\t" +
             triple.relationLemmaGloss() + "\t" +
             triple.objectLemmaGloss());
 
         def subject = triple.subjectLemmaGloss().toString()
-        def relation = triple.relationLemmaGloss().toString()
+        def relation = triple.relationLemmaGloss().toString().replace('be ','')
         def object = triple.objectLemmaGloss().toString()
+        println "$subject,$relation,$object"
 
         def subjectAnn = annotate(id, subject).findAll {
-          it.group == 'terms' && it.matchedText.size() == subject.size()
+          it.group == 'terms' //&& it.matchedText.size() == subject.size()
         }
 
         def relationAnn = annotate(id, relation).findAll { 
-          it.group == 'object-properties' && it.matchedText.size() == relation.size()
+          it.group == 'object-properties'// && it.matchedText.size() == relation.size()
         }
         
         def objectAnn = annotate(id, object).findAll { 
-          it.group == 'terms' && it.matchedText.size() == object.size()
+          it.group == 'terms'// && it.matchedText.size() == object.size()
         }
 
         if(subjectAnn && relationAnn && objectAnn) {
           println 'Yeah!'
-          allTriples << new AnnotationTriple()
+          println 'HOWHWOHWHOWHOAWHOWHAONDFJKASBDHYUIASHDUIAS'
+          allTriples << new AnnotationTriple(
+            subject: subjectAnn, 
+            relation: relationAnn, 
+            object: objectAnn
+          )
         }
       }
     }

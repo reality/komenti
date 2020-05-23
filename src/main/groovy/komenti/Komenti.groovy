@@ -171,16 +171,16 @@ public class Komenti {
     // getting a bit spaghet-ey
     if(!o['extract-triples']) {
       def outWriter = new BufferedWriter(new FileWriter(o.out))
-    } else {
-      def ou
     }
 
     // So the idea is that we'll only evaluate triples
     def aList = new AnnotationList(o.out, !o['extract-triples'])
+    def tList
+    def tripleAnnotator
     if(o['extract-triples']) {
-      def tList = new AnnotationTripleList(o.out, true) 
       println 'starting triple ann'
-      def tripleAnnotator = new Komentisto(vocab, 
+      tList = new AnnotationTripleList(o.out, true) 
+      tripleAnnotator = new Komentisto(vocab, 
         o['disable-modifiers'], 
         o['family-modifier'], 
         o['allergy-modifier'],
@@ -233,8 +233,9 @@ public class Komenti {
           println termAnns.size()
           println rAnns
 
+          // check the rAnns are between the termAnns??
           if(termAnns.size() >= 2 && rAnns) {
-            tList.add(tripleAnnotator.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].sentence))
+            tList.add(tripleAnnotator.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].text))
           }
         }
       } else {
@@ -249,6 +250,8 @@ public class Komenti {
 
     if(!o['extract-triples']) {
       aList.finishWrite() 
+    } else {
+      tList.finishWrite()
     }
 
     println "Annotation complete"

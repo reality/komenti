@@ -5,7 +5,7 @@ import groovy.transform.MapConstructor
 
 @MapConstructor
 class AnnotationTripleList implements Iterable<AnnotationTriple> {
-  List<AnnotationTriple> a
+  List<AnnotationTriple> a = []
   def annPath
   def writeMode
 
@@ -23,12 +23,16 @@ class AnnotationTripleList implements Iterable<AnnotationTriple> {
     ans.each { an ->
       a << an
       if(writeMode) {
-        if((a.size() % 500) == 0) { write() }
+        //if((a.size() % 500) == 0) { write() }
+        write()
       }
     } 
   }
 
   def write() {
+    println a
+    println new JsonBuilder(a).toPrettyString()
+    println new JsonBuilder(a[0]).toPrettyString()
     new File(annPath).text = new JsonBuilder(a).toPrettyString()
   }
 

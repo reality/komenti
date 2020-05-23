@@ -26,6 +26,14 @@ komenti query -q "'part of' some 'apoptotic process'" -o GO --out labels.txt
 komenti query -c toxicity,asbestos -o ENM --out labels.txt
 ```
 
+### All classes
+
+You can get all classes in an ontology by running a subclass query on owl#Thing:
+
+```bash
+komenti query -q "<http://www.w3.org/2002/07/owl#Thing>" --ontology HP
+```
+
 ### Parameters
 
 * The labels can be extended by the power of lemmatisation, by passing --lemmatise

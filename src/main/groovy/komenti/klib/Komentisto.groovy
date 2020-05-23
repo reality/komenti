@@ -78,7 +78,10 @@ public class Komentisto {
   def annotate(id, text, sentenceCount) {
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
 
-    def annotators = [
+    def annotators = [ // These are the basic annotators we need for the entity extraction
+      coreNLP.getExistingAnnotator("tokenize"),
+      coreNLP.getExistingAnnotator("ssplit"),
+      coreNLP.getExistingAnnotator("ner"),
       coreNLP.getExistingAnnotator("regexner"),
       coreNLP.getExistingAnnotator("entitymentions")
     ]

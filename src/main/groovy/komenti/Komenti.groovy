@@ -189,8 +189,7 @@ public class Komenti {
         o['threads'] ?: 1)
     }
 
-    println "Annotating ${files.size()} files ..."
-    println 'starting notriple ann'
+    if(o['verbose']) { println "Initialising annotators" }
     def komentisto = new Komentisto(vocab, 
       o['disable-modifiers'], 
       o['family-modifier'], 
@@ -199,6 +198,7 @@ public class Komenti {
       o['exclude'], 
       o['threads'] ?: 1)
       
+    println "Annotating ${files.size()} files ..."
     def i = 0
     GParsPool.withPool(o['threads'] ?: 1) { p -> 
     files.eachParallel{ f ->

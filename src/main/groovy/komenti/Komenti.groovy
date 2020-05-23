@@ -178,23 +178,15 @@ public class Komenti {
     def tList
     def tripleAnnotator
     if(o['extract-triples']) {
-      println 'starting triple ann'
       tList = new AnnotationTripleList(o.out, true) 
-      tripleAnnotator = new Komentisto(vocab, 
-        o['disable-modifiers'], 
-        o['family-modifier'], 
-        o['allergy-modifier'],
-        true,
-        o['exclude'], 
-        o['threads'] ?: 1)
-    }
+    } 
 
     if(o['verbose']) { println "Initialising annotators" }
     def komentisto = new Komentisto(vocab, 
       o['disable-modifiers'], 
       o['family-modifier'], 
       o['allergy-modifier'],
-      false,
+      o['extract-triples'],
       o['exclude'], 
       o['threads'] ?: 1)
       
@@ -221,21 +213,14 @@ public class Komenti {
         annotations = komentisto.annotate(name, text)
       }
 
-      // So the idea is that we only invoke the triple annotator if
-      // the regular annotator found two terms and an object relation in the sentence. 
-      // Why? 
-      // Because it's extremely slow.
       if(o['extract-triples']) {
         annotations.groupBy { it.sentenceId }.each { sid, sAnns ->
           def termAnns = sAnns.findAll { it.group == 'terms' }
           def rAnns = sAnns.find { it.group == 'object-properties' }
-          
-          println termAnns.size()
-          println rAnns
 
           // check the rAnns are between the termAnns??
-          if(termAnns.size() >= 2 && rAnns) {
-            tList.add(tripleAnnotator.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].text))
+          if(termAnns.size() >= 2 && (rAnns || o['allow-unmatched-relations'])) {
+            tList.add(komentisto.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].text, o['allow-unmatched-relations']))
           }
         }
       } else {

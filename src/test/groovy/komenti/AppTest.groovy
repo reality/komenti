@@ -3,6 +3,8 @@ package komenti
 import spock.lang.Specification
 import spock.lang.Shared
 
+import groovy.json.*
+
 import klib.*
 
 class AppTest extends Specification {
@@ -73,5 +75,25 @@ class AppTest extends Specification {
       anns[0].sentenceId == "1"
       anns[0].text == "apoptotic dna fragmentation is a key feature of apoptosis, a type of programmed cell death."
       anns.findAll { it.tags.contains('negated') }.size() == 1
+  }
+
+  def "extract_triples"() {
+    given: 
+      def labelFile = resourceToPass('/go_triple_vocab.txt')
+      def textFile = resourceToPass('/annotate_this.txt')
+    when:
+      def q = ["annotate", "-l", labelFile, "-t", textFile, "--out", outFile, "--threads", "1", "--extract-triples", "--allow-unmatched-relations"]
+      App.main(toArg(q))
+    then:
+      buffer.toString() =~ "Annotation complete"
+    then:
+      new File(outFile).exists()
+  }
+
+  def "check_extract_triples_output"() {
+    given:
+      def anns = new JsonSlurper().parse(new File(outFile))
+    expect:
+      anns == false
   }
 }

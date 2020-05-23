@@ -119,9 +119,9 @@ public class Komentisto {
     results
   }
 
-  def extractTriples(id, text) { extractTriples(id, text, 0) }
+  def extractTriples(id, text, allowUnmatchedRelations) { extractTriples(id, text, 0, allowUnmatchedRelations) }
 
-  def extractTriples(id, text, sentenceCount) {
+  def extractTriples(id, text, sentenceCount, allowUnmatchedRelations) {
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
     [ "tokenize", "ssplit", "pos", "lemma", "depparse", "natlog", "openie" ].each {
       coreNLP.getExistingAnnotator(it).annotate(aDocument)
@@ -158,7 +158,20 @@ public class Komentisto {
         println "relation: $relationAnn"
         println "object: $objectAnn"
 
-        if(subjectAnn && relationAnn && objectAnn) {
+        if(subjectAnn && objectAnn) {
+          if(!relationAnn && allowUnmatchedRelations) {
+            relationAnn = new Annotation(
+              documentId: subjectAnn.documentId,
+              termIri: 'UNMATCHED-CONCEPT',
+              conceptLabel: 'UNMATCHED-CONCEPT',
+              matchedText: relation,
+              group: 'object-properties',
+              tags: [],
+              sentenceId: subjectAnn.sentenceId,
+              text: subjectAnn.text
+            ) 
+          }
+
           println 'Yeah!'
           println 'HOWHWOHWHOWHOAWHOWHAONDFJKASBDHYUIASHDUIAS'
           allTriples << new AnnotationTriple(

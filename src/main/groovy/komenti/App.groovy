@@ -34,6 +34,8 @@ class App {
       _ longOpt: 'exclude', 'A list of phrases, which when matched in a sentence, will cause that sentence not to be annotated. One phrase per line.', args: 1
       _ longOpt: 'write-pdfs-to-dir', 'If set, write the converted PDF text into the given directory.', args: 1
       _ longOpt: 'extract-triples', 'Extract triples from text', type: Boolean
+      _ longOpt: 'allow-unmatched-relations', 'If there are two terms, output a mocked Annotation in AnnotationTriple, allowing triples without ', type: Boolean
+      // _ longOpt: 'require-full-match', ' require a full match for extraction of tripels'
 
       // summary options
       a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1

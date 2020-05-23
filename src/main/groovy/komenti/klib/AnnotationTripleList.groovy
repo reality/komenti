@@ -21,18 +21,20 @@ class AnnotationTripleList implements Iterable<AnnotationTriple> {
   
   def add(List<AnnotationTriple> ans) {
     ans.each { an ->
-      a << an
-      if(writeMode) {
-        //if((a.size() % 500) == 0) { write() }
-        write()
+      if(!a.any { 
+          it.subject.conceptLabel == an.subject.conceptLabel && 
+          it.relation.conceptLabel == an.relation.conceptLabel && 
+          it.object.conceptLabel == an.object.conceptLabel }) {
+        a << an
+        if(writeMode) {
+          //if((a.size() % 500) == 0) { write() }
+          //write()
+        }
       }
     } 
   }
 
   def write() {
-    println a
-    println new JsonBuilder(a).toPrettyString()
-    println new JsonBuilder(a[0]).toPrettyString()
     new File(annPath).text = new JsonBuilder(a).toPrettyString()
   }
 

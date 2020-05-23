@@ -97,11 +97,11 @@ class AppTest extends Specification {
       anns.size() == 4
 
       anns[0].subject.documentId == 'annotate_this.txt_1'
-      anns[0].subject.sentenceId == 1
+      anns[0].subject.sentenceId == 0
       anns[0].subject.matchedText == 'apoptotic dna fragmentation'
       anns[0].subject.text == 'apoptotic dna fragmentation is a key feature of apoptosis, a type of programmed cell death.'
 
-      anns[0].relation.conceptLabel == 'UNMATCHED_CONCEPT'
+      anns[0].relation.conceptLabel == 'key feature of'
       anns[0].relation.termIri == 'UNMATCHED_CONCEPT'
       anns[0].relation.matchedText == 'key feature of'
   }

@@ -142,28 +142,56 @@ public class Komentisto {
         println "$subject,$relation,$object"
 
         // it's inefficient to annotate it again, but just testing for now ...
-        def subjectAnn = annotate(id, subject, sentenceCount).find {
-          it.group == 'terms' //&& it.matchedText.size() == subject.size()
-        }
+        def subjectIri = vocabulary.labelIri(subject)
+        def relationIri = vocabulary.labelIri(relation)
+        def objectIri = vocabulary.labelIri(object)
 
-        def relationAnn = annotate(id, relation, sentenceCount).find { 
-          it.group == 'object-properties'// && it.matchedText.size() == relation.size()
-        }
-        
-        def objectAnn = annotate(id, object, sentenceCount).find { 
-          it.group == 'terms'// && it.matchedText.size() == object.size()
-        }
+        println "subject: $subjectIri"
+        println "relation: $relationIri"
+        println "object: $objectIri"
 
-        println "subject: $subjectAnn"
-        println "relation: $relationAnn"
-        println "object: $objectAnn"
+        // TODO we can simplify this a lot with a clone command!!
+        def subjectAnn
+        def relationAnn
+        def objectAnn
+        if(subjectIri && objectIri) {
+          subjectAnn = new Annotation(
+            documentId: id, 
+            termIri: subjectIri,
+            conceptLabel: vocabulary.termLabel(subjectIri),
+            matchedText: subject,
+            group: 'terms',
+            tags: [],
+            sentenceId: sentenceCount,
+            text: sentence.toString() 
+          )
+          objectAnn = new Annotation(
+            documentId: id, 
+            termIri: objectIri,
+            conceptLabel: vocabulary.termLabel(objectIri),
+            matchedText: object,
+            group: 'terms',
+            tags: [],
+            sentenceId: sentenceCount,
+            text: sentence.toString() 
+          )
 
-        if(subjectAnn && objectAnn) {
-          if(!relationAnn && allowUnmatchedRelations) {
+          if(relationIri) {
             relationAnn = new Annotation(
-              documentId: subjectAnn.documentId,
+              documentId: id, 
+              termIri: relationIri,
+              conceptLabel: vocabulary.termLabel(relationIri),
+              matchedText: relation,
+              group: 'terms',
+              tags: [],
+              sentenceId: sentenceCount,
+              text: sentence.toString() 
+            )
+          } else if(allowUnmatchedRelations) {
+            relationAnn = new Annotation(
+              documentId: id,
               termIri: 'UNMATCHED_CONCEPT',
-              conceptLabel: 'UNMATCHED_CONCEPT',
+              conceptLabel: relation,
               matchedText: relation,
               group: 'object-properties',
               tags: [],
@@ -172,17 +200,19 @@ public class Komentisto {
             ) 
           }
 
-          [subjectAnn, relationAnn, objectAnn].each {
-            it.text = text
-          }
+          if(relationAnn) {
+            [subjectAnn, relationAnn, objectAnn].each {
+              it.text = text
+            }
 
-          println 'Yeah!'
-          println 'HOWHWOHWHOWHOAWHOWHAONDFJKASBDHYUIASHDUIAS'
-          allTriples << new AnnotationTriple(
-            subject: subjectAnn, 
-            relation: relationAnn, 
-            object: objectAnn
-          )
+            println 'Yeah!'
+            println 'HOWHWOHWHOWHOAWHOWHAONDFJKASBDHYUIASHDUIAS'
+            allTriples << new AnnotationTriple(
+              subject: subjectAnn, 
+              relation: relationAnn, 
+              object: objectAnn
+            )
+          }
         }
 
         println ''

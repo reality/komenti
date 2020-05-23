@@ -66,7 +66,7 @@ class Sentence {
     }
 
     def sentences = aDocument.get(CoreAnnotations.SentencesAnnotation.class)
-    if(sentences && sentences.size() >= 1) {
+    if(sentences && sentences.size() >= 1) { // TODO not sure about this
       rText = sentences[0]
       graph = sentences[0].get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class)
     }

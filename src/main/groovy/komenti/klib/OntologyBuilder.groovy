@@ -32,61 +32,91 @@ class OntologyBuilder {
     manager.addAxiom(ontology, factory.getOWLReflexiveObjectPropertyAxiom(partOf))
 
     def addedTerms = [:]
-    def addClass = { iri, label ->
+    def addClass = { iri, label, relation ->
       def cClass = factory.getOWLClass(IRI.create(iri))
+      if(relation) {
+        cClass = factory.getOWLObjectProperty(IRI.create(iri))
+      }
+      println "adding $label with $iri"
+
       def anno = factory.getOWLAnnotation(
            factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI()),
            factory.getOWLLiteral(label))
       def axiom =  factory.getOWLAnnotationAssertionAxiom(cClass.getIRI(), anno)
       manager.addAxiom(ontology, axiom)
+
       return cClass
     }
     def makeOrGetClass
-    makeOrGetClass = { t ->
+    makeOrGetClass = { t, relation ->
+      println "processing $t"
+
       def label = t.getLabel()
+      def oClass
       if(t.iri == 'UNMATCHED_CONCEPT') {
         if(addedTerms.containsKey(label)) {
           t.iri = addedTerms[label]
         } else {
           t.iri = prefix + (++tCount)
         }
-      }
 
-      def oClass = factory.getOWLClass(IRI.create(t.iri))
-      if(!addedTerms.containsKey(label)) {
-        addClass(t.iri, label)
+        addClass(t.iri, label, relation)
         addedTerms[label] = t.iri         
-      }
 
-      if(t.parentTerm) {
-        // we also have to create specifier
-        if(!addedTerms[t.getSpecificLabel()]) {
-          addedTerms[t.getSpecificLabel()] = prefix + (++tCount)
-          addClass(addedTerms[t.getSpecificLabel()], t.getSpecificLabel())
+        if(relation) {
+          oClass = factory.getOWLObjectProperty(IRI.create(t.iri))
+        } else {
+          oClass = factory.getOWLClass(IRI.create(t.iri))
         }
-        def specifierClass = factory.getOWLClass(IRI.create(addedTerms[t.getSpecificLabel()]))
 
-        manager.addAxiom(ontology, factory.getOWLEquivalentClassesAxiom(
-          oClass, factory.getOWLObjectIntersectionOf(
-            makeOrGetClass(t.parentTerm),
-            factory.getOWLObjectSomeValuesFrom(
-              hasSpecifier,
-              specifierClass
-            )
-          )))
+        if(t.parentTerm) {
+          // we also have to create specifier
+          if(!addedTerms[t.getSpecificLabel()]) {
+            addedTerms[t.getSpecificLabel()] = prefix + (++tCount)
+            addClass(addedTerms[t.getSpecificLabel()], t.getSpecificLabel(), relation)
+          }
+          def specifierClass = factory.getOWLClass(IRI.create(addedTerms[t.getSpecificLabel()]))
+
+          if(!relation) { // TODO add subrelationof
+            manager.addAxiom(ontology, factory.getOWLEquivalentClassesAxiom(
+              oClass, factory.getOWLObjectIntersectionOf(
+                makeOrGetClass(t.parentTerm, relation),
+                factory.getOWLObjectSomeValuesFrom(
+                  hasSpecifier,
+                  specifierClass
+                )
+              )))
+          }
+        }
+      } else {
+        if(!addedTerms.containsKey(t.getSpecificLabel())) {
+          addClass(t.iri, t.getSpecificLabel(), relation)
+          addedTerms[t.getSpecificLabel()] = t.iri         
+        }
+
+        if(relation) {
+          oClass = factory.getOWLObjectProperty(IRI.create(t.iri))
+        } else {
+          oClass = factory.getOWLClass(IRI.create(t.iri))
+        }
+
+        if(t.parentTerm) { makeOrGetClass(t.parentTerm, relation) }
       }
+
+      
+      println ''
 
       oClass
     }
     triples.each { 
-      def subjectIri = makeOrGetClass(it.subject)
-      def relationIri = makeOrGetClass(it.relation)
-      def objectIri = makeOrGetClass(it.object)
+      def subject = makeOrGetClass(it.subject, false)
+      def relation = makeOrGetClass(it.relation, true)
+      def object = makeOrGetClass(it.object, false)
 
-      /*manager.addAxiom(ontology, factory.getOWLEquivalentClassesAxiom(
-        subjectIri, factory.getOWLObjectSomeValuesFrom(
-          relationIri, objectIri) 
-      )) */ 
+      manager.addAxiom(ontology, factory.getOWLEquivalentClassesAxiom(
+        subject, factory.getOWLObjectSomeValuesFrom(
+          relation, object) 
+      ))
     }
 
     manager.saveOntology(ontology, IRI.create(new File(o['out']).toURI()))

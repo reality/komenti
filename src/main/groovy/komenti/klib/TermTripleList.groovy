@@ -47,11 +47,11 @@ class TermTripleList implements Iterable<TermTriple> {
     def processTerm // done this way to support recursion
     // TODO currently ignoring the originalAnnotation, will just involve some more casting
     processTerm = { t -> // this is kind of a pain, i don't really get why it can't do it iself
-      if(t.containsKey('parentTerm')) {
+      if(t.parentTerm) {
         t.parentTerm = processTerm(t.parentTerm)
-        return new Term(t.parentTerm, t.iri, t.label)
+        new Term(t.parentTerm, t.iri, t.specificLabel)
       } else {
-        return new Term(t.iri, t.label)
+        new Term(t.iri, t.specificLabel)
       }
     }
     def ans = new JsonSlurper().parse(new File(fileName)).collect {

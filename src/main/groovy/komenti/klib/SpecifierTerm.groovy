@@ -4,8 +4,9 @@ package klib
 class SpecifierTerm extends Term {
   Term parentTerm 
 
-  SpecifierTerm(Term t, iri, label) {
-    super(iri, label)
-    parentTerm = t
+  // Little bit of a clunky way of doing it
+  SpecifierTerm(Term parentTerm, Term specifiedTerm) {
+    super(specifiedTerm.iri, specifiedTerm.label)
+    this.parentTerm = parentTerm
   }
 }

@@ -134,61 +134,58 @@ public class Komentisto {
         System.out.println(triple.confidence + "\t" +
             triple.subjectLemmaGloss() + "\t" +
             triple.relationLemmaGloss() + "\t" +
-            triple.objectLemmaGloss());
+            triple.objectLemmaGloss())
 
         def subject = triple.subjectLemmaGloss().toString()
         def relation = triple.relationLemmaGloss().toString().replace('be ','')
         def object = triple.objectLemmaGloss().toString()
         println "$subject,$relation,$object"
 
-        // it's inefficient to annotate it again, but just testing for now ...
-				// we could also potentially have several...
-        println ''
-			  def subjectAnn = annotate(id, subject, sentenceCount).findAll {
-          it.group == 'terms' //&& it.matchedText.size() == subject.size()
-        }.max { it.matchedText.size() }
+        // we take the text, annotate it, turn it into Terms
+        def consume = { entity, group ->
+          def result
+          while(entity.size() > 0) {
+            def a = annotate(id, entity, sentenceCount).findAll {
+              it.group == group
+            }.max { it.matchedText.size() }
 
-        def relationAnn = annotate(id, relation, sentenceCount).findAll { 
-          it.group == 'object-properties'// && it.matchedText.size() == relation.size()
-        }.max { it.matchedText.size() }
-        
-        def objectAnn = annotate(id, object, sentenceCount).findAll { 
-          it.group == 'terms'// && it.matchedText.size() == object.size()
-        }.max { it.matchedText.size() }
+            def t
+            if(!a) {
+              t = new Term('UNMATCHED_CONCEPT', entity)
+              entity = ''
+            } else {
+              a.text = text
+              entity = entity.replace(a.matchedText, '').trim()
+              t = Term.fromAnnotation(a)
+            }
 
-        println "subject: $subjectAnn"
-        println "relation: $relationAnn"
-        println "object: $objectAnn"
-
-        if(subjectAnn && objectAnn) {
-          if(!relationAnn && allowUnmatchedRelations) {
-            relationAnn = new Annotation(
-              documentId: subjectAnn.documentId,
-              termIri: 'UNMATCHED_CONCEPT',
-              conceptLabel: relation,
-              matchedText: relation,
-              group: 'object-properties',
-              tags: [],
-              sentenceId: subjectAnn.sentenceId,
-              text: text
-            ) 
+            if(result) {
+              result = new SpecifierTerm(result, t)
+            } else {
+              if(t.iri != 'UNMATCHED_CONCEPT' || (group == 'object-properties' && allowUnmatchedRelations)) {
+                result = t
+              } // So we only want to *Start* a result if we have at least some match to specify
+            }
           }
-
-          [subjectAnn, relationAnn, objectAnn].each {
-            it.text = text
-          }
-
-          println 'Yeah!'
-          println 'HOWHWOHWHOWHOAWHOWHAONDFJKASBDHYUIASHDUIAS'
-          allTriples << new AnnotationTriple(
-            subject: subjectAnn, 
-            relation: relationAnn, 
-            object: objectAnn,
-            original: "$subject -> $relation -> $object"
-          )
+          result
         }
 
+        def subjectTerm = consume(subject, 'terms')
+        def relationTerm = consume(relation, 'object-properties')
+        def objectTerm = consume(object, 'terms')
+
+        println subjectTerm
+        println relationTerm
+        println objectTerm
         println ''
+
+        if(subjectTerm && relationTerm && objectTerm) {
+          allTriples << new TermTriple(
+            subject: subjectTerm, 
+            relation: relationTerm, 
+            object: objectTerm,
+          )
+        }
       }
     }
 

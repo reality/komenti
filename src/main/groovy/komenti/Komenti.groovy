@@ -178,7 +178,7 @@ public class Komenti {
     def tList
     def tripleAnnotator
     if(o['extract-triples']) {
-      tList = new AnnotationTripleList(o.out, true) 
+      tList = new TermTripleList(o.out, true) 
     } 
 
     if(o['verbose']) { println "Initialising annotators" }

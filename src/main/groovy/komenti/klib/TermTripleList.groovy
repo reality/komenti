@@ -4,12 +4,12 @@ import groovy.json.*
 import groovy.transform.MapConstructor
 
 @MapConstructor
-class AnnotationTripleList implements Iterable<AnnotationTriple> {
-  List<AnnotationTriple> a = []
+class TermTripleList implements Iterable<TermTriple> {
+  List<TermTriple> a = []
   def annPath
   def writeMode
 
-  AnnotationTripleList(annPath, writeMode) {
+  TermTripleList(annPath, writeMode) {
     this.writeMode = writeMode
     this.annPath = annPath
   }
@@ -19,12 +19,9 @@ class AnnotationTripleList implements Iterable<AnnotationTriple> {
     a.iterator()
   }
   
-  def add(List<AnnotationTriple> ans) {
+  def add(List<TermTriple> ans) {
     ans.each { an ->
-      if(!a.any { 
-          it.subject.conceptLabel == an.subject.conceptLabel && 
-          it.relation.conceptLabel == an.relation.conceptLabel && 
-          it.object.conceptLabel == an.object.conceptLabel }) {
+      if(!a.any { it.toString() == an.toString() }) {
         a << an
         if(writeMode) {
           //if((a.size() % 500) == 0) { write() }
@@ -42,9 +39,9 @@ class AnnotationTripleList implements Iterable<AnnotationTriple> {
 
   static def loadFile(fileName) {
     def ans = new JsonSlurper().parse(new File(fileName)).each {
-      new AnnotationTriple(it)
+      new TermTriple(it)
     }
 
-    new AnnotationTripleList(a: ans, annPath: fileName)
+    new TermTripleList(a: ans, annPath: fileName)
   }
 }

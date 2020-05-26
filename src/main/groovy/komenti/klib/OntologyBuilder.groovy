@@ -33,19 +33,19 @@ class OntologyBuilder {
 
     def addedTerms = [:]
     def addClass = { iri, label ->
-      def cClass = factory.getOWLClass(IRI.create(t.iri))
+      def cClass = factory.getOWLClass(IRI.create(iri))
       def anno = factory.getOWLAnnotation(
-         factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL,
+           factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI()),
            factory.getOWLLiteral(label))
-        )
-      def axiom =  factory.getOWLAnnotationAssertionAxiom(iri, anno)
+      def axiom =  factory.getOWLAnnotationAssertionAxiom(cClass.getIRI(), anno)
       manager.addAxiom(ontology, axiom)
       return cClass
     }
-    def makeOrGetClass = { t ->
+    def makeOrGetClass
+    makeOrGetClass = { t ->
       def label = t.getLabel()
       if(t.iri == 'UNMATCHED_CONCEPT') {
-        if(addedTerms.contains(label)) {
+        if(addedTerms.containsKey(label)) {
           t.iri = addedTerms[label]
         } else {
           t.iri = prefix + (++tCount)
@@ -67,7 +67,7 @@ class OntologyBuilder {
             makeOrGetClass(t.parentTerm),
             factory.getOWLObjectSomeValuesFrom(
               hasSpecifier,
-              cClass
+              specifierClass
             )
           )))
       }

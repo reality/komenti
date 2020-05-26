@@ -45,12 +45,12 @@ class TermTripleList implements Iterable<TermTriple> {
     processTerm = { t -> // this is kind of a pain, i don't really get why it can't do it iself
       if(t.containsKey('parentTerm')) {
         t.parentTerm = processTerm(t.parentTerm)
-        new Term(t.parentTerm, t.iri, t.label)
+        return new Term(t.parentTerm, t.iri, t.label)
       } else {
-        new Term(t.iri, t.label)
+        return new Term(t.iri, t.label)
       }
     }
-    def ans = new JsonSlurper().parse(new File(fileName)).each {
+    def ans = new JsonSlurper().parse(new File(fileName)).collect {
       new TermTriple(
         subject: processTerm(it.subject),
         relation: processTerm(it.relation),

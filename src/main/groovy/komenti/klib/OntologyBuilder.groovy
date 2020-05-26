@@ -11,7 +11,7 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary
 
 
 class OntologyBuilder {
-  static def build(triples, o) {
+  static def build(TermTripleList triples, o) {
     def manager = OWLManager.createOWLOntologyManager()
     def factory = manager.getOWLDataFactory()
 
@@ -26,10 +26,10 @@ class OntologyBuilder {
     
     OWLOntology ontology = manager.createOntology(IRI.create("oIRI"))
 
-    manager.addAxiom(ontology, factory.getOWLTransitiveObjectPropertyAxiom(r("has-part")))
-    manager.addAxiom(ontology, factory.getOWLTransitiveObjectPropertyAxiom(r("part-of")))
-    manager.addAxiom(ontology, factory.getOWLReflexiveObjectPropertyAxiom(r("has-part")))
-    manager.addAxiom(ontology, factory.getOWLReflexiveObjectPropertyAxiom(r("part-of")))
+    manager.addAxiom(ontology, factory.getOWLTransitiveObjectPropertyAxiom(hasPart))
+    manager.addAxiom(ontology, factory.getOWLTransitiveObjectPropertyAxiom(partOf))
+    manager.addAxiom(ontology, factory.getOWLReflexiveObjectPropertyAxiom(hasPart))
+    manager.addAxiom(ontology, factory.getOWLReflexiveObjectPropertyAxiom(partOf))
 
     def addedTerms = [:]
     def addClass = { iri, label ->

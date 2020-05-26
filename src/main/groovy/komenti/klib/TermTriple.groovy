@@ -6,6 +6,6 @@ class TermTriple {
   Term object
 
   String toString() {
-    subject.label + " -> " + relation.label + " -> " + object.label
+    subject.toString() + " -> " + relation.toString() + " -> " + object.toString()
   }
 }

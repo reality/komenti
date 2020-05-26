@@ -155,7 +155,7 @@ public class Komentisto {
               entity = ''
             } else {
               a.text = text
-              entity = entity.replace(a.matchedText, '').trim()
+              entity = entity.replace(a.matchedText, '').replaceAll('\\s+', ' ').trim()
               t = Term.fromAnnotation(a)
             }
 

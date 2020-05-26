@@ -21,7 +21,8 @@ class TermTripleList implements Iterable<TermTriple> {
   
   def add(List<TermTriple> ans) {
     ans.each { an ->
-      if(!a.any { it.toString() == an.toString() }) {
+      // kind of inefficient; for concurrency purposes
+      if(!a.asImmutable().any { it.toString() == an.toString() }) {
         a << an
         if(writeMode) {
           //if((a.size() % 500) == 0) { write() }

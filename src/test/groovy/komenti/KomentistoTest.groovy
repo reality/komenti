@@ -23,11 +23,13 @@ class KomentistoTest extends Specification {
 
   def "extract_triples"() {
     given:
-      def aFile = getClass().getResource('/annotate_this.txt').toURI()
+      def aFile = getClass().getResource('/pubmed20n0688_abstract_12336.txt').toURI()
       def aText = new File(aFile).text
     when:
-      def out = komentisto.extractTriples(0, aText)
+      def out = komentisto.extractTriples("test", aText, true)
     then:
-      println out
+      out.each {
+        println it
+      }
   }
 }

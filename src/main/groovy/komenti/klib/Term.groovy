@@ -18,4 +18,8 @@ class Term {
   static Term fromAnnotation(Annotation a) {
     new Term(a.termIri, a.conceptLabel, a)
   }
+
+  String toString() {
+    "$label<$iri>"
+  }
 }

@@ -9,4 +9,8 @@ class SpecifierTerm extends Term {
     super(specifiedTerm.iri, specifiedTerm.label)
     this.parentTerm = parentTerm
   }
+
+  String toString() {
+    parentTerm.toString() + " $label<$iri>"
+  }
 }

@@ -596,6 +596,13 @@ public class Komenti {
     writeOutput(results.join('\n'), o, "Diagnosis calculation complete!")
   }
 
+  static def ontologise(o) {
+    println "Loading triples..."
+    def triples = TermTripleList.loadFile(o['triples'])
+    println "Building ontology..."
+    OntologyBuilder.build(triples, o)
+  }
+
   static def writeOutput(text, o, success) {
     def printErr = System.err.&println
     if(o.out) {

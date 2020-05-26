@@ -160,7 +160,7 @@ public class Komentisto {
             }
 
             if(result) {
-              result = new SpecifierTerm(result, t)
+              result = new Term(result, t)
             } else {
               if(t.iri != 'UNMATCHED_CONCEPT' || (group == 'object-properties' && allowUnmatchedRelations)) {
                 result = t

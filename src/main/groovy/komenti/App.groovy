@@ -72,6 +72,9 @@ class App {
       // diagnose options
       _ longOpt: 'by-group', 'Group items for diagnosis by the query group, rather than by term IRI', type: Boolean
 
+      // ontologise options
+      _ longOpt: 'triples', 'Triples file to turn into --ontolog', args: 1
+
       // all options
       _ longOpt: 'out', 'Where to write the annotation results.', args: 1
       _ longOpt: 'append', 'Append output file, instead of replacing it', type: Boolean

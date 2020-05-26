@@ -17,7 +17,8 @@ class Term {
   }
 
   Term(Term parentTerm, String iri, String label) {
-    this(parentTerm, new Term(label, iri))
+    this(iri, label)
+    this.parentTerm = parentTerm
   }
 
   Term(String iri, String label, Annotation originalAnnotation) {
@@ -39,9 +40,13 @@ class Term {
 
   String getLabel() {
     if(parentTerm) {
-      parentTerm.getLabel() + " " + label
+      label + " " + parentTerm.getLabel()
     } else {
       label
     }
+  }
+
+  String getSpecificLabel() {
+    label
   }
 }

@@ -220,7 +220,8 @@ public class Komenti {
 
           // check the rAnns are between the termAnns??
           if(termAnns.size() >= 2 && (rAnns || o['allow-unmatched-relations'])) {
-            tList.add(komentisto.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].text, o['allow-unmatched-relations']))
+            def newTriples = komentisto.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].text, o['allow-unmatched-relations'])
+            tList.add(newTriples.max { it.object.label.size() })
           }
         }
       } else {

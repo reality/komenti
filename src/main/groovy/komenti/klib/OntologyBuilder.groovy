@@ -53,14 +53,18 @@ class OntologyBuilder {
       }
 
       def oClass = factory.getOWLClass(IRI.create(t.iri))
-      if(!addedTerms.containsKey(t.iri)) {
+      if(!addedTerms.containsKey(label)) {
         addClass(t.iri, label)
         addedTerms[label] = t.iri         
       }
 
       if(t.parentTerm) {
         // we also have to create specifier
-        def specifierClass = addClass(prefix + (++tCount), t.label)
+        if(!addedTerms[t.getSpecificLabel()]) {
+          addedTerms[t.getSpecificLabel()] = prefix + (++tCount)
+          addClass(addedTerms[t.getSpecificLabel()], t.getSpecificLabel())
+        }
+        def specifierClass = factory.getOWLClass(IRI.create(addedTerms[t.getSpecificLabel()]))
 
         manager.addAxiom(ontology, factory.getOWLEquivalentClassesAxiom(
           oClass, factory.getOWLObjectIntersectionOf(

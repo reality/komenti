@@ -21,15 +21,19 @@ class TermTripleList implements Iterable<TermTriple> {
   
   def add(List<TermTriple> ans) {
     ans.each { an ->
-      // kind of inefficient; for concurrency purposes
-      if(!a.asImmutable().any { it.toString() == an.toString() }) {
-        a << an
-        if(writeMode) {
-          //if((a.size() % 500) == 0) { write() }
-          //write()
-        }
-      }
+      add(an)
     } 
+  }
+
+  def add(TermTriple an) {
+    // kind of inefficient; for concurrency purposes
+    if(!a.asImmutable().any { it.toString() == an.toString() }) {
+      a << an
+      if(writeMode) {
+        //if((a.size() % 500) == 0) { write() }
+        //write()
+      }
+    }
   }
 
   def write() {

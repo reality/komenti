@@ -105,4 +105,15 @@ class AppTest extends Specification {
       anns[0].relation.iri == 'UNMATCHED_CONCEPT'
       !anns[0].relation.originalAnnotation
   }
+
+  def "create-triple-ontology"() {
+    given:
+      def tFile = resourceToPass('/triples.json')
+      def outPath = 'ontology.owl'
+    when:
+      def q = ["ontologise", "--triples", tFile, "--out", outPath ]
+      App.main(toArg(q))
+    then:
+      new File(outPath).exists()
+  }
 }

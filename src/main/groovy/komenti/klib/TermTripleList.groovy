@@ -34,6 +34,7 @@ class TermTripleList implements Iterable<TermTriple> {
 
   def write() {
     new File(annPath).text = new JsonBuilder(a).toPrettyString()
+    new File("string_$annPath".replace('json','txt')).text = a.collect { it.toString() }.join('\n')
   }
 
   def finishWrite() { write() }

@@ -1,3 +1,5 @@
 language: groovy
 dist: bionic
 sudo: required
+install: gradle --no-daemon assemble
+script: gradle --no-daemon check

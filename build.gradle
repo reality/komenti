@@ -71,4 +71,8 @@ gradle.taskGraph.whenReady { taskGraph ->
 
 test {
   maxHeapSize = "6G"
+  testLogging {
+    events "started", "skipped", "failed"
+    exceptionFormat "full"
+  }
 }

@@ -1,5 +1,7 @@
 # Komenti
 
+[![Build Status](https://travis-ci.com/reality/komenti.svg?branch=master)](https://travis-ci.com/reality/komenti)
+
 Komenti is a tool for semantic query, annotation, and analysis of text using ontologies. 
 
 It enables querying multiple ontologies with complex class descriptions using AberOWL. These can be used to build a vocabulary for text annotation, including new methods for synonym and label expansion. Annotation is performed using Stanford CoreNLP, and include novel methods for the detection and disambiguation of concept negation and uncertainty. Annotations of text corpora can be used for analysis, within or without Komenti. These components are in development, but currently include summarisation of the co-ocurrence of groups of concepts across text, and use of annotations to suggest description logic axioms for classes. These more complex uses can be described by series of parameters to be passed to the tool in the form of a serialised 'roster,' defining a natural language processing pipeline.

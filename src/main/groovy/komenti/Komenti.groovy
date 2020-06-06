@@ -229,7 +229,7 @@ public class Komenti {
       }
 
       if(o.verbose) {
-        println "${i}/${files.size()}"
+        println "${++i}/${files.size()}"
       }
     }
     }
@@ -600,8 +600,15 @@ public class Komenti {
   static def ontologise(o) {
     println "Loading triples..."
     def triples = TermTripleList.loadFile(o['triples'])
+    def vocabulary
+    if(o['labels']) {
+      vocabulary = Vocabulary.loadFile(o['labels'])
+    } else {
+      vocabulary = new Vocabulary()
+    }
     println "Building ontology..."
-    OntologyBuilder.build(triples, o)
+
+    OntologyBuilder.build(triples, vocabulary, o)
   }
 
   static def writeOutput(text, o, success) {

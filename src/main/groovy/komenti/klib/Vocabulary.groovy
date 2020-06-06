@@ -16,6 +16,8 @@ class Vocabulary implements Iterable<Label> {
     this.labelPath = labelPath;
   }
 
+  Vocabulary() {}
+
   def add(iri, Label label) {
     if(label.label == '') { return; }
     if(!entities.containsKey(iri)) { entities[iri] = [] }

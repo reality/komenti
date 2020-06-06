@@ -9,9 +9,8 @@ import org.semanticweb.owlapi.io.*
 import org.semanticweb.elk.owlapi.*
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary
 
-
 class OntologyBuilder {
-  static def build(TermTripleList triples, o) {
+  static def build(TermTripleList triples, Vocabulary vocabulary, o) {
     def manager = OWLManager.createOWLOntologyManager()
     def factory = manager.getOWLDataFactory()
 
@@ -59,17 +58,23 @@ class OntologyBuilder {
     def specifierParent = addClass(prefix + (++tCount), 'observation specifier', false, factory.getOWLThing())
     def observedParent = addClass(prefix + (++tCount), 'observed entity', false, factory.getOWLThing())
 
+    def lookupIRI = { label -> vocabulary.labelIri(label) ?: prefix + (++tCount) }
+
     def makeOrGetClass
     makeOrGetClass = { t, type ->
       println "processing $t"
+      def label = preProcessLabel(t.getLabel())
+      println 'preprocessed label: ' + label
 
-      def label = t.getLabel()
+      // don't overwrite relations with classes
+      if(type == 'cl' && addedTerms['rl'][label]) { return; }
+
       def oClass
       if(t.iri == 'UNMATCHED_CONCEPT') {
-        if(addedTerms.containsKey(label)) {
+        if(addedTerms[type].containsKey(label)) {
           t.iri = addedTerms[type][label]
         } else {
-          t.iri = prefix + (++tCount)
+          t.iri = lookupIRI(label)
         }
 
         if(!t.parentTerm) {
@@ -87,12 +92,17 @@ class OntologyBuilder {
 
         if(t.parentTerm) {
           // we also have to create specifier
-          if(!addedTerms[type][t.getSpecificLabel()]) {
-            addedTerms[type][t.getSpecificLabel()] = prefix + (++tCount)
-            addClass(addedTerms[type][t.getSpecificLabel()], t.getSpecificLabel(), 
+
+          // TODO if a relation exists, we can just add an axiom with taht!!! i.e. x and role in some y
+
+          def specificLabel = preProcessLabel(t.getSpecificLabel())
+          println "Processed $specificLabel"
+          if(!addedTerms[type][specificLabel]) {
+            addedTerms[type][specificLabel] = lookupIRI(specificLabel)
+            addClass(addedTerms[type][specificLabel], specificLabel, 
               type == 'rl', specifierParent)
           }
-          def specifierClass = factory.getOWLClass(IRI.create(addedTerms[type][t.getSpecificLabel()]))
+          def specifierClass = factory.getOWLClass(IRI.create(addedTerms[type][specificLabel]))
 
           if(type != 'rl') { // TODO add subrelationof
             def parent = makeOrGetClass(t.parentTerm, type)
@@ -109,9 +119,11 @@ class OntologyBuilder {
           }
         }
       } else {
-        if(!addedTerms[type].containsKey(t.getSpecificLabel())) {
-          addClass(t.iri, t.getSpecificLabel(), type == 'rl', observedParent)
-          addedTerms[type][t.getSpecificLabel()] = t.iri         
+        def specificLabel = preProcessLabel(t.getSpecificLabel())
+
+        if(!addedTerms[type].containsKey(specificLabel)) {
+          addClass(t.iri, specificLabel, type == 'rl', observedParent)
+          addedTerms[type][specificLabel] = t.iri         
         }
 
         if(type == 'rl') {
@@ -128,17 +140,77 @@ class OntologyBuilder {
 
       oClass
     }
+      
+    triples.each { def relation = makeOrGetClass(it.relation, 'rl') } // so we can make RLs exclusive
     triples.each { 
       def subject = makeOrGetClass(it.subject, 'cl')
       def relation = makeOrGetClass(it.relation, 'rl')
       def object = makeOrGetClass(it.object, 'cl')
 
-      manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
-        subject, factory.getOWLObjectSomeValuesFrom(
-          relation, object)
-      ))
+      if(subject && object && relation) { // this wouldn't occur if one of our classes has been booted for a relation
+        manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
+          subject, factory.getOWLObjectSomeValuesFrom(
+            relation, object)
+        ))
+      }
     }
 
     manager.saveOntology(ontology, IRI.create(new File(o['out']).toURI()))
+  }
+
+  static def preProcessLabel(label) {
+    label.replaceAll("^of\\W", "")
+         .replaceAll("^in\$", "observe in")
+         .replaceAll(".*role in.*", 'role in')
+         .replaceAll('.*observe in.*', 'observed in')
+         .replaceAll('.*accompany.*', 'accompany')
+         .replaceAll('accumulation', 'accumulate')
+         .replaceAll('^also\\W', '')
+         .replaceAll('^apparently\\W', '')
+         .replaceAll('means of', '')
+         .replaceAll('essentially', '')
+         .replaceAll('^can\\W', '')
+         .replaceAll('^clearly\\W', '')
+         .replaceAll('^closely\\W', '')
+         .replaceAll('^completely\\W', '')
+         .replaceAll('^could\\W', '')
+         .replaceAll('^eventually\\W', '')
+         .replaceAll('^exhibit\\W', '')
+         .replaceAll('^first\\W', '')
+         .replaceAll('^finally\\W', '')
+
+         .replaceAll('largely\\W', '')
+         .replaceAll('completely\\W', '')
+         .replaceAll('show\\W', '')
+         .replaceAll('also\\W', '')
+         .replaceAll('significantly\\W', '')
+
+         .replaceAll('inhibition\\W', 'inhibit')
+
+         .replaceAll('^crucial\\W', 'necessary')
+         .replaceAll('^critical\\W', 'necessary')
+         .replaceAll('^essential\\W', 'necessary')
+         .replaceAll('^need\\W', 'necessary')
+
+         .replaceAll('^furthermore\\W', '')
+         .replaceAll('^have\\W', '')
+         .replaceAll('^however\\W', '')
+         .replaceAll('^important\\W', '')
+         .replaceAll('^independently\\W', '')
+         .replaceAll('^indeed\\W', '')
+         .replaceAll('^key\\W', '')
+         .replaceAll('^may\\W', '')
+         .replaceAll('^might\\W', '')
+         .replaceAll('^play\\W', '')
+         .replaceAll('^potential\\W', '')
+         .replaceAll('^possible\\W', '')
+         .replaceAll('^possibly\\W', '')
+         .replaceAll('^probably\\W', '')
+         .replaceAll('^rarely\\W', '')
+         .replaceAll('^specific\\W', '')
+         .replaceAll('^specifically\\W', '')
+         .replaceAll('^strongly\\W', '')
+
+         .replaceAll("^in\\W", "")
   }
 }

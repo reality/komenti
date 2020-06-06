@@ -94,7 +94,7 @@ class AppTest extends Specification {
     given:
       def anns = new JsonSlurper().parse(new File(outFile))
     expect:
-      anns.size() == 2
+      anns.size() == 1
 
       anns[0].subject.originalAnnotation.documentId == 'annotate_this.txt_1'
       anns[0].subject.originalAnnotation.sentenceId == 1

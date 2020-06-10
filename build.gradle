@@ -14,6 +14,7 @@ plugins {
     id 'application'
 
     id 'jacoco'
+    id 'com.github.dawnwords.jacoco.badge' version '0.2.0'
 }
 
 repositories {
@@ -77,4 +78,16 @@ test {
     events "started", "skipped", "failed"
     exceptionFormat "full"
   }
+  finalizedBy jacocoTestReport // report is always generated after tests run
 }
+
+jacocoTestReport {
+  dependsOn test // tests are required to run before generating the report
+  reports {
+    xml.enabled true
+  }
+}
+
+
+
+

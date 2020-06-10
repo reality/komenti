@@ -1,6 +1,9 @@
 # Komenti
 
 [![Build Status](https://travis-ci.com/reality/komenti.svg?branch=master)](https://travis-ci.com/reality/komenti)
+![LINE](https://img.shields.io/badge/line--coverage-49%25-orange.svg)
+![BRANCH](https://img.shields.io/badge/branch--coverage-21%25-red.svg)
+![COMPLEXITY](https://img.shields.io/badge/complexity-5.50-brightgreen.svg)
 
 Komenti is a tool for semantic query, annotation, and analysis of text using ontologies. 
 

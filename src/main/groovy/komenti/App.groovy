@@ -22,6 +22,7 @@ class App {
       _ longOpt: 'override-group', 'Override group in labels output with given text', args: 1
       _ longOpt: 'priority', 'RegexNER priority in output. Default is 1.', args: 1
       _ longOpt: 'expand-synonyms', 'Expand synonyms using AberOWL', type: Boolean
+      _ longOpt: 'label-extension', 'Run a named label extension, e.g. cmo', args: 1
 
       // annotation options
       t longOpt: 'text', 'A file or directory of files to annotate.', args: 1

@@ -215,20 +215,21 @@ class KomentLib {
     }
     }
 
-    if(o.lemmatise) {
-      vocabulary.entities.each { c, l ->
-        Komentisto.getLemmas(l.label).each {
-          if(l.any { ls -> ls.label == it}) { return; }
-          vocabulary.add(c,
-            new Label(
-              label: it,
-              iri: c,
-              group: group,
-              ontology: l[0].ontology,
-              priority: priority
-            )
+    vocabulary.entities.each { c, l ->
+      def labelValues = l.collect { it.label }
+      def otherLabels = []
+      if(o.lemmatise) { otherLabels += Komentisto.getLemmas(labelValues) } 
+      if(o['label-extension']) { otherLabels += Komentisto.getExtensionLabels(labelValues, o['label-extension']) }
+      otherLabels.each {
+        vocabulary.add(c,
+          new Label(
+            label: it,
+            iri: c,
+            group: group,
+            ontology: l[0].ontology,
+            priority: priority
           )
-        }
+        )
       }
     }
   }

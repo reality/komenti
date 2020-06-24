@@ -235,6 +235,7 @@ public class Komentisto {
     newText
   }
 
+  // TODO normalise the it size 3 stuff, it appears in multiple places
   static def getLemmas(labels) {
     def m = new edu.stanford.nlp.process.Morphology()
     labels.collect { l ->
@@ -245,5 +246,18 @@ public class Komentisto {
 
       s.collect { m.stem(it) ?: it }.join(' ')
     }.findAll { it.size() > 3 }.unique(false)
+  }
+
+  // This needs to be moved to some kind of extension system...
+  static def getExtensionLabels(labels, extensionName) {
+    labels.collect { l ->
+      if(extensionName == 'cmo') {
+        [
+          l.replace('total ', ''),
+          l.replace('blood ', '').replace(' level', ''),
+          l.replace(' level', '')
+        ]
+      }
+    }.flatten().findAll { it.size() > 3 }.unique(false)
   }
 }

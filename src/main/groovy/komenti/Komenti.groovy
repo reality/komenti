@@ -22,7 +22,7 @@ public class Komenti {
     }
 
     def roster = new JsonSlurper().parseText(templateFile.getText())
-    
+
     // TODO this can probably mostly be automated
     if(o.q) {
       roster.commands.find { it.id == 'class_query' }.args.query = o.q
@@ -92,7 +92,6 @@ public class Komenti {
 
   static def query(o) {
     def vocabulary = new Vocabulary(o.out)
-
     if(o['object-properties']) {
       KomentLib.AOGetObjectProperties(o.o, { oProps ->
         KomentLib.buildEntityNames(vocabulary, 'object-properties', o, oProps)
@@ -204,10 +203,10 @@ public class Komenti {
         }
       }
 
-      def annotations
+      def annotations = []
       if(o['per-line']) {
         text.tokenize('\n').eachWithIndex { lineText, z ->
-          annotations = komentisto.annotate(name, lineText, z+i)
+          annotations += komentisto.annotate(name, lineText, z+i)
         }
       } else {
         annotations = komentisto.annotate(name, text)
@@ -512,6 +511,11 @@ public class Komenti {
 
   }
 
+  /**
+   * Diagnose patients.
+   *
+   * @Param o Options
+   */
   static def diagnose(o) {
     if(!o.a) { println 'Must provide a --annotations file to diagnose' ; System.exit(1) }
 
@@ -668,7 +672,6 @@ public class Komenti {
       }
       files = processFileOrDir([], target)
     }
-    files;
+    files
   }
-
 }

@@ -205,8 +205,8 @@ class KomentLib {
     entities.eachParallel { e ->
       if(o['verbose']) { println "Processing entity: ${++i}/${entities.size()}" }
 
-      vocabulary.add(e.class, KomentLib.AOExtractNames(e, group, priority))
-      if(o['expand-synonyms']) { // they will be made unique etc later
+      def addedAny = vocabulary.add(e.class, KomentLib.AOExtractNames(e, group, priority))
+      if(addedAny && o['expand-synonyms']) { // they will be made unique etc later
         def newLabels = KomentLib.AOExpandSynonyms(e.owlClass, vocabulary.termLabel(e.class), group, priority)
         vocabulary.add(e.class, newLabels)
       }

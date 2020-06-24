@@ -19,11 +19,16 @@ class Vocabulary implements Iterable<Label> {
   Vocabulary() {}
 
   def add(iri, Label label) {
+    def addedAny = false
+
     if(label.label == '') { return; }
     if(!entities.containsKey(iri)) { entities[iri] = [] }
     if(!entities[iri].contains(label)) {
       entities[iri] << label
+      addedAny = true
     }
+
+    addedAny
   }
 
   def add(iri, List<Label> labels) {

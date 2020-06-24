@@ -135,15 +135,17 @@ class KomentLib {
       }.each { nCl ->
         if(!BANNED_ONTOLOGIES.contains(nCl.ontology)) {
           def newSynonyms = AOExtractNames(nCl, group, priority).findAll { it.label.indexOf(label) == -1 }
+          newSynonyms.each { it.iri = iri } // kind of naughty, but it's to correct the IRI fo expanded synonyms from other ontologies to our source IRI!
           synonyms += newSynonyms
         }
       }
     })
 
-    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
+    AOSemanticQuery('<'+iri+'>', 'equivalent', { eqClasses ->
       eqClasses.each { eqCl ->
         if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
           def newSynonyms = AOExtractNames(eqCl, group, priority).findAll { it.label.indexOf(label) == -1 }
+          newSynonyms.each { it.iri = iri } // see note above
           synonyms += newSynonyms
         }
       }
@@ -206,8 +208,8 @@ class KomentLib {
       if(o['verbose']) { println "Processing entity: ${++i}/${entities.size()}" }
 
       def addedAny = vocabulary.add(e.class, KomentLib.AOExtractNames(e, group, priority))
-      if(addedAny && o['expand-synonyms']) { // they will be made unique etc later
-        def newLabels = KomentLib.AOExpandSynonyms(e.owlClass, vocabulary.termLabel(e.class), group, priority)
+      if(addedAny && o['expand-synonyms']) { 
+        def newLabels = KomentLib.AOExpandSynonyms(e.class, vocabulary.termLabel(e.class), group, priority)
         vocabulary.add(e.class, newLabels)
       }
     }

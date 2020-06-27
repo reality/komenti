@@ -255,6 +255,9 @@ public class Komentisto {
         [
           l.replace('total ', ''),
           l.replace('blood ', '').replace(' level', ''),
+          l.replace('blood ', ''),
+          l.replace('blood ', '').replace('phil', 'phill'),
+          l.replace('phil', 'phill'),
           l.replace(' level', '')
         ]
       }

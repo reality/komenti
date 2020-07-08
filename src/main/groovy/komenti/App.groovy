@@ -79,7 +79,7 @@ class App {
       // all options
       _ longOpt: 'out', 'Where to write the annotation results.', args: 1
       _ longOpt: 'append', 'Append output file, instead of replacing it', type: Boolean
-      _ longOpt: 'verbose', 'Verbose output, mostly progress', type: Boolean
+      _ longOpt: 'verbose', 'Verbose output, mostly progress', type: Boolean, args: 0
       _ longOpt: 'threads', 'Number of threads to use for query/annotation processes', type: Integer, args: 1
     }
 

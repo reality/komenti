@@ -106,8 +106,9 @@ public class Komenti {
           queries = o.c.split(',')
         }
       }
-      
-      queries.each { q ->
+     
+      queries.eachWithIndex { q, i ->
+        if(o.verbose) { println "Executing query ${i}/${queries.size()}" }
         def ont = o.o
         if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') }
         KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->

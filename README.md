@@ -11,7 +11,7 @@ It enables querying multiple ontologies with complex class descriptions using Ab
 
 We are working on papers discussing the novel components. I will post them here:
 
-* [A fast, scalable, and generalisable heuristic-based negation](https://www.biorxiv.org/content/10.1101/2020.07.03.187054v1)
+* [A fast, accurate, and generalisable heuristic-based negation detection algorithm for clinical text](https://www.biorxiv.org/content/10.1101/2020.07.03.187054v1)
 
 ## Installation
 

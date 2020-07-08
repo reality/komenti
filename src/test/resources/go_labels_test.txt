@@ -1,0 +1,241 @@
+apoptotic dna fragmentation	http://purl.obolibrary.org/obo/GO_0006309	'part of' some 'apoptotic process'	GO	1
+dna catabolism during apoptosis	http://purl.obolibrary.org/obo/GO_0006309	'part of' some 'apoptotic process'	GO	1
+dna catabolic process during apoptosis	http://purl.obolibrary.org/obo/GO_0006309	'part of' some 'apoptotic process'	GO	1
+dna fragmentation	http://purl.obolibrary.org/obo/GO_0006309	'part of' some 'apoptotic process'	GO	1
+dna fragmentation involved in apoptotic nuclear change	http://purl.obolibrary.org/obo/GO_0006309	'part of' some 'apoptotic process'	GO	1
+chromatinolysis	http://purl.obolibrary.org/obo/GO_0006309	'part of' some 'apoptotic process'	GO	1
+endonucleolytic dna catabolic process involved in apoptosis	http://purl.obolibrary.org/obo/GO_0006309	'part of' some 'apoptotic process'	GO	1
+cysteine\-type endopeptidase activity involved in apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0097199	'part of' some 'apoptotic process'	GO	1
+initiator caspase activity	http://purl.obolibrary.org/obo/GO_0097199	'part of' some 'apoptotic process'	GO	1
+activator caspase activity	http://purl.obolibrary.org/obo/GO_0097199	'part of' some 'apoptotic process'	GO	1
+apical caspase activity	http://purl.obolibrary.org/obo/GO_0097199	'part of' some 'apoptotic process'	GO	1
+cysteine\-type endopeptidase activity involved in apoptotic signalling pathway	http://purl.obolibrary.org/obo/GO_0097199	'part of' some 'apoptotic process'	GO	1
+cysteine\-type endopeptidase activity involved in apoptotic process	http://purl.obolibrary.org/obo/GO_0097153	'part of' some 'apoptotic process'	GO	1
+caspase activity	http://purl.obolibrary.org/obo/GO_0097153	'part of' some 'apoptotic process'	GO	1
+metacaspase activity	http://purl.obolibrary.org/obo/GO_0097153	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptotic signaling pathway in absence of ligand	http://purl.obolibrary.org/obo/GO_0097192	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptotic signalling pathway in absence of ligand	http://purl.obolibrary.org/obo/GO_0097192	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptosis in absence of ligand	http://purl.obolibrary.org/obo/GO_0097192	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0097191	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptosis	http://purl.obolibrary.org/obo/GO_0097191	'part of' some 'apoptotic process'	GO	1
+death receptor\-mediated apoptosis	http://purl.obolibrary.org/obo/GO_0097191	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptotic signalling pathway	http://purl.obolibrary.org/obo/GO_0097191	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptotic pathway	http://purl.obolibrary.org/obo/GO_0097191	'part of' some 'apoptotic process'	GO	1
+execution phase of apoptosis	http://purl.obolibrary.org/obo/GO_0097194	'part of' some 'apoptotic process'	GO	1
+execution phase of apoptotic process	http://purl.obolibrary.org/obo/GO_0097194	'part of' some 'apoptotic process'	GO	1
+apoptosis	http://purl.obolibrary.org/obo/GO_0097194	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0097193	'part of' some 'apoptotic process'	GO	1
+mitochondrial\-mediated apoptotic pathway	http://purl.obolibrary.org/obo/GO_0097193	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signalling pathway	http://purl.obolibrary.org/obo/GO_0097193	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptosis	http://purl.obolibrary.org/obo/GO_0097193	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic pathway	http://purl.obolibrary.org/obo/GO_0097193	'part of' some 'apoptotic process'	GO	1
+mitochondrial fragmentation involved in apoptotic process	http://purl.obolibrary.org/obo/GO_0043653	'part of' some 'apoptotic process'	GO	1
+mitochondrial fragmentation involved in apoptosis	http://purl.obolibrary.org/obo/GO_0043653	'part of' some 'apoptotic process'	GO	1
+apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0097190	'part of' some 'apoptotic process'	GO	1
+apoptotic signalling pathway	http://purl.obolibrary.org/obo/GO_0097190	'part of' some 'apoptotic process'	GO	1
+induction of apoptosis by extracellular signals	http://purl.obolibrary.org/obo/GO_0097190	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signalling pathway involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signalling pathway involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signalling pathway involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signalling pathway involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signaling pathway involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgfr signaling pathway involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgfr signaling pathway involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signaling pathway involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signalling pathway involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signalling pathway involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signaling pathway involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signaling pathway involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgfr signaling pathway involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgfr signaling pathway involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signaling pathway involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgfr signaling pathway involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signalling pathway involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signalling pathway involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signaling pathway involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgfr signaling pathway involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgfr signaling pathway involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signaling pathway involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signaling pathway involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signaling pathway involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signalling pathway involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signaling pathway involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signaling pathway involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signalling pathway involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signalling pathway involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signaling pathway involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signalling pathway involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signaling pathway involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signalling pathway involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fibroblast growth factor receptor signalling pathway involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+fgf receptor signaling pathway involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902178	'part of' some 'apoptotic process'	GO	1
+peptidase activator activity involved in apoptotic process	http://purl.obolibrary.org/obo/GO_0016505	'part of' some 'apoptotic process'	GO	1
+apoptotic protease activator activity	http://purl.obolibrary.org/obo/GO_0016505	'part of' some 'apoptotic process'	GO	1
+trail death\-inducing signaling complex assembly	http://purl.obolibrary.org/obo/GO_1903074	'part of' some 'apoptotic process'	GO	1
+trail disc assembly	http://purl.obolibrary.org/obo/GO_1903074	'part of' some 'apoptotic process'	GO	1
+trail death\-inducing signalling complex formation	http://purl.obolibrary.org/obo/GO_1903074	'part of' some 'apoptotic process'	GO	1
+trail death\-inducing signaling complex formation	http://purl.obolibrary.org/obo/GO_1903074	'part of' some 'apoptotic process'	GO	1
+trail death\-inducing signalling complex assembly	http://purl.obolibrary.org/obo/GO_1903074	'part of' some 'apoptotic process'	GO	1
+trail disc formation	http://purl.obolibrary.org/obo/GO_1903074	'part of' some 'apoptotic process'	GO	1
+apoptosome assembly	http://purl.obolibrary.org/obo/GO_0097314	'part of' some 'apoptotic process'	GO	1
+apoptosome formation	http://purl.obolibrary.org/obo/GO_0097314	'part of' some 'apoptotic process'	GO	1
+b cell receptor apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_1990117	'part of' some 'apoptotic process'	GO	1
+b cell receptor extrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_1990117	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway by p53 class mediator	http://purl.obolibrary.org/obo/GO_0072332	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway by signal transduction by p53 class mediator	http://purl.obolibrary.org/obo/GO_0072332	'part of' some 'apoptotic process'	GO	1
+cysteine\-type endopeptidase activity involved in execution phase of apoptosis	http://purl.obolibrary.org/obo/GO_0097200	'part of' some 'apoptotic process'	GO	1
+effector caspase activity	http://purl.obolibrary.org/obo/GO_0097200	'part of' some 'apoptotic process'	GO	1
+executioner caspase activity	http://purl.obolibrary.org/obo/GO_0097200	'part of' some 'apoptotic process'	GO	1
+death\-inducing signaling complex assembly	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+disc assembly	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+death\-inducing signalling complex assembly	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+disc formation	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+death\-inducing signaling complex formation	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+death domain\-mediated complex assembly	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+death domain\-mediated complex assembly involved in extrinsic apoptotic pathway	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+dd\-mediated complex assembly	http://purl.obolibrary.org/obo/GO_0071550	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to nitrosative stress	http://purl.obolibrary.org/obo/GO_1990442	'part of' some 'apoptotic process'	GO	1
+nitrosative stress\-induced intrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_1990442	'part of' some 'apoptotic process'	GO	1
+regulation of mitochondrial membrane permeability involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of transport across mitochondrial membrane involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of transport across mitochondrial membrane involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of mitochondrial membrane permeability involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of mitochondrial membrane permeability involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of transport across mitochondrial membrane involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of mitochondrial membrane permeability involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of transport across mitochondrial membrane involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of mitochondrial membrane permeability involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of mitochondrial membrane permeability involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of transport across mitochondrial membrane involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of transport across mitochondrial membrane involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of mitochondrial membrane permeability involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+regulation of transport across mitochondrial membrane involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902108	'part of' some 'apoptotic process'	GO	1
+cysteine\-type endopeptidase activator activity involved in apoptotic process	http://purl.obolibrary.org/obo/GO_0008656	'part of' some 'apoptotic process'	GO	1
+caspase activator activity	http://purl.obolibrary.org/obo/GO_0008656	'part of' some 'apoptotic process'	GO	1
+negative regulation of mitochondrial membrane permeability involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of mitochondrial membrane permeability involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane impermeabilization involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of transport across mitochondrial membrane involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane impermeabilization involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of transport across mitochondrial membrane involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of mitochondrial membrane permeability involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of mitochondrial membrane permeability involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of transport across mitochondrial membrane involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of transport across mitochondrial membrane involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane impermeabilization involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane impermeabilization involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane impermeabilization involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane impermeabilization involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of mitochondrial membrane permeability involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane impermeabilization involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of transport across mitochondrial membrane involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of transport across mitochondrial membrane involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of mitochondrial membrane permeability involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of transport across mitochondrial membrane involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+negative regulation of mitochondrial membrane permeability involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902109	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to dna damage by p53 class mediator	http://purl.obolibrary.org/obo/GO_0042771	'part of' some 'apoptotic process'	GO	1
+cysteine\-type endopeptidase inhibitor activity involved in apoptotic process	http://purl.obolibrary.org/obo/GO_0043027	'part of' some 'apoptotic process'	GO	1
+caspase inhibitor activity	http://purl.obolibrary.org/obo/GO_0043027	'part of' some 'apoptotic process'	GO	1
+positive regulation of mitochondrial membrane permeability involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of transport across mitochondrial membrane involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeabilization involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of transport across mitochondrial membrane involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeability transition involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeability transition involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeability transition involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of transport across mitochondrial membrane involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeabilization involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of mitochondrial membrane permeability involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of mitochondrial membrane permeability involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial permeability transition involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of transport across mitochondrial membrane involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of mitochondrial membrane permeability involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeability transition involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeabilization involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial permeability transition involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeabilization involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeabilization involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of mitochondrial membrane permeability involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of transport across mitochondrial membrane involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial permeability transition involved in apoptotic programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeabilization involved in programmed cell death by apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial permeability transition involved in apoptotic process	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial permeability transition involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of mitochondrial membrane permeability involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of mitochondrial membrane permeability involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of transport across mitochondrial membrane involved in apoptosis	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+positive regulation of transport across mitochondrial membrane involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial permeability transition involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeability transition involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeability transition involved in apoptotic program	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial permeability transition involved in apoptotic cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeability transition involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+mitochondrial membrane permeabilization involved in type i programmed cell death	http://purl.obolibrary.org/obo/GO_1902110	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to osmotic stress by p53 class mediator	http://purl.obolibrary.org/obo/GO_1990127	'part of' some 'apoptotic process'	GO	1
+trail\-activated apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036462	'part of' some 'apoptotic process'	GO	1
+trail\-activated extrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036462	'part of' some 'apoptotic process'	GO	1
+trail\-induced apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036462	'part of' some 'apoptotic process'	GO	1
+tumor necrosis factor\-related apoptosis\-inducing ligand apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036462	'part of' some 'apoptotic process'	GO	1
+trail receptor activity	http://purl.obolibrary.org/obo/GO_0036463	'part of' some 'apoptotic process'	GO	1
+tumor necrosis factor\-related apoptosis\-inducing ligand receptor	http://purl.obolibrary.org/obo/GO_0036463	'part of' some 'apoptotic process'	GO	1
+phosphatidylserine exposure on apoptotic cell surface	http://purl.obolibrary.org/obo/GO_0070782	'part of' some 'apoptotic process'	GO	1
+externalization of phosphatidylserine	http://purl.obolibrary.org/obo/GO_0070782	'part of' some 'apoptotic process'	GO	1
+hormone\-mediated apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0008628	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to osmotic stress	http://purl.obolibrary.org/obo/GO_0008627	'part of' some 'apoptotic process'	GO	1
+granzyme\-mediated apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0008626	'part of' some 'apoptotic process'	GO	1
+cellular component disassembly involved in execution phase of apoptosis	http://purl.obolibrary.org/obo/GO_0006921	'part of' some 'apoptotic process'	GO	1
+cellular component disassembly involved in apoptotic process	http://purl.obolibrary.org/obo/GO_0006921	'part of' some 'apoptotic process'	GO	1
+disassembly of cell structures	http://purl.obolibrary.org/obo/GO_0006921	'part of' some 'apoptotic process'	GO	1
+cellular component disassembly involved in apoptosis	http://purl.obolibrary.org/obo/GO_0006921	'part of' some 'apoptotic process'	GO	1
+extrinsic apoptotic signaling pathway via death domain receptors	http://purl.obolibrary.org/obo/GO_0008625	'part of' some 'apoptotic process'	GO	1
+death receptor\-mediated apoptosis	http://purl.obolibrary.org/obo/GO_0008625	'part of' some 'apoptotic process'	GO	1
+induction of apoptosis via death receptors	http://purl.obolibrary.org/obo/GO_0008625	'part of' some 'apoptotic process'	GO	1
+release of matrix enzymes from mitochondria	http://purl.obolibrary.org/obo/GO_0032976	'part of' some 'apoptotic process'	GO	1
+mast release from mitochondria	http://purl.obolibrary.org/obo/GO_0032976	'part of' some 'apoptotic process'	GO	1
+release of aspartate aminotransferase from mitochondria	http://purl.obolibrary.org/obo/GO_0032976	'part of' some 'apoptotic process'	GO	1
+ripoptosome assembly involved in extrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_1901025	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to endoplasmic reticulum stress	http://purl.obolibrary.org/obo/GO_0070059	'part of' some 'apoptotic process'	GO	1
+apoptosis in response to endoplasmic reticulum stress	http://purl.obolibrary.org/obo/GO_0070059	'part of' some 'apoptotic process'	GO	1
+er stress\-induced apoptosis	http://purl.obolibrary.org/obo/GO_0070059	'part of' some 'apoptotic process'	GO	1
+endoplasmic reticulum stress\-induced apoptosis	http://purl.obolibrary.org/obo/GO_0070059	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway induced by endoplasmic reticulum stress	http://purl.obolibrary.org/obo/GO_0070059	'part of' some 'apoptotic process'	GO	1
+apoptosis in response to er stress	http://purl.obolibrary.org/obo/GO_0070059	'part of' some 'apoptotic process'	GO	1
+apoptosis triggered by er stress	http://purl.obolibrary.org/obo/GO_0070059	'part of' some 'apoptotic process'	GO	1
+release of cytochrome c from mitochondria	http://purl.obolibrary.org/obo/GO_0001836	'part of' some 'apoptotic process'	GO	1
+mitochondrial outer membrane permeabilization	http://purl.obolibrary.org/obo/GO_0097345	'part of' some 'apoptotic process'	GO	1
+momp	http://purl.obolibrary.org/obo/GO_0097345	'part of' some 'apoptotic process'	GO	1
+apoptotic mitochondrial changes	http://purl.obolibrary.org/obo/GO_0008637	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to hypoxia	http://purl.obolibrary.org/obo/GO_1990144	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to oxidative stress	http://purl.obolibrary.org/obo/GO_0008631	'part of' some 'apoptotic process'	GO	1
+oxidative stress\-induced intrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0008631	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to dna damage	http://purl.obolibrary.org/obo/GO_0008630	'part of' some 'apoptotic process'	GO	1
+neuron intrinsic apoptotic signaling pathway in response to oxidative stress	http://purl.obolibrary.org/obo/GO_0036480	'part of' some 'apoptotic process'	GO	1
+oxidative stress\-induced neuronal apoptosis	http://purl.obolibrary.org/obo/GO_0036480	'part of' some 'apoptotic process'	GO	1
+oxidative stress\-induced neuron apoptosis	http://purl.obolibrary.org/obo/GO_0036480	'part of' some 'apoptotic process'	GO	1
+nuclear fragmentation involved in apoptotic nuclear change	http://purl.obolibrary.org/obo/GO_0030264	'part of' some 'apoptotic process'	GO	1
+apoptotic nuclear fragmentation	http://purl.obolibrary.org/obo/GO_0030264	'part of' some 'apoptotic process'	GO	1
+nucleus fragmentation	http://purl.obolibrary.org/obo/GO_0030264	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to hydrogen peroxide	http://purl.obolibrary.org/obo/GO_0036481	'part of' some 'apoptotic process'	GO	1
+intrinsic apoptotic signaling pathway in response to h2o2	http://purl.obolibrary.org/obo/GO_0036481	'part of' some 'apoptotic process'	GO	1
+hydrogen peroxide\-induced apoptosis	http://purl.obolibrary.org/obo/GO_0036481	'part of' some 'apoptotic process'	GO	1
+hydrogen peroxide\-induced intrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036481	'part of' some 'apoptotic process'	GO	1
+apoptotic nuclear changes	http://purl.obolibrary.org/obo/GO_0030262	'part of' some 'apoptotic process'	GO	1
+apoptotic nuclear change	http://purl.obolibrary.org/obo/GO_0030262	'part of' some 'apoptotic process'	GO	1
+neuron intrinsic apoptotic signaling pathway in response to hydrogen peroxide	http://purl.obolibrary.org/obo/GO_0036482	'part of' some 'apoptotic process'	GO	1
+neuron intrinsic apoptotic signaling pathway in response to h2o2	http://purl.obolibrary.org/obo/GO_0036482	'part of' some 'apoptotic process'	GO	1
+hydrogen peroxide\-induced neuronal apoptosis	http://purl.obolibrary.org/obo/GO_0036482	'part of' some 'apoptotic process'	GO	1
+h2o2\-induced neuron intrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036482	'part of' some 'apoptotic process'	GO	1
+hydrogen peroxide\-induced neuron apoptosis	http://purl.obolibrary.org/obo/GO_0036482	'part of' some 'apoptotic process'	GO	1
+protein insertion into mitochondrial membrane involved in apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0001844	'part of' some 'apoptotic process'	GO	1
+insertion of proteins into mitochondrial membranes during the induction of apoptosis	http://purl.obolibrary.org/obo/GO_0001844	'part of' some 'apoptotic process'	GO	1
+protein insertion into mitochondrion membrane during induction of apoptosis	http://purl.obolibrary.org/obo/GO_0001844	'part of' some 'apoptotic process'	GO	1
+protein insertion into mitochondrial membrane during induction of apoptosis	http://purl.obolibrary.org/obo/GO_0001844	'part of' some 'apoptotic process'	GO	1
+protein insertion into mitochondrial membrane involved in induction of apoptosis	http://purl.obolibrary.org/obo/GO_0001844	'part of' some 'apoptotic process'	GO	1
+apoptotic chromosome condensation	http://purl.obolibrary.org/obo/GO_0030263	'part of' some 'apoptotic process'	GO	1
+pyknosis	http://purl.obolibrary.org/obo/GO_0030263	'part of' some 'apoptotic process'	GO	1
+neuron intrinsic apoptotic signaling pathway in response to endoplasmic reticulum stress	http://purl.obolibrary.org/obo/GO_0036483	'part of' some 'apoptotic process'	GO	1
+endoplasmic reticulum stress\-induced neuron apoptosis	http://purl.obolibrary.org/obo/GO_0036483	'part of' some 'apoptotic process'	GO	1
+er stress\-induced neuron apoptosis	http://purl.obolibrary.org/obo/GO_0036483	'part of' some 'apoptotic process'	GO	1
+er stress\-induced neuron intrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036483	'part of' some 'apoptotic process'	GO	1
+endoplasmic reticulum stress\-induced neuron intrinsic apoptotic signaling pathway	http://purl.obolibrary.org/obo/GO_0036483	'part of' some 'apoptotic process'	GO	1

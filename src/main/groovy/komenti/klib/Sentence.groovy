@@ -18,7 +18,7 @@ class Sentence {
   def rText
   def nWords
   def negated = null
-  def NEG_MODS = [ 'negative', 'exclude', 'without', 'no', 'excluded', 'not', 'denies', 'free', 'deny', 'denied', 'stop', 'stopped' ]
+  def NEG_MODS = [ 'negative', 'excluding', 'exclude', 'without', 'no', 'excluded', 'not', 'denies', 'free', 'deny', 'denied', 'stop', 'stopped' ]
 
   def Sentence(text, fileName) {
     this.text = text
@@ -61,10 +61,12 @@ class Sentence {
     } 
 
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(tText)
-    tParser.annotate(aDocument)
+    [ "tokenize", "ssplit", "pos", "lemma", "depparse" ].each {
+      tParser.getExistingAnnotator(it).annotate(aDocument)
+    }
 
     def sentences = aDocument.get(CoreAnnotations.SentencesAnnotation.class)
-    if(sentences && sentences.size() >= 1) {
+    if(sentences && sentences.size() >= 1) { // TODO not sure about this
       rText = sentences[0]
       graph = sentences[0].get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class)
     }

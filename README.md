@@ -1,12 +1,21 @@
 # Komenti
 
+[![Build Status](https://travis-ci.com/reality/komenti.svg?branch=master)](https://travis-ci.com/reality/komenti)
+![LINE](https://img.shields.io/badge/line--coverage-49%25-orange.svg)
+![BRANCH](https://img.shields.io/badge/branch--coverage-21%25-red.svg)
+![COMPLEXITY](https://img.shields.io/badge/complexity-5.50-brightgreen.svg)
+
 Komenti is a tool for semantic query, annotation, and analysis of text using ontologies. 
 
 It enables querying multiple ontologies with complex class descriptions using AberOWL. These can be used to build a vocabulary for text annotation, including new methods for synonym and label expansion. Annotation is performed using Stanford CoreNLP, and include novel methods for the detection and disambiguation of concept negation and uncertainty. Annotations of text corpora can be used for analysis, within or without Komenti. These components are in development, but currently include summarisation of the co-ocurrence of groups of concepts across text, and use of annotations to suggest description logic axioms for classes. These more complex uses can be described by series of parameters to be passed to the tool in the form of a serialised 'roster,' defining a natural language processing pipeline.
 
+We are working on papers discussing the novel components. I will post them here:
+
+* [A fast, accurate, and generalisable heuristic-based negation detection algorithm for clinical text](https://www.biorxiv.org/content/10.1101/2020.07.03.187054v1)
+
 ## Installation
 
-You can find the latest release here: https://github.com/reality/komenti/releases/tag/0.0.4-SNAPSHOT-5
+You can find the latest stable-ish release here: https://github.com/reality/komenti/releases/tag/0.1.0
 
 You can add the bin/ directory to your PATH, to be able to use it easily from anywhere. It should also work on Windows, but I haven't tested that.
 
@@ -24,6 +33,14 @@ komenti query -q "'part of' some 'apoptotic process'" -o GO --out labels.txt
 
 ```bash
 komenti query -c toxicity,asbestos -o ENM --out labels.txt
+```
+
+### All classes
+
+You can get all classes in an ontology by running a subclass query on owl#Thing:
+
+```bash
+komenti query -q "<http://www.w3.org/2002/07/owl#Thing>" --ontology HP
 ```
 
 ### Parameters

@@ -1,0 +1,3745 @@
+[
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "membrane",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0137_abstract_188.txt_2",
+                    "conceptLabel": "membrane",
+                    "text": "onion-like globular membrane structures were observed in addition to rod-like and ribbon-like structures, indicating the existence of a globular membrane structure even in the dried state.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                    "matchedText": "membrane"
+                },
+                "label": "membrane"
+            },
+            "specificLabel": "existence of globular structure",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "existence of globular structure membrane"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "indicate",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "indicate"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "membrane",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0137_abstract_188.txt_2",
+                    "conceptLabel": "membrane",
+                    "text": "onion-like globular membrane structures were observed in addition to rod-like and ribbon-like structures, indicating the existence of a globular membrane structure even in the dried state.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                    "matchedText": "membrane"
+                },
+                "label": "membrane"
+            },
+            "specificLabel": "structure",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "structure membrane"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "extracellular region",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005576",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0322_abstract_2501.txt_5",
+                    "conceptLabel": "extracellular region",
+                    "text": "our results suggest that intracellular [ca2+]i spike trains convey faithful information on temporal variations of extracellular hormonal concentrations at scales of 30-200 sec, corresponding to cut-off frequencies between 5 and 30 mhz of the random hormonal stimulation.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005576",
+                    "matchedText": "extracellular"
+                },
+                "label": "extracellular region"
+            },
+            "specificLabel": "temporal variation of hormonal concentration",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "temporal variation of hormonal concentration extracellular region"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "convey information on",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "convey information on"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "spike train",
+                "iri": "http://purl.obolibrary.org/obo/GO_0098874",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0322_abstract_2501.txt_5",
+                    "conceptLabel": "spike train",
+                    "text": "our results suggest that intracellular [ca2+]i spike trains convey faithful information on temporal variations of extracellular hormonal concentrations at scales of 30-200 sec, corresponding to cut-off frequencies between 5 and 30 mhz of the random hormonal stimulation.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0098874",
+                    "matchedText": "spike train"
+                },
+                "label": "spike train"
+            },
+            "specificLabel": "i",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "i spike train"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0930_abstract_15426.txt_5",
+                    "conceptLabel": "cell",
+                    "text": "cellular uptake of nbr was compared to free bilirubin (fbr) in an insulinoma cell line (ins-r3) model using confocal-like structured illumination microscopy.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "free bilirubin in insulinoma line",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "free bilirubin in insulinoma line cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "compare to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "compare to"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "import into cell",
+            "iri": "http://purl.obolibrary.org/obo/GO_0098657",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0930_abstract_15426.txt_5",
+                "conceptLabel": "import into cell",
+                "text": "cellular uptake of nbr was compared to free bilirubin (fbr) in an insulinoma cell line (ins-r3) model using confocal-like structured illumination microscopy.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0098657",
+                "matchedText": "uptake"
+            },
+            "label": "import into cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "pathogenesis",
+                "iri": "http://purl.obolibrary.org/obo/GO_0009405",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0723_abstract_19490.txt_2",
+                    "conceptLabel": "pathogenesis",
+                    "text": "il-18 has been implicated in the pathogenesis of various inflammatory and cardiovascular diseases.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0009405",
+                    "matchedText": "pathogenesis"
+                },
+                "label": "pathogenesis"
+            },
+            "specificLabel": "have implicate in of various inflammatory disease",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "have implicate in of various inflammatory disease pathogenesis"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "have",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "have"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "interleukin-18 receptor binding",
+            "iri": "http://purl.obolibrary.org/obo/GO_0045515",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0723_abstract_19490.txt_2",
+                "conceptLabel": "interleukin-18 receptor binding",
+                "text": "il-18 has been implicated in the pathogenesis of various inflammatory and cardiovascular diseases.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0045515",
+                "matchedText": "il-18"
+            },
+            "label": "interleukin-18 receptor binding"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "interleukin-18 receptor binding",
+            "iri": "http://purl.obolibrary.org/obo/GO_0045515",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0723_abstract_19490.txt_3",
+                "conceptLabel": "interleukin-18 receptor binding",
+                "text": "il-18 binding protein (il-18bp) is a natural inhibitor of il-18 that possesses higher affinity to il-18 than that of the il-18 receptor alpha chain on the cell surface.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0045515",
+                "matchedText": "il-18"
+            },
+            "label": "interleukin-18 receptor binding"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "inhibitor of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "inhibitor of"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "interleukin-18 binding",
+                "iri": "http://purl.obolibrary.org/obo/GO_0042007",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0723_abstract_19490.txt_3",
+                    "conceptLabel": "interleukin-18 binding",
+                    "text": "il-18 binding protein (il-18bp) is a natural inhibitor of il-18 that possesses higher affinity to il-18 than that of the il-18 receptor alpha chain on the cell surface.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0042007",
+                    "matchedText": "il-18 binding"
+                },
+                "label": "interleukin-18 binding"
+            },
+            "specificLabel": "protein",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "protein interleukin-18 binding"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "binding",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005488",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0224_abstract_14846.txt_2",
+                    "conceptLabel": "binding",
+                    "text": "the kinetic properties of this effect (k+-specificity, saturability, optical isomerism, antagonism by structural analogues, etc.) strongly suggest that it is mediated by a k+-transport system with a specific binding site for some diuretic drugs.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005488",
+                    "matchedText": "bind"
+                },
+                "label": "binding"
+            },
+            "specificLabel": "specific site for diuretic drug",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "specific site for diuretic drug binding"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "with",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "with"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "transport",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006810",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0224_abstract_14846.txt_2",
+                    "conceptLabel": "transport",
+                    "text": "the kinetic properties of this effect (k+-specificity, saturability, optical isomerism, antagonism by structural analogues, etc.) strongly suggest that it is mediated by a k+-transport system with a specific binding site for some diuretic drugs.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006810",
+                    "matchedText": "transport"
+                },
+                "label": "transport"
+            },
+            "specificLabel": "system",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "system transport"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "necrotic cell death",
+                "iri": "http://purl.obolibrary.org/obo/GO_0070265",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0930_abstract_15426.txt_10",
+                    "conceptLabel": "necrotic cell death",
+                    "text": "cell death after hypoxic stress was significantly decreased in murine islets treated with 5 \u03bcm nbr (18.5% \u00b1 14.1) compared to untreated islets (33.5% \u00b1 17.5%; p = 0.019), with reduction in central necrosis.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0070265",
+                    "matchedText": "necrosis"
+                },
+                "label": "necrotic cell death"
+            },
+            "specificLabel": "untreated islet with reduction in central",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "untreated islet with reduction in central necrotic cell death"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "decrease compare to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "decrease compare to"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "cell death",
+            "iri": "http://purl.obolibrary.org/obo/GO_0008219",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0930_abstract_15426.txt_10",
+                "conceptLabel": "cell death",
+                "text": "cell death after hypoxic stress was significantly decreased in murine islets treated with 5 \u03bcm nbr (18.5% \u00b1 14.1) compared to untreated islets (33.5% \u00b1 17.5%; p = 0.019), with reduction in central necrosis.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0008219",
+                "matchedText": "cell death"
+            },
+            "label": "cell death"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "developmental process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0032502",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n1012_abstract_23199.txt_4",
+                    "conceptLabel": "developmental process",
+                    "text": "t-box transcription factors play critical roles in embryonic development.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0032502",
+                    "matchedText": "development"
+                },
+                "label": "developmental process"
+            },
+            "specificLabel": "embryonic",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "embryonic developmental process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "play role in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "play role in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "dna-binding transcription factor activity, rna polymerase ii-specific",
+                "iri": "http://purl.obolibrary.org/obo/GO_0000981",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n1012_abstract_23199.txt_4",
+                    "conceptLabel": "dna-binding transcription factor activity, rna polymerase ii-specific",
+                    "text": "t-box transcription factors play critical roles in embryonic development.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0000981",
+                    "matchedText": "transcription factor"
+                },
+                "label": "dna-binding transcription factor activity, rna polymerase ii-specific"
+            },
+            "specificLabel": "t-box",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "t-box dna-binding transcription factor activity, rna polymerase ii-specific"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cellular respiration",
+                "iri": "http://purl.obolibrary.org/obo/GO_0045333",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0126_abstract_17982.txt_6",
+                    "conceptLabel": "cellular respiration",
+                    "text": "respiration in which nadh was used as substrate was twice as much more sensitive to inhibition by fumarate than respiration stimulated by succinate.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0045333",
+                    "matchedText": "respiration"
+                },
+                "label": "cellular respiration"
+            },
+            "specificLabel": "twice as much more sensitive to inhibition by fumarate than stimulate by succinate",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "twice as much more sensitive to inhibition by fumarate than stimulate by succinate cellular respiration"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "be"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "cellular respiration",
+            "iri": "http://purl.obolibrary.org/obo/GO_0045333",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0126_abstract_17982.txt_6",
+                "conceptLabel": "cellular respiration",
+                "text": "respiration in which nadh was used as substrate was twice as much more sensitive to inhibition by fumarate than respiration stimulated by succinate.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0045333",
+                "matchedText": "respiration"
+            },
+            "label": "cellular respiration"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "inflammatory response",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006954",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0505_abstract_17889.txt_1",
+                    "conceptLabel": "inflammatory response",
+                    "text": "hypersensitivity pneumonitis (hp) is an immunologically induced inflammation of the lung parenchyma, though bronchial airways may be also involved.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006954",
+                    "matchedText": "inflammation"
+                },
+                "label": "inflammatory response"
+            },
+            "specificLabel": "immunologically induce",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "immunologically induce inflammatory response"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "be"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "hypersensitivity",
+                "iri": "http://purl.obolibrary.org/obo/GO_0002524",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0505_abstract_17889.txt_1",
+                    "conceptLabel": "hypersensitivity",
+                    "text": "hypersensitivity pneumonitis (hp) is an immunologically induced inflammation of the lung parenchyma, though bronchial airways may be also involved.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0002524",
+                    "matchedText": "hypersensitivity"
+                },
+                "label": "hypersensitivity"
+            },
+            "specificLabel": "pneumonitis",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "pneumonitis hypersensitivity"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "developmental process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0032502",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n1012_abstract_23199.txt_6",
+                    "conceptLabel": "developmental process",
+                    "text": "thus, dysregulated tbx5 gene expression may be involved in cad development.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0032502",
+                    "matchedText": "development"
+                },
+                "label": "developmental process"
+            },
+            "specificLabel": "thus may involve in cad",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "thus may involve in cad developmental process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "may",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "may"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "gene expression",
+                "iri": "http://purl.obolibrary.org/obo/GO_0010467",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n1012_abstract_23199.txt_6",
+                    "conceptLabel": "gene expression",
+                    "text": "thus, dysregulated tbx5 gene expression may be involved in cad development.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0010467",
+                    "matchedText": "gene expression"
+                },
+                "label": "gene expression"
+            },
+            "specificLabel": "dysregulate tbx5",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "dysregulate tbx5 gene expression"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell division",
+                "iri": "http://purl.obolibrary.org/obo/GO_0051301",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0676_abstract_97.txt_5",
+                    "conceptLabel": "cell division",
+                    "text": "such uncontrolled proteolysis leads to inhibition of bacterial cell division and eventually cell death.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0051301",
+                    "matchedText": "cell division"
+                },
+                "label": "cell division"
+            },
+            "specificLabel": "inhibition of bacterial",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "inhibition of bacterial cell division"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "lead to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "lead to"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "proteolysis",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006508",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0676_abstract_97.txt_5",
+                    "conceptLabel": "proteolysis",
+                    "text": "such uncontrolled proteolysis leads to inhibition of bacterial cell division and eventually cell death.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006508",
+                    "matchedText": "proteolysis"
+                },
+                "label": "proteolysis"
+            },
+            "specificLabel": "such uncontrolled",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "such uncontrolled proteolysis"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0234_abstract_7344.txt_7",
+                    "conceptLabel": "cell",
+                    "text": "the results are interpreted on the basis of a clonal succession model of hemopoiesis with stem cells of varying proliferative potential and proliferation rates increasing as capacity for cell production decreases.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "stem of vary proliferative potential",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "stem of vary proliferative potential cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "with",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "with"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "hemopoiesis",
+            "iri": "http://purl.obolibrary.org/obo/GO_0030097",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0234_abstract_7344.txt_7",
+                "conceptLabel": "hemopoiesis",
+                "text": "the results are interpreted on the basis of a clonal succession model of hemopoiesis with stem cells of varying proliferative potential and proliferation rates increasing as capacity for cell production decreases.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0030097",
+                "matchedText": "hemopoiesis"
+            },
+            "label": "hemopoiesis"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "developmental process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0032502",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0994_abstract_19605.txt_1",
+                    "conceptLabel": "developmental process",
+                    "text": "population segmentation of patients into parsimonious and relatively homogenous subgroups or segments based on healthcare requirements can aid healthcare resource planning and the development of targeted intervention programs.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0032502",
+                    "matchedText": "development"
+                },
+                "label": "developmental process"
+            },
+            "specificLabel": "of target intervention program",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "of target intervention program developmental process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "can aid",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "can aid"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "segmentation",
+                "iri": "http://purl.obolibrary.org/obo/GO_0035282",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0994_abstract_19605.txt_1",
+                    "conceptLabel": "segmentation",
+                    "text": "population segmentation of patients into parsimonious and relatively homogenous subgroups or segments based on healthcare requirements can aid healthcare resource planning and the development of targeted intervention programs.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0035282",
+                    "matchedText": "segmentation"
+                },
+                "label": "segmentation"
+            },
+            "specificLabel": "population",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "population segmentation"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "membrane",
+            "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0954_abstract_18303.txt_9",
+                "conceptLabel": "membrane",
+                "text": "it is concluded that tryptophans 11 and 13 contribute most to pore stabilization in the membrane, whereas tryptophan 9 is not so important for pore formation.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "matchedText": "membrane"
+            },
+            "label": "membrane"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "pore complex",
+                "iri": "http://purl.obolibrary.org/obo/GO_0046930",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0954_abstract_18303.txt_9",
+                    "conceptLabel": "pore complex",
+                    "text": "it is concluded that tryptophans 11 and 13 contribute most to pore stabilization in the membrane, whereas tryptophan 9 is not so important for pore formation.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0046930",
+                    "matchedText": "pore"
+                },
+                "label": "pore complex"
+            },
+            "specificLabel": "stabilization",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "stabilization pore complex"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0688_abstract_12336.txt_4",
+                    "conceptLabel": "cell",
+                    "text": "continuous antigen presentation by a limited number of differentiated transgenic hematopoietic cells results in an induction and prolonged maintenance of fully functional effector t cell responses in a mouse model.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "induction of fully functional effector t response",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "induction of fully functional effector t response cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "result in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "result in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "antigen processing and presentation",
+                "iri": "http://purl.obolibrary.org/obo/GO_0019882",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0688_abstract_12336.txt_4",
+                    "conceptLabel": "antigen processing and presentation",
+                    "text": "continuous antigen presentation by a limited number of differentiated transgenic hematopoietic cells results in an induction and prolonged maintenance of fully functional effector t cell responses in a mouse model.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0019882",
+                    "matchedText": "antigen presentation"
+                },
+                "label": "antigen processing and presentation"
+            },
+            "specificLabel": "continuous",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "continuous antigen processing and presentation"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "signaling",
+                "iri": "http://purl.obolibrary.org/obo/GO_0023052",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0750_abstract_23636.txt_3",
+                    "conceptLabel": "signaling",
+                    "text": "here we show that treatment of urogenital sinus (ugs) organ cultures with known inhibitors of canonical wnt signaling also inhibits prostatic bud formation.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0023052",
+                    "matchedText": "signaling"
+                },
+                "label": "signaling"
+            },
+            "specificLabel": "known inhibitor of canonical wnt",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "known inhibitor of canonical wnt signaling"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "treatment with",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "treatment with"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "biosynthetic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0009058",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0750_abstract_23636.txt_3",
+                    "conceptLabel": "biosynthetic process",
+                    "text": "here we show that treatment of urogenital sinus (ugs) organ cultures with known inhibitors of canonical wnt signaling also inhibits prostatic bud formation.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0009058",
+                    "matchedText": "formation"
+                },
+                "label": "biosynthetic process"
+            },
+            "specificLabel": "bud",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "bud biosynthetic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0045_abstract_4475.txt_2",
+                    "conceptLabel": "cell",
+                    "text": "to investigate the mechanism of the synergism between il-3 and il-6, we sorted hemopoietic stem cells from untreated murine bone marrow cells using a two-laser fluorescence-activated cell sorter (facs).",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "two-laser fluorescence-activated sorter",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "two-laser fluorescence-activated sorter cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "use",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "use"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0045_abstract_4475.txt_2",
+                    "conceptLabel": "cell",
+                    "text": "to investigate the mechanism of the synergism between il-3 and il-6, we sorted hemopoietic stem cells from untreated murine bone marrow cells using a two-laser fluorescence-activated cell sorter (facs).",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "hemopoietic stem",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "hemopoietic stem cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "interleukin-3 receptor binding",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005135",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0045_abstract_4475.txt_9",
+                    "conceptLabel": "interleukin-3 receptor binding",
+                    "text": "it is thus suggested that the target cells of il-3 and il-6 are the same as those of il-3.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005135",
+                    "matchedText": "il-3"
+                },
+                "label": "interleukin-3 receptor binding"
+            },
+            "specificLabel": "those of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "those of interleukin-3 receptor binding"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "same as",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "same as"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0045_abstract_4475.txt_9",
+                    "conceptLabel": "cell",
+                    "text": "it is thus suggested that the target cells of il-3 and il-6 are the same as those of il-3.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "target",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "target cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0812_abstract_17704.txt_15",
+                    "conceptLabel": "cell",
+                    "text": "the majority of the asymptomatic inflammation that is detected in the prostate is classified as chronic inflammation (i.e., as evidenced by the presence of monocytic and/or lymphoplasmacytic inflammatory cell infiltrates); however, acute inflammation is also observed to a lesser degree.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "presence of monocytic inflammatory infiltrate",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "presence of monocytic inflammatory infiltrate cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "evidence by",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "evidence by"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "inflammatory response",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006954",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0812_abstract_17704.txt_15",
+                    "conceptLabel": "inflammatory response",
+                    "text": "the majority of the asymptomatic inflammation that is detected in the prostate is classified as chronic inflammation (i.e., as evidenced by the presence of monocytic and/or lymphoplasmacytic inflammatory cell infiltrates); however, acute inflammation is also observed to a lesser degree.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006954",
+                    "matchedText": "inflammation"
+                },
+                "label": "inflammatory response"
+            },
+            "specificLabel": "acute",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "acute inflammatory response"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "golgi apparatus",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005794",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0465_abstract_40.txt_6",
+                    "conceptLabel": "golgi apparatus",
+                    "text": "intracellular hyaluronidase-sensitive metachromatic granules are found chiefly at the cell periphery or mantle, rarely juxtanuclear in the main golgi zone.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005794",
+                    "matchedText": "golgi"
+                },
+                "label": "golgi apparatus"
+            },
+            "specificLabel": "rarely juxtanuclear in main zone",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "rarely juxtanuclear in main zone golgi apparatus"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "find",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "find"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "intracellular",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005622",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0465_abstract_40.txt_6",
+                    "conceptLabel": "intracellular",
+                    "text": "intracellular hyaluronidase-sensitive metachromatic granules are found chiefly at the cell periphery or mantle, rarely juxtanuclear in the main golgi zone.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005622",
+                    "matchedText": "intracellular"
+                },
+                "label": "intracellular"
+            },
+            "specificLabel": "granule",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "granule intracellular"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "extracellular region",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005576",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0629_abstract_12355.txt_2",
+                    "conceptLabel": "extracellular region",
+                    "text": "amhrii is a membrane protein containing an n-terminal extracellular domain (ecd) that binds amh, a transmembrane domain, and an intracellular domain with serine/threonine kinase activity.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005576",
+                    "matchedText": "extracellular"
+                },
+                "label": "extracellular region"
+            },
+            "specificLabel": "n-terminal domain",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "n-terminal domain extracellular region"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "contains",
+            "iri": "http://purl.obolibrary.org/obo/RO_0001019",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "object-properties",
+                "documentId": "pubmed20n0629_abstract_12355.txt_2",
+                "conceptLabel": "contains",
+                "text": "amhrii is a membrane protein containing an n-terminal extracellular domain (ecd) that binds amh, a transmembrane domain, and an intracellular domain with serine/threonine kinase activity.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/RO_0001019",
+                "matchedText": "contain"
+            },
+            "label": "contains"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "membrane",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0629_abstract_12355.txt_2",
+                    "conceptLabel": "membrane",
+                    "text": "amhrii is a membrane protein containing an n-terminal extracellular domain (ecd) that binds amh, a transmembrane domain, and an intracellular domain with serine/threonine kinase activity.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                    "matchedText": "membrane"
+                },
+                "label": "membrane"
+            },
+            "specificLabel": "protein",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "protein membrane"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "phagocytosis",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006909",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0938_abstract_18610.txt_3",
+                    "conceptLabel": "phagocytosis",
+                    "text": "in this study the signal pathways mediating zymosan phagocytosis, focusing in lipidic second messengers, were investigated.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006909",
+                    "matchedText": "phagocytosis"
+                },
+                "label": "phagocytosis"
+            },
+            "specificLabel": "zymosan",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "zymosan phagocytosis"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "mediate",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "mediate"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "signaling",
+                "iri": "http://purl.obolibrary.org/obo/GO_0023052",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0938_abstract_18610.txt_3",
+                    "conceptLabel": "signaling",
+                    "text": "in this study the signal pathways mediating zymosan phagocytosis, focusing in lipidic second messengers, were investigated.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0023052",
+                    "matchedText": "signal"
+                },
+                "label": "signaling"
+            },
+            "specificLabel": "pathway",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "pathway signaling"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "maintenance of location",
+                "iri": "http://purl.obolibrary.org/obo/GO_0051235",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0909_abstract_20186.txt_4",
+                    "conceptLabel": "maintenance of location",
+                    "text": "in response to lae treatment, p. aeruginosa cells up-regulated iron acquisition and signaling genes and down-regulated iron storage genes.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0051235",
+                    "matchedText": "storage"
+                },
+                "label": "maintenance of location"
+            },
+            "specificLabel": "iron gene",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "iron gene maintenance of location"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "down-regulate",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "down-regulate"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0909_abstract_20186.txt_4",
+                    "conceptLabel": "cell",
+                    "text": "in response to lae treatment, p. aeruginosa cells up-regulated iron acquisition and signaling genes and down-regulated iron storage genes.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "p. aeruginosa",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "p. aeruginosa cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "pore complex",
+                "iri": "http://purl.obolibrary.org/obo/GO_0046930",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n1004_abstract_14157.txt_7",
+                    "conceptLabel": "pore complex",
+                    "text": "denitrification was mainly related to the nitrate concentration in pore water and organic matter in the sediment, while anammox was mainly regulated by the concentration of nitrate and nitrite in pore water.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0046930",
+                    "matchedText": "pore"
+                },
+                "label": "pore complex"
+            },
+            "specificLabel": "concentration of nitrate in water",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "concentration of nitrate in water pore complex"
+        },
+        "relation": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "regulates",
+                "iri": "http://purl.obolibrary.org/obo/RO_0002211",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "object-properties",
+                    "documentId": "pubmed20n1004_abstract_14157.txt_7",
+                    "conceptLabel": "regulates",
+                    "text": "denitrification was mainly related to the nitrate concentration in pore water and organic matter in the sediment, while anammox was mainly regulated by the concentration of nitrate and nitrite in pore water.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/RO_0002211",
+                    "matchedText": "regulate"
+                },
+                "label": "regulates"
+            },
+            "specificLabel": "by",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "by regulates"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "anaerobic respiration, using ammonium as electron donor",
+            "iri": "http://purl.obolibrary.org/obo/GO_0019331",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n1004_abstract_14157.txt_7",
+                "conceptLabel": "anaerobic respiration, using ammonium as electron donor",
+                "text": "denitrification was mainly related to the nitrate concentration in pore water and organic matter in the sediment, while anammox was mainly regulated by the concentration of nitrate and nitrite in pore water.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0019331",
+                "matchedText": "anammox"
+            },
+            "label": "anaerobic respiration, using ammonium as electron donor"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cytoplasmic vesicle",
+                "iri": "http://purl.obolibrary.org/obo/GO_0031410",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0465_abstract_42.txt_3",
+                    "conceptLabel": "cytoplasmic vesicle",
+                    "text": "the most immature primordial oocyte is morphologically a simple cell consisting of a large slightly eccentric nucleus, a few large spherical mitochondria, a profusion of granular cytoplasmic vesicles, and free rnp particles.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0031410",
+                    "matchedText": "cytoplasmic vesicle"
+                },
+                "label": "cytoplasmic vesicle"
+            },
+            "specificLabel": "granular",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "granular cytoplasmic vesicle"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "profusion of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "profusion of"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0465_abstract_42.txt_3",
+                    "conceptLabel": "cell",
+                    "text": "the most immature primordial oocyte is morphologically a simple cell consisting of a large slightly eccentric nucleus, a few large spherical mitochondria, a profusion of granular cytoplasmic vesicles, and free rnp particles.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "simple",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "simple cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "transport",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006810",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0001_abstract_9314.txt_15",
+                    "conceptLabel": "transport",
+                    "text": "from the observation that both bicarbonate reabsorption and phosphate acidification are similarly affected by these experimental manoeuvres, it is concluded that h ion secretion plays a key role in both transport processes.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006810",
+                    "matchedText": "transport"
+                },
+                "label": "transport"
+            },
+            "specificLabel": "process",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "process transport"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "play role in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "play role in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "secretion",
+                "iri": "http://purl.obolibrary.org/obo/GO_0046903",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0001_abstract_9314.txt_15",
+                    "conceptLabel": "secretion",
+                    "text": "from the observation that both bicarbonate reabsorption and phosphate acidification are similarly affected by these experimental manoeuvres, it is concluded that h ion secretion plays a key role in both transport processes.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0046903",
+                    "matchedText": "secretion"
+                },
+                "label": "secretion"
+            },
+            "specificLabel": "h ion",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "h ion secretion"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0992_abstract_20858.txt_5",
+                    "conceptLabel": "cell",
+                    "text": "here, we characterize the spatio-temporal expression of the rhabdomeric opsin genes in c. teleta and show that a single rhabdomeric opsin gene, ct-r-opsin1, is expressed in the larval photoreceptor cells.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "larval photoreceptor",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "larval photoreceptor cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "express in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "express in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "3,4-didehydroretinal binding",
+                "iri": "http://purl.obolibrary.org/obo/GO_0046876",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0992_abstract_20858.txt_5",
+                    "conceptLabel": "3,4-didehydroretinal binding",
+                    "text": "here, we characterize the spatio-temporal expression of the rhabdomeric opsin genes in c. teleta and show that a single rhabdomeric opsin gene, ct-r-opsin1, is expressed in the larval photoreceptor cells.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0046876",
+                    "matchedText": "opsin"
+                },
+                "label": "3,4-didehydroretinal binding"
+            },
+            "specificLabel": "gene",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "gene 3,4-didehydroretinal binding"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "membrane",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0220_abstract_3625.txt_2",
+                    "conceptLabel": "membrane",
+                    "text": "in common with many membrane glycoproteins, mig moves extensively in the lipid bilayer, and after binding of specific antisera displays lateral mobility with patch and cap formation.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                    "matchedText": "membrane"
+                },
+                "label": "membrane"
+            },
+            "specificLabel": "common with many glycoprotein",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "common with many glycoprotein membrane"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "display mobility in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "display mobility in"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "binding",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005488",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0220_abstract_3625.txt_2",
+                "conceptLabel": "binding",
+                "text": "in common with many membrane glycoproteins, mig moves extensively in the lipid bilayer, and after binding of specific antisera displays lateral mobility with patch and cap formation.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005488",
+                "matchedText": "binding"
+            },
+            "label": "binding"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "developmental process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0032502",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0296_abstract_16939.txt_1",
+                    "conceptLabel": "developmental process",
+                    "text": "to investigate the association of a g/a polymorphism at position -455 of the beta-fibrinogen gene and fibrinogen levels in the development of coronary artery disease (cad) in subjects with niddm.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0032502",
+                    "matchedText": "development"
+                },
+                "label": "developmental process"
+            },
+            "specificLabel": "of coronary artery disease",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "of coronary artery disease developmental process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "fibrinogen complex",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005577",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0296_abstract_16939.txt_1",
+                    "conceptLabel": "fibrinogen complex",
+                    "text": "to investigate the association of a g/a polymorphism at position -455 of the beta-fibrinogen gene and fibrinogen levels in the development of coronary artery disease (cad) in subjects with niddm.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005577",
+                    "matchedText": "fibrinogen"
+                },
+                "label": "fibrinogen complex"
+            },
+            "specificLabel": "level",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "level fibrinogen complex"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "long-term synaptic potentiation",
+            "iri": "http://purl.obolibrary.org/obo/GO_0060291",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0546_abstract_4219.txt_1",
+                "conceptLabel": "long-term synaptic potentiation",
+                "text": "long-term memory and its putative synaptic correlates the late phases of both long-term potentiation and long-term depression require enhanced protein synthesis.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0060291",
+                "matchedText": "long-term potentiation"
+            },
+            "label": "long-term synaptic potentiation"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "late phase of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "late phase of"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "translation",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006412",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0546_abstract_4219.txt_1",
+                    "conceptLabel": "translation",
+                    "text": "long-term memory and its putative synaptic correlates the late phases of both long-term potentiation and long-term depression require enhanced protein synthesis.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006412",
+                    "matchedText": "protein synthesis"
+                },
+                "label": "translation"
+            },
+            "specificLabel": "enhance",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "enhance translation"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "schmidt-lanterman incisure",
+            "iri": "http://purl.obolibrary.org/obo/GO_0043220",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0205_abstract_14144.txt_2",
+                "conceptLabel": "schmidt-lanterman incisure",
+                "text": "three of these (p0, p2, and bp) are constituents of compact myelin whereas myelin-associated glycoprotein (mag) is restricted to membranes near schwann cell cytoplasm in periaxonal and paranodal regions and in schmidt-lanterman clefts.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0043220",
+                "matchedText": "schmidt-lanterman cleft"
+            },
+            "label": "schmidt-lanterman incisure"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "membrane",
+            "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0205_abstract_14144.txt_2",
+                "conceptLabel": "membrane",
+                "text": "three of these (p0, p2, and bp) are constituents of compact myelin whereas myelin-associated glycoprotein (mag) is restricted to membranes near schwann cell cytoplasm in periaxonal and paranodal regions and in schmidt-lanterman clefts.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "matchedText": "membrane"
+            },
+            "label": "membrane"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0637_abstract_2796.txt_2",
+                    "conceptLabel": "cell",
+                    "text": "the single mix/bix family member identified in the mouse, mix-like 1 (mixl1), is required for mesendoderm patterning during gastrulation and promotes mesoderm formation and hematopoiesis in embryonic stem cell (esc)-derived embryoid bodies.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "embryonic stem esc",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "embryonic stem esc cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "biosynthetic process",
+            "iri": "http://purl.obolibrary.org/obo/GO_0009058",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0637_abstract_2796.txt_2",
+                "conceptLabel": "biosynthetic process",
+                "text": "the single mix/bix family member identified in the mouse, mix-like 1 (mixl1), is required for mesendoderm patterning during gastrulation and promotes mesoderm formation and hematopoiesis in embryonic stem cell (esc)-derived embryoid bodies.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0009058",
+                "matchedText": "formation"
+            },
+            "label": "biosynthetic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "electron transport chain",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0022900",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0028_abstract_5496.txt_8",
+                        "conceptLabel": "electron transport chain",
+                        "text": "we propose that metabolism in heterotrophically grown cells of paracoccus dentrificans is regulated on the level of phosphorylation in the site i region of the electron transport chain.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0022900",
+                        "matchedText": "electron transport chain"
+                    },
+                    "label": "electron transport chain"
+                },
+                "specificLabel": "phosphorylation",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016310",
+                "originalAnnotation": null,
+                "label": "phosphorylation electron transport chain"
+            },
+            "specificLabel": "level of in site i region of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "level of in site i region of phosphorylation electron transport chain"
+        },
+        "relation": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "regulates",
+                "iri": "http://purl.obolibrary.org/obo/RO_0002211",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "object-properties",
+                    "documentId": "pubmed20n0028_abstract_5496.txt_8",
+                    "conceptLabel": "regulates",
+                    "text": "we propose that metabolism in heterotrophically grown cells of paracoccus dentrificans is regulated on the level of phosphorylation in the site i region of the electron transport chain.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/RO_0002211",
+                    "matchedText": "regulate"
+                },
+                "label": "regulates"
+            },
+            "specificLabel": "on",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "on regulates"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "metabolic process",
+            "iri": "http://purl.obolibrary.org/obo/GO_0008152",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0028_abstract_5496.txt_8",
+                "conceptLabel": "metabolic process",
+                "text": "we propose that metabolism in heterotrophically grown cells of paracoccus dentrificans is regulated on the level of phosphorylation in the site i region of the electron transport chain.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0008152",
+                "matchedText": "metabolism"
+            },
+            "label": "metabolic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "interleukin-8 receptor binding",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005153",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0550_abstract_1518.txt_6",
+                    "conceptLabel": "interleukin-8 receptor binding",
+                    "text": "neutralizing antibody against tumor necrosis factor-alpha inhibited il-8 expression induced by h. influenzae and rv39.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005153",
+                    "matchedText": "il-8"
+                },
+                "label": "interleukin-8 receptor binding"
+            },
+            "specificLabel": "expression induce by h. influenza",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "expression induce by h. influenza interleukin-8 receptor binding"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "inhibit",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "inhibit"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "immunoglobulin complex",
+            "iri": "http://purl.obolibrary.org/obo/GO_0019814",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0550_abstract_1518.txt_6",
+                "conceptLabel": "immunoglobulin complex",
+                "text": "neutralizing antibody against tumor necrosis factor-alpha inhibited il-8 expression induced by h. influenzae and rv39.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0019814",
+                "matchedText": "antibody"
+            },
+            "label": "immunoglobulin complex"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "methylation",
+                "iri": "http://purl.obolibrary.org/obo/GO_0032259",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0799_abstract_16051.txt_4",
+                    "conceptLabel": "methylation",
+                    "text": "methylation of rassf1a and cdh13 gene promoter regions was detected by the methylation specific polymerase chain reaction (msp).",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0032259",
+                    "matchedText": "methylation"
+                },
+                "label": "methylation"
+            },
+            "specificLabel": "specific polymerase chain reaction",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "specific polymerase chain reaction methylation"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "detect by",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "detect by"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "methylation",
+            "iri": "http://purl.obolibrary.org/obo/GO_0032259",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0799_abstract_16051.txt_4",
+                "conceptLabel": "methylation",
+                "text": "methylation of rassf1a and cdh13 gene promoter regions was detected by the methylation specific polymerase chain reaction (msp).",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0032259",
+                "matchedText": "methylation"
+            },
+            "label": "methylation"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "prolactin receptor binding",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005148",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0015_abstract_11706.txt_5",
+                "conceptLabel": "prolactin receptor binding",
+                "text": "the mammary cell is therefore sensitive to prolactin before the first pregnancy but prolactin then displays only an abortive effect on the expression of casein genes.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005148",
+                "matchedText": "prolactin"
+            },
+            "label": "prolactin receptor binding"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "sensitive to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "sensitive to"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "cell",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0015_abstract_11706.txt_5",
+                "conceptLabel": "cell",
+                "text": "the mammary cell is therefore sensitive to prolactin before the first pregnancy but prolactin then displays only an abortive effect on the expression of casein genes.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "matchedText": "cell"
+            },
+            "label": "cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "respiratory chain complex iii",
+            "iri": "http://purl.obolibrary.org/obo/GO_0045275",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0705_abstract_6561.txt_9",
+                "conceptLabel": "respiratory chain complex iii",
+                "text": "mitochondrial respiratory chain activities in muscle were predominantly decreased in complex iii.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0045275",
+                "matchedText": "complex iii"
+            },
+            "label": "respiratory chain complex iii"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "decrease in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "decrease in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "respirasome",
+                "iri": "http://purl.obolibrary.org/obo/GO_0070469",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0705_abstract_6561.txt_9",
+                    "conceptLabel": "respirasome",
+                    "text": "mitochondrial respiratory chain activities in muscle were predominantly decreased in complex iii.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0070469",
+                    "matchedText": "respiratory chain"
+                },
+                "label": "respirasome"
+            },
+            "specificLabel": "activity",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "activity respirasome"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "import into cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0098657",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0774_abstract_21868.txt_4",
+                    "conceptLabel": "import into cell",
+                    "text": "lysosomal degradation, on the other hand, came to a halt below 8\u00b0c. the activation energies for uptake and degradation were 54.6 and 164.2 kj/mol respectively.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0098657",
+                    "matchedText": "uptake"
+                },
+                "label": "import into cell"
+            },
+            "specificLabel": "halt below 8 \u00b0 c. activation energy for",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "halt below 8 \u00b0 c. activation energy for import into cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "come to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "come to"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "catabolic process",
+            "iri": "http://purl.obolibrary.org/obo/GO_0009056",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0774_abstract_21868.txt_4",
+                "conceptLabel": "catabolic process",
+                "text": "lysosomal degradation, on the other hand, came to a halt below 8\u00b0c. the activation energies for uptake and degradation were 54.6 and 164.2 kj/mol respectively.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0009056",
+                "matchedText": "degradation"
+            },
+            "label": "catabolic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "catabolic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0009056",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0070_abstract_7610.txt_1",
+                    "conceptLabel": "catabolic process",
+                    "text": "a lipoxygenase has been found in the reticulocytes of all mammalian species tested so far (rabbit, rat, mouse, monkey, and humans); evidence from in vitro studies suggests that the lipid-peroxidizing effects of this enzyme could render the mitochondrion and other intracellular organelles prone to the proteolytic degradation which is a natural step in development of the reticulocyte to the mature red cell.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0009056",
+                    "matchedText": "degradation"
+                },
+                "label": "catabolic process"
+            },
+            "specificLabel": "proteolytic",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "proteolytic catabolic process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "prone to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "prone to"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "organelle",
+                "iri": "http://purl.obolibrary.org/obo/GO_0043226",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0070_abstract_7610.txt_1",
+                    "conceptLabel": "organelle",
+                    "text": "a lipoxygenase has been found in the reticulocytes of all mammalian species tested so far (rabbit, rat, mouse, monkey, and humans); evidence from in vitro studies suggests that the lipid-peroxidizing effects of this enzyme could render the mitochondrion and other intracellular organelles prone to the proteolytic degradation which is a natural step in development of the reticulocyte to the mature red cell.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0043226",
+                    "matchedText": "organelle"
+                },
+                "label": "organelle"
+            },
+            "specificLabel": "other",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "other organelle"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "intracellular",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005622",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0070_abstract_7610.txt_9",
+                    "conceptLabel": "intracellular",
+                    "text": "the precise structures of the hydroxylated polyenoic fatty acids and the time course of their appearance strongly suggest that their formation is due to the intracellular action of the cell-specific reticulocyte lipoxygenase.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005622",
+                    "matchedText": "intracellular"
+                },
+                "label": "intracellular"
+            },
+            "specificLabel": "action of cell-specific reticulocyte lipoxygenase",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "action of cell-specific reticulocyte lipoxygenase intracellular"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "due to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "due to"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "biosynthetic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0009058",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0070_abstract_7610.txt_9",
+                    "conceptLabel": "biosynthetic process",
+                    "text": "the precise structures of the hydroxylated polyenoic fatty acids and the time course of their appearance strongly suggest that their formation is due to the intracellular action of the cell-specific reticulocyte lipoxygenase.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0009058",
+                    "matchedText": "formation"
+                },
+                "label": "biosynthetic process"
+            },
+            "specificLabel": "they",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "they biosynthetic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "binding",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005488",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0936_abstract_12348.txt_2",
+                    "conceptLabel": "binding",
+                    "text": "the heptahelical receptors are highly dynamic structures and the signaling efficiency largely depends on the discrete contact with the ligand.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005488",
+                    "matchedText": "ligand"
+                },
+                "label": "binding"
+            },
+            "specificLabel": "discrete contact with",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "discrete contact with binding"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "depends on",
+            "iri": "http://purl.obolibrary.org/obo/RO_0002502",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "object-properties",
+                "documentId": "pubmed20n0936_abstract_12348.txt_2",
+                "conceptLabel": "depends on",
+                "text": "the heptahelical receptors are highly dynamic structures and the signaling efficiency largely depends on the discrete contact with the ligand.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/RO_0002502",
+                "matchedText": "depend on"
+            },
+            "label": "depends on"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "signaling",
+                "iri": "http://purl.obolibrary.org/obo/GO_0023052",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0936_abstract_12348.txt_2",
+                    "conceptLabel": "signaling",
+                    "text": "the heptahelical receptors are highly dynamic structures and the signaling efficiency largely depends on the discrete contact with the ligand.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0023052",
+                    "matchedText": "signaling"
+                },
+                "label": "signaling"
+            },
+            "specificLabel": "efficiency",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "efficiency signaling"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "membrane",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0936_abstract_12348.txt_6",
+                    "conceptLabel": "membrane",
+                    "text": "recent findings indicate that also chemokine receptor activity is modulated by membrane lipids.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                    "matchedText": "membrane"
+                },
+                "label": "membrane"
+            },
+            "specificLabel": "lipid",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "lipid membrane"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "also modulate by",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "also modulate by"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "chemokine receptor activity",
+            "iri": "http://purl.obolibrary.org/obo/GO_0004950",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0936_abstract_12348.txt_6",
+                "conceptLabel": "chemokine receptor activity",
+                "text": "recent findings indicate that also chemokine receptor activity is modulated by membrane lipids.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0004950",
+                "matchedText": "chemokine receptor activity"
+            },
+            "label": "chemokine receptor activity"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "intracellular organelle",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0043229",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0070_abstract_7610.txt_10",
+                        "conceptLabel": "intracellular organelle",
+                        "text": "these findings are the first evidence for an activity of this enzyme in vivo, and the results support the hypothesis that enzymic peroxidation of reticulocyte intracellular membranes is a step in preparation of the intracellular organelles for proteolytic degradation.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0043229",
+                        "matchedText": "intracellular organelle"
+                    },
+                    "label": "intracellular organelle"
+                },
+                "specificLabel": "catabolic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0009056",
+                "originalAnnotation": null,
+                "label": "catabolic process intracellular organelle"
+            },
+            "specificLabel": "step in preparation of for proteolytic",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "step in preparation of for proteolytic catabolic process intracellular organelle"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "enzymic peroxidation of be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "enzymic peroxidation of be"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "membrane",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0070_abstract_7610.txt_10",
+                    "conceptLabel": "membrane",
+                    "text": "these findings are the first evidence for an activity of this enzyme in vivo, and the results support the hypothesis that enzymic peroxidation of reticulocyte intracellular membranes is a step in preparation of the intracellular organelles for proteolytic degradation.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                    "matchedText": "membrane"
+                },
+                "label": "membrane"
+            },
+            "specificLabel": "reticulocyte",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "reticulocyte membrane"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "immunoglobulin complex",
+                "iri": "http://purl.obolibrary.org/obo/GO_0019814",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0672_abstract_19312.txt_5",
+                    "conceptLabel": "immunoglobulin complex",
+                    "text": "neurogenesis in the dg was compared between the tickled and untickled rats by using immunohistochemistry with anti-brdu antibody.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0019814",
+                    "matchedText": "antibody"
+                },
+                "label": "immunoglobulin complex"
+            },
+            "specificLabel": "immunohistochemistry with anti-brdu",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "immunohistochemistry with anti-brdu immunoglobulin complex"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "use",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "use"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "neurogenesis",
+            "iri": "http://purl.obolibrary.org/obo/GO_0022008",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0672_abstract_19312.txt_5",
+                "conceptLabel": "neurogenesis",
+                "text": "neurogenesis in the dg was compared between the tickled and untickled rats by using immunohistochemistry with anti-brdu antibody.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0022008",
+                "matchedText": "neurogenesis"
+            },
+            "label": "neurogenesis"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "metabolic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0008152",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0041_abstract_7894.txt_5",
+                    "conceptLabel": "metabolic process",
+                    "text": "in vitro metabolism of 14c-theo was investigated in order to identify the enzyme(s) responsible for theophylline metabolism.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0008152",
+                    "matchedText": "metabolism"
+                },
+                "label": "metabolic process"
+            },
+            "specificLabel": "enzyme s responsible for theophylline",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "enzyme s responsible for theophylline metabolic process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "identify",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "identify"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "metabolic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0008152",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0041_abstract_7894.txt_5",
+                    "conceptLabel": "metabolic process",
+                    "text": "in vitro metabolism of 14c-theo was investigated in order to identify the enzyme(s) responsible for theophylline metabolism.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0008152",
+                    "matchedText": "metabolism"
+                },
+                "label": "metabolic process"
+            },
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in metabolic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "spindle",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0005819",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0137_abstract_209.txt_2",
+                        "conceptLabel": "spindle",
+                        "text": "the first nuclear division (meiosis i) is indicated by the appearance of spindle fibers within the nucleus.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0005819",
+                        "matchedText": "spindle"
+                    },
+                    "label": "spindle"
+                },
+                "specificLabel": "nucleus",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005634",
+                "originalAnnotation": null,
+                "label": "nucleus spindle"
+            },
+            "specificLabel": "appearance of fiber within",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "appearance of fiber within nucleus spindle"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "indicate by",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "indicate by"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "nuclear division",
+                "iri": "http://purl.obolibrary.org/obo/GO_0000280",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0137_abstract_209.txt_2",
+                    "conceptLabel": "nuclear division",
+                    "text": "the first nuclear division (meiosis i) is indicated by the appearance of spindle fibers within the nucleus.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0000280",
+                    "matchedText": "nuclear division"
+                },
+                "label": "nuclear division"
+            },
+            "specificLabel": "first",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "first nuclear division"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "immunoglobulin complex",
+                "iri": "http://purl.obolibrary.org/obo/GO_0019814",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0151_abstract_585.txt_4",
+                    "conceptLabel": "immunoglobulin complex",
+                    "text": "the binding site has antibody specificity for the fc portion of igg.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0019814",
+                    "matchedText": "antibody"
+                },
+                "label": "immunoglobulin complex"
+            },
+            "specificLabel": "specificity for fc portion of igg",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "specificity for fc portion of igg immunoglobulin complex"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "have",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "have"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "binding",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005488",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0151_abstract_585.txt_4",
+                    "conceptLabel": "binding",
+                    "text": "the binding site has antibody specificity for the fc portion of igg.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005488",
+                    "matchedText": "binding"
+                },
+                "label": "binding"
+            },
+            "specificLabel": "site",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "site binding"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0038_abstract_2394.txt_1",
+                    "conceptLabel": "cell",
+                    "text": "plasma membranes obtained from different neural regions of the chicken embryo have previously been shown to specifically bind to homotypic cells and prevent cell aggregation (merrell, r., and glaser, l. (1973) proc.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "homotypic",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "homotypic cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "bind to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "bind to"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "plasma membrane",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005886",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0038_abstract_2394.txt_1",
+                "conceptLabel": "plasma membrane",
+                "text": "plasma membranes obtained from different neural regions of the chicken embryo have previously been shown to specifically bind to homotypic cells and prevent cell aggregation (merrell, r., and glaser, l. (1973) proc.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005886",
+                "matchedText": "plasma membrane"
+            },
+            "label": "plasma membrane"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "developmental process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0032502",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0720_abstract_579.txt_12",
+                    "conceptLabel": "developmental process",
+                    "text": "we suggest that transient gene expression alterations during drug treatment and in the early period of withdrawal are involved in the establishment of persistent neuroplastic alterations responsible for the development of drug addiction.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0032502",
+                    "matchedText": "development"
+                },
+                "label": "developmental process"
+            },
+            "specificLabel": "establishment of persistent neuroplastic alteration responsible for of drug addiction",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "establishment of persistent neuroplastic alteration responsible for of drug addiction developmental process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "involve in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "involve in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "gene expression",
+                "iri": "http://purl.obolibrary.org/obo/GO_0010467",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0720_abstract_579.txt_12",
+                    "conceptLabel": "gene expression",
+                    "text": "we suggest that transient gene expression alterations during drug treatment and in the early period of withdrawal are involved in the establishment of persistent neuroplastic alterations responsible for the development of drug addiction.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0010467",
+                    "matchedText": "gene expression"
+                },
+                "label": "gene expression"
+            },
+            "specificLabel": "transient alteration",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "transient alteration gene expression"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "tsc1-tsc2 complex",
+                "iri": "http://purl.obolibrary.org/obo/GO_0033596",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0745_abstract_8054.txt_6",
+                    "conceptLabel": "tsc1-tsc2 complex",
+                    "text": "the findings indicate a crucial role of mammalian target of rapamycin signalling in deficient social behaviour in mouse models of tuberous sclerosis complex, supporting the notion that mammalian target of rapamycin inhibitors may be useful for the pharmacological treatment of autism spectrum disorder associated with tuberous sclerosis complex and other conditions that result from dysregulated mammalian target of rapamycin signalling.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0033596",
+                    "matchedText": "tuberous sclerosis complex"
+                },
+                "label": "tsc1-tsc2 complex"
+            },
+            "specificLabel": "mouse model of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "mouse model of tsc1-tsc2 complex"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "social behavior",
+                "iri": "http://purl.obolibrary.org/obo/GO_0035176",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0745_abstract_8054.txt_6",
+                    "conceptLabel": "social behavior",
+                    "text": "the findings indicate a crucial role of mammalian target of rapamycin signalling in deficient social behaviour in mouse models of tuberous sclerosis complex, supporting the notion that mammalian target of rapamycin inhibitors may be useful for the pharmacological treatment of autism spectrum disorder associated with tuberous sclerosis complex and other conditions that result from dysregulated mammalian target of rapamycin signalling.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0035176",
+                    "matchedText": "social behaviour"
+                },
+                "label": "social behavior"
+            },
+            "specificLabel": "deficient",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "deficient social behavior"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "metabolic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0008152",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0907_abstract_14081.txt_1",
+                    "conceptLabel": "metabolic process",
+                    "text": "iron regulatory protein 1 (irp1) is a cytosolic bifunctional [4fe-4s] protein which exhibits aconitase activity or binds iron responsive elements (ires) in untranslated regions of specific mrna encoding proteins involved in cellular iron metabolism.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0008152",
+                    "matchedText": "metabolism"
+                },
+                "label": "metabolic process"
+            },
+            "specificLabel": "untranslated region of specific mrna encoding protein involve in cellular iron",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "untranslated region of specific mrna encoding protein involve in cellular iron metabolic process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "bind iron element in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "bind iron element in"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "aconitate hydratase activity",
+            "iri": "http://purl.obolibrary.org/obo/GO_0003994",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0907_abstract_14081.txt_1",
+                "conceptLabel": "aconitate hydratase activity",
+                "text": "iron regulatory protein 1 (irp1) is a cytosolic bifunctional [4fe-4s] protein which exhibits aconitase activity or binds iron responsive elements (ires) in untranslated regions of specific mrna encoding proteins involved in cellular iron metabolism.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0003994",
+                "matchedText": "aconitase activity"
+            },
+            "label": "aconitate hydratase activity"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "extracellular region",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005576",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0714_abstract_4848.txt_2",
+                    "conceptLabel": "extracellular region",
+                    "text": "all cells exchange materials with the extracellular medium through the reciprocal processes of endocytosis and secretion.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005576",
+                    "matchedText": "extracellular"
+                },
+                "label": "extracellular region"
+            },
+            "specificLabel": "medium",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "medium extracellular region"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "with",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "with"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0714_abstract_4848.txt_2",
+                    "conceptLabel": "cell",
+                    "text": "all cells exchange materials with the extracellular medium through the reciprocal processes of endocytosis and secretion.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "exchange material",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "exchange material cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "dendritic branch",
+                "iri": "http://purl.obolibrary.org/obo/GO_0044307",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0546_abstract_4219.txt_3",
+                    "conceptLabel": "dendritic branch",
+                    "text": "in this model, which we call clustered plasticity, local translational enhancement, along with synaptic tagging and capture, facilitates the formation of long-term memory engrams through bidirectional synaptic weight changes among synapses within a dendritic branch.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0044307",
+                    "matchedText": "dendritic branch"
+                },
+                "label": "dendritic branch"
+            },
+            "specificLabel": "bidirectional synaptic weight change among synaps within",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "bidirectional synaptic weight change among synaps within dendritic branch"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "engram through",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "engram through"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "biosynthetic process",
+            "iri": "http://purl.obolibrary.org/obo/GO_0009058",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0546_abstract_4219.txt_3",
+                "conceptLabel": "biosynthetic process",
+                "text": "in this model, which we call clustered plasticity, local translational enhancement, along with synaptic tagging and capture, facilitates the formation of long-term memory engrams through bidirectional synaptic weight changes among synapses within a dendritic branch.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0009058",
+                "matchedText": "formation"
+            },
+            "label": "biosynthetic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "membrane",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0016020",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0361_abstract_15862.txt_6",
+                        "conceptLabel": "membrane",
+                        "text": "jbp923 inhibited the proton-dependent transport of glycylsarcosine in brush-border membrane vesicles, suggesting that peptide transport system(s) may recognize jbp923.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0016020",
+                        "matchedText": "membrane"
+                    },
+                    "label": "membrane"
+                },
+                "specificLabel": "vesicle",
+                "iri": "http://purl.obolibrary.org/obo/GO_0031982",
+                "originalAnnotation": null,
+                "label": "vesicle membrane"
+            },
+            "specificLabel": "brush-border",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "brush-border vesicle membrane"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "transport",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006810",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0361_abstract_15862.txt_6",
+                    "conceptLabel": "transport",
+                    "text": "jbp923 inhibited the proton-dependent transport of glycylsarcosine in brush-border membrane vesicles, suggesting that peptide transport system(s) may recognize jbp923.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0006810",
+                    "matchedText": "transport"
+                },
+                "label": "transport"
+            },
+            "specificLabel": "proton-dependent",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "proton-dependent transport"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "mitochondrion",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005739",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0612_abstract_890.txt_4",
+                    "conceptLabel": "mitochondrion",
+                    "text": "green fluorescent protein-based cell biological analysis demonstrated targeting of adnt1 to mitochondria.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005739",
+                    "matchedText": "mitochondria"
+                },
+                "label": "mitochondrion"
+            },
+            "specificLabel": "targeting of adnt1 to",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "targeting of adnt1 to mitochondrion"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "demonstrate",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "demonstrate"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0612_abstract_890.txt_4",
+                    "conceptLabel": "cell",
+                    "text": "green fluorescent protein-based cell biological analysis demonstrated targeting of adnt1 to mitochondria.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "protein-based analysis",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "protein-based analysis cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "localization",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0051179",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0353_abstract_21141.txt_4",
+                        "conceptLabel": "localization",
+                        "text": "the rpt2 gene is light inducible; encodes a novel protein with putative phosphorylation sites, a nuclear localization signal, a btb/poz domain, and a coiled-coil domain; and belongs to a large gene family that includes the recently isolated nph3 gene.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0051179",
+                        "matchedText": "localization"
+                    },
+                    "label": "localization"
+                },
+                "specificLabel": "signaling",
+                "iri": "http://purl.obolibrary.org/obo/GO_0023052",
+                "originalAnnotation": null,
+                "label": "signaling localization"
+            },
+            "specificLabel": "nuclear",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "nuclear signaling localization"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "with protein be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "with protein be"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "phosphorylation",
+                "iri": "http://purl.obolibrary.org/obo/GO_0016310",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0353_abstract_21141.txt_4",
+                    "conceptLabel": "phosphorylation",
+                    "text": "the rpt2 gene is light inducible; encodes a novel protein with putative phosphorylation sites, a nuclear localization signal, a btb/poz domain, and a coiled-coil domain; and belongs to a large gene family that includes the recently isolated nph3 gene.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0016310",
+                    "matchedText": "phosphorylation"
+                },
+                "label": "phosphorylation"
+            },
+            "specificLabel": "putative site",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "putative site phosphorylation"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": {
+                        "parentTerm": {
+                            "parentTerm": null,
+                            "specificLabel": "synaptonemal complex",
+                            "iri": "http://purl.obolibrary.org/obo/GO_0000795",
+                            "originalAnnotation": {
+                                "sentenceId": 1,
+                                "group": "terms",
+                                "documentId": "pubmed20n0905_abstract_6159.txt_1",
+                                "conceptLabel": "synaptonemal complex",
+                                "text": "during schizosaccharomyces pombe meiotic prophase, homologous chromosomes are co-aligned by linear elements (lines) analogous to the axial elements of the synaptonemal complex (sc) in other organisms.",
+                                "tags": [
+                                    
+                                ],
+                                "termIri": "http://purl.obolibrary.org/obo/GO_0000795",
+                                "matchedText": "synaptonemal complex"
+                            },
+                            "label": "synaptonemal complex"
+                        },
+                        "specificLabel": "linear element",
+                        "iri": "http://purl.obolibrary.org/obo/GO_0030998",
+                        "originalAnnotation": null,
+                        "label": "linear element synaptonemal complex"
+                    },
+                    "specificLabel": "lateral element",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0000800",
+                    "originalAnnotation": null,
+                    "label": "lateral element linear element synaptonemal complex"
+                },
+                "specificLabel": "prophase",
+                "iri": "http://purl.obolibrary.org/obo/GO_0051324",
+                "originalAnnotation": null,
+                "label": "prophase lateral element linear element synaptonemal complex"
+            },
+            "specificLabel": "during schizosaccharomyce pombe meiotic co-align by analogous to of in other organism",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "during schizosaccharomyce pombe meiotic co-align by analogous to of in other organism prophase lateral element linear element synaptonemal complex"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "be"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "chromosome",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005694",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0905_abstract_6159.txt_1",
+                "conceptLabel": "chromosome",
+                "text": "during schizosaccharomyces pombe meiotic prophase, homologous chromosomes are co-aligned by linear elements (lines) analogous to the axial elements of the synaptonemal complex (sc) in other organisms.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005694",
+                "matchedText": "chromosome"
+            },
+            "label": "chromosome"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "mitochondrion",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005739",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0038_abstract_9559.txt_11",
+                "conceptLabel": "mitochondrion",
+                "text": "glycollate oxidation was linked to o2 uptake in mitochondria but not in peroxisome-like particles.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005739",
+                "matchedText": "mitochondria"
+            },
+            "label": "mitochondrion"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "import into cell",
+            "iri": "http://purl.obolibrary.org/obo/GO_0098657",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0038_abstract_9559.txt_11",
+                "conceptLabel": "import into cell",
+                "text": "glycollate oxidation was linked to o2 uptake in mitochondria but not in peroxisome-like particles.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0098657",
+                "matchedText": "uptake"
+            },
+            "label": "import into cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cytoplasm",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005737",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0471_abstract_56.txt_1",
+                    "conceptLabel": "cytoplasm",
+                    "text": "after an antigenic stimulus, antibody is first demonstrable in the cytoplasm, and often in a spot in the nucleus, of large, immature cells in the medullary areas of the lymph node draining the site of injection.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005737",
+                    "matchedText": "cytoplasm"
+                },
+                "label": "cytoplasm"
+            },
+            "specificLabel": "after antigenic stimulus first demonstrable in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "after antigenic stimulus first demonstrable in cytoplasm"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "be"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "immunoglobulin complex",
+            "iri": "http://purl.obolibrary.org/obo/GO_0019814",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0471_abstract_56.txt_1",
+                "conceptLabel": "immunoglobulin complex",
+                "text": "after an antigenic stimulus, antibody is first demonstrable in the cytoplasm, and often in a spot in the nucleus, of large, immature cells in the medullary areas of the lymph node draining the site of injection.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0019814",
+                "matchedText": "antibody"
+            },
+            "label": "immunoglobulin complex"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0471_abstract_56.txt_2",
+                    "conceptLabel": "cell",
+                    "text": "morphologically, these cells have basophilic cytoplasm and a large nucleus, and are typical hematogenous stem cells.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "typical hematogenous stem",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "typical hematogenous stem cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "be"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "cell",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0471_abstract_56.txt_2",
+                "conceptLabel": "cell",
+                "text": "morphologically, these cells have basophilic cytoplasm and a large nucleus, and are typical hematogenous stem cells.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "matchedText": "cell"
+            },
+            "label": "cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "growth",
+                "iri": "http://purl.obolibrary.org/obo/GO_0040007",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0143_abstract_865.txt_1",
+                    "conceptLabel": "growth",
+                    "text": "the plaque formation of poliovirus in hela cell monolayers was decreased upto 95% when the host cells were subcultured several times in a growth medium containing fresh bovine serum prior to their inoculation with virus.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0040007",
+                    "matchedText": "growth"
+                },
+                "label": "growth"
+            },
+            "specificLabel": "when subculture several time in medium",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "when subculture several time in medium growth"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "be",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "be"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "host cell",
+            "iri": "http://purl.obolibrary.org/obo/GO_0043657",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0143_abstract_865.txt_1",
+                "conceptLabel": "host cell",
+                "text": "the plaque formation of poliovirus in hela cell monolayers was decreased upto 95% when the host cells were subcultured several times in a growth medium containing fresh bovine serum prior to their inoculation with virus.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0043657",
+                "matchedText": "host cell"
+            },
+            "label": "host cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "growth",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0040007",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0143_abstract_865.txt_5",
+                        "conceptLabel": "growth",
+                        "text": "the plaque formation of poliovirus in monkey heart and hep-2-cell monolayers was decreased irregularly by the use of fresh serum in the growth medium of these cells.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0040007",
+                        "matchedText": "growth"
+                    },
+                    "label": "growth"
+                },
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": null,
+                "label": "cell growth"
+            },
+            "specificLabel": "use of fresh serum in medium of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "use of fresh serum in medium of cell growth"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "decrease irregularly by",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "decrease irregularly by"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "biosynthetic process",
+                "iri": "http://purl.obolibrary.org/obo/GO_0009058",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0143_abstract_865.txt_5",
+                    "conceptLabel": "biosynthetic process",
+                    "text": "the plaque formation of poliovirus in monkey heart and hep-2-cell monolayers was decreased irregularly by the use of fresh serum in the growth medium of these cells.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0009058",
+                    "matchedText": "formation"
+                },
+                "label": "biosynthetic process"
+            },
+            "specificLabel": "plaque",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "plaque biosynthetic process"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "lactation",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0007595",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0126_abstract_5298.txt_10",
+                        "conceptLabel": "lactation",
+                        "text": "lactation average somatic cell counts of daughters were predicted with greater accuracy from averages of somatic cell counts of multiple lactations of dams than from single lactations of dams.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0007595",
+                        "matchedText": "lactation"
+                    },
+                    "label": "lactation"
+                },
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": null,
+                "label": "cell lactation"
+            },
+            "specificLabel": "greater accuracy from average of somatic count of multiple of dam than from single of dam",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "greater accuracy from average of somatic count of multiple of dam than from single of dam cell lactation"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "predict with",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "predict with"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": {
+                    "parentTerm": null,
+                    "specificLabel": "lactation",
+                    "iri": "http://purl.obolibrary.org/obo/GO_0007595",
+                    "originalAnnotation": {
+                        "sentenceId": 1,
+                        "group": "terms",
+                        "documentId": "pubmed20n0126_abstract_5298.txt_10",
+                        "conceptLabel": "lactation",
+                        "text": "lactation average somatic cell counts of daughters were predicted with greater accuracy from averages of somatic cell counts of multiple lactations of dams than from single lactations of dams.",
+                        "tags": [
+                            
+                        ],
+                        "termIri": "http://purl.obolibrary.org/obo/GO_0007595",
+                        "matchedText": "lactation"
+                    },
+                    "label": "lactation"
+                },
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": null,
+                "label": "cell lactation"
+            },
+            "specificLabel": "average count",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "average count cell lactation"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": null,
+            "specificLabel": "metabolic process",
+            "iri": "http://purl.obolibrary.org/obo/GO_0008152",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0810_abstract_20802.txt_4",
+                "conceptLabel": "metabolic process",
+                "text": "differentiation of na\u00efve t cells in effector or long term memory cells is tightly associated with changes in their energy metabolic activity and recent data have revealed that fine-tuning of metabolism could modulate t cell functions.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0008152",
+                "matchedText": "metabolism"
+            },
+            "label": "metabolic process"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "fine-tuning of",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "fine-tuning of"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0810_abstract_20802.txt_4",
+                    "conceptLabel": "cell",
+                    "text": "differentiation of na\u00efve t cells in effector or long term memory cells is tightly associated with changes in their energy metabolic activity and recent data have revealed that fine-tuning of metabolism could modulate t cell functions.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "t function",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "t function cell"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "cell",
+                "iri": "http://purl.obolibrary.org/obo/GO_0005623",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0520_abstract_12539.txt_10",
+                    "conceptLabel": "cell",
+                    "text": "in summary, our results offer strong evidence for a novel functional interaction between pmca and calcineurin, suggesting a role for pmca as a negative modulator of calcineurin-mediated signaling pathways in mammalian cells.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0005623",
+                    "matchedText": "cell"
+                },
+                "label": "cell"
+            },
+            "specificLabel": "mammalian",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "mammalian cell"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "in",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "in"
+        },
+        "subject": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "calcineurin-mediated signaling",
+                "iri": "http://purl.obolibrary.org/obo/GO_0097720",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0520_abstract_12539.txt_10",
+                    "conceptLabel": "calcineurin-mediated signaling",
+                    "text": "in summary, our results offer strong evidence for a novel functional interaction between pmca and calcineurin, suggesting a role for pmca as a negative modulator of calcineurin-mediated signaling pathways in mammalian cells.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0097720",
+                    "matchedText": "calcineurin-mediated signaling"
+                },
+                "label": "calcineurin-mediated signaling"
+            },
+            "specificLabel": "pathway",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "pathway calcineurin-mediated signaling"
+        }
+    },
+    {
+        "object": {
+            "parentTerm": {
+                "parentTerm": null,
+                "specificLabel": "stringent response",
+                "iri": "http://purl.obolibrary.org/obo/GO_0015968",
+                "originalAnnotation": {
+                    "sentenceId": 1,
+                    "group": "terms",
+                    "documentId": "pubmed20n0099_abstract_10513.txt_4",
+                    "conceptLabel": "stringent response",
+                    "text": "triggering the stringent response by amino acid starvation increased glycogen synthesis even in mutants lacking the ability to synthesize cyclic amp or lacking cyclic amp receptor protein; and cyclic amp addition stimulated glycogen synthesis in rela mutant strains.",
+                    "tags": [
+                        
+                    ],
+                    "termIri": "http://purl.obolibrary.org/obo/GO_0015968",
+                    "matchedText": "stringent response"
+                },
+                "label": "stringent response"
+            },
+            "specificLabel": "by amino acid starvation",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "by amino acid starvation stringent response"
+        },
+        "relation": {
+            "parentTerm": null,
+            "specificLabel": "trigger",
+            "iri": "UNMATCHED_CONCEPT",
+            "originalAnnotation": null,
+            "label": "trigger"
+        },
+        "subject": {
+            "parentTerm": null,
+            "specificLabel": "glycogen biosynthetic process",
+            "iri": "http://purl.obolibrary.org/obo/GO_0005978",
+            "originalAnnotation": {
+                "sentenceId": 1,
+                "group": "terms",
+                "documentId": "pubmed20n0099_abstract_10513.txt_4",
+                "conceptLabel": "glycogen biosynthetic process",
+                "text": "triggering the stringent response by amino acid starvation increased glycogen synthesis even in mutants lacking the ability to synthesize cyclic amp or lacking cyclic amp receptor protein; and cyclic amp addition stimulated glycogen synthesis in rela mutant strains.",
+                "tags": [
+                    
+                ],
+                "termIri": "http://purl.obolibrary.org/obo/GO_0005978",
+                "matchedText": "glycogen synthesis"
+            },
+            "label": "glycogen biosynthetic process"
+        }
+    }
+]

@@ -135,15 +135,17 @@ class KomentLib {
       }.each { nCl ->
         if(!BANNED_ONTOLOGIES.contains(nCl.ontology)) {
           def newSynonyms = AOExtractNames(nCl, group, priority).findAll { it.label.indexOf(label) == -1 }
+          newSynonyms.each { it.iri = iri } // kind of naughty, but it's to correct the IRI fo expanded synonyms from other ontologies to our source IRI!
           synonyms += newSynonyms
         }
       }
     })
 
-    AOSemanticQuery(iri, 'equivalent', { eqClasses ->
+    AOSemanticQuery('<'+iri+'>', 'equivalent', { eqClasses ->
       eqClasses.each { eqCl ->
         if(eqCl && !BANNED_ONTOLOGIES.contains(eqCl.ontology)) {
           def newSynonyms = AOExtractNames(eqCl, group, priority).findAll { it.label.indexOf(label) == -1 }
+          newSynonyms.each { it.iri = iri } // see note above
           synonyms += newSynonyms
         }
       }
@@ -205,17 +207,29 @@ class KomentLib {
     entities.eachParallel { e ->
       if(o['verbose']) { println "Processing entity: ${++i}/${entities.size()}" }
 
-      vocabulary.add(e.class, KomentLib.AOExtractNames(e, group, priority))
-      if(o['expand-synonyms']) { // they will be made unique etc later
-        def newLabels = KomentLib.AOExpandSynonyms(e.owlClass, vocabulary.termLabel(e.class), group, priority)
+      def addedAny = vocabulary.add(e.class, KomentLib.AOExtractNames(e, group, priority))
+      if(addedAny && o['expand-synonyms']) { 
+        def newLabels = KomentLib.AOExpandSynonyms(e.class, vocabulary.termLabel(e.class), group, priority)
         vocabulary.add(e.class, newLabels)
       }
     }
     }
 
     vocabulary.entities.each { c, l ->
-      if(o.lemmatise) {
-        vocabulary.add(c, Komentisto.getLemmas(l.label))
+      def labelValues = l.collect { it.label }
+      def otherLabels = []
+      if(o.lemmatise) { otherLabels += Komentisto.getLemmas(labelValues) } 
+      if(o['label-extension']) { otherLabels += Komentisto.getExtensionLabels(labelValues, o['label-extension']) }
+      otherLabels.each {
+        vocabulary.add(c,
+          new Label(
+            label: it,
+            iri: c,
+            group: group,
+            ontology: l[0].ontology,
+            priority: priority
+          )
+        )
       }
     }
   }

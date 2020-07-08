@@ -8,7 +8,7 @@ class Vocabulary implements Iterable<Label> {
 
   Vocabulary(lbls, labelPath) {
     this(labelPath)
-    entities = lbls.groupBy {it.iri }
+    entities = lbls.groupBy { it.iri }
             .collectEntries({ [(it.getKey()): it.getValue()] })
   }
 
@@ -16,12 +16,19 @@ class Vocabulary implements Iterable<Label> {
     this.labelPath = labelPath;
   }
 
+  Vocabulary() {}
+
   def add(iri, Label label) {
+    def addedAny = false
+
     if(label.label == '') { return; }
     if(!entities.containsKey(iri)) { entities[iri] = [] }
     if(!entities[iri].contains(label)) {
       entities[iri] << label
+      addedAny = true
     }
+
+    addedAny
   }
 
   def add(iri, List<Label> labels) {

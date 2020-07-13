@@ -107,13 +107,16 @@ public class Komenti {
         }
       }
 
-      queries.eachWithIndex { q, i ->
-        if(o['verbose']) { println "Executing query ${i}/${queries.size()}" }
-        def ont = o.o
-        if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') } // not sure what this is for...
-        KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
-          KomentLib.buildEntityNames(vocabulary, q, o, classes)
-        })
+      GParsPool.withPool(o['threads'] ?: 1) { p -> 
+        def i = 0
+        queries.eachParallel { q ->
+          if(o['verbose']) { println "Executing query ${++i}/${queries.size()}" }
+          def ont = o.o
+          //if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') } // not sure what this is for :| ...
+          KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
+            KomentLib.buildEntityNames(vocabulary, q, o, classes)
+          })
+        }
       }
     }
 
@@ -213,6 +216,7 @@ public class Komenti {
         annotations = komentisto.annotate(name, text)
       }
 
+      // TODO save inferred axioms? I know you can do it with robot but I think it's a pain with pure OWLAPI
       if(o['extract-triples']) {
         annotations.groupBy { it.sentenceId }.each { sid, sAnns ->
           def termAnns = sAnns.findAll { it.group == 'terms' }

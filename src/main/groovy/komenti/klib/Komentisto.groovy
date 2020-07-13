@@ -147,20 +147,20 @@ public class Komentisto {
           while(entity.size() > 0) {
             def a = annotate(id, entity, sentenceCount).findAll {
               it.group == group
-            }.max { it.matchedText.size() }
+            }.max { it.matchedText.size() } // find the largest matching annotation in the remaining string
 
-            def t
-            if(!a) {
+            def t // The new term
+            if(!a) { // if there was no matching annotation, 
               t = new Term('UNMATCHED_CONCEPT', entity)
               entity = ''
             } else {
               a.text = text
-              entity = entity.replace(a.matchedText, '').replaceAll('\\s+', ' ').trim()
+              entity = entity.replace(a.matchedText, '').replaceAll('\\s+', ' ').trim() // Remove matched term from string being consumed
               t = Term.fromAnnotation(a)
             }
 
             if(result) {
-              result = new Term(result, t)
+              result = new Term(result, t) // (parent term, specified term) ; in this way we build up a hierarchy of specified terms!
             } else {
               if(t.iri != 'UNMATCHED_CONCEPT' || (group == 'object-properties' && allowUnmatchedRelations)) {
                 result = t

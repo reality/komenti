@@ -12,6 +12,9 @@ It enables querying multiple ontologies with complex class descriptions using Ab
 We are working on papers discussing the novel components. I will post them here:
 
 * [A fast, accurate, and generalisable heuristic-based negation detection algorithm for clinical text](https://www.biorxiv.org/content/10.1101/2020.07.03.187054v1)
+  * When you use *komenti annotate*, annotations will automatically be marked for negation and uncertainty using the algorithm described.
+* [Improved characterisation of clinical text through ontology-based vocabulary expansion](https://www.biorxiv.org/content/10.1101/2020.07.10.197541v1)
+  * You can use this feature by passing the *--expand-synonyms* flag to the query command.
 
 ## Installation
 

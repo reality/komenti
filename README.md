@@ -154,3 +154,9 @@ The rosters can be executed with the following command:
 ```bash
 komenti auto -r roster.json
 ```
+
+## Tips:
+
+* Large vocabularies can have some formatting problems, due to some minor bugs, leading to failure to parse the file at annotate time. It will usually tell you where these are, and it will involve adding or removing some backslashes. I will get around to it. There can also be blank lines sometimes, which must be removed.
+* The AberOWL API may become upset if you run too many queries, particularly when trying to --expand-synonyms on all classes from large ontologies. Try reducing the number of threads, and trying again later (there seems to be a throttling thing going on).
+* When one argument isn't parsed correctly, the other ones won't work. If it seems to be ignoring arguments passed, check that all your arguments pass. This needs some better error checking code (sorry)

@@ -22,8 +22,8 @@ class Vocabulary implements Iterable<Label> {
     def addedAny = false
 
     if(label.label == '') { return; }
-    if(!entities.containsKey(iri)) { entities[iri] = [] }
-    if(!entities[iri].contains(label)) {
+    if(!entities.containsKey(iri)) { entities[iri] = Collections.synchronizedList([]) }
+    if(!entities[iri].any { it.label == label.label }) {
       entities[iri] << label
       addedAny = true
     }

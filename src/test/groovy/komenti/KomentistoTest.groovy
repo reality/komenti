@@ -32,4 +32,15 @@ class KomentistoTest extends Specification {
         println it
       }
   }
+
+  def "multilevel_specifiers"() {
+    given:
+      def input = "blue developmental process apoptosis was observed in apoptosis"
+    when:
+      def out = komentisto.extractTriples("test", input, true)
+    then:
+      out.each {
+        println it.subject
+      }
+  }
 }

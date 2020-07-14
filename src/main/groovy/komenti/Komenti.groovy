@@ -215,6 +215,13 @@ public class Komenti {
       } else {
         annotations = komentisto.annotate(name, text)
       }
+      def countParents = { t -> // basically just count the term depth
+        def c = 0
+        while(t.parentTerm != null) {
+          c++
+          t = t.parentTerm
+        }
+      }
 
       // TODO save inferred axioms? I know you can do it with robot but I think it's a pain with pure OWLAPI
       if(o['extract-triples']) {
@@ -227,7 +234,10 @@ public class Komenti {
           // check the rAnns are between the termAnns??
           if(termAnns.size() >= 2 && (rAnns || o['allow-unmatched-relations'])) {
             def newTriples = komentisto.extractTriples("${name}_${sAnns[0].sentenceId}", sAnns[0].text, o['allow-unmatched-relations'])
-            tList.add(newTriples.max { it.object.label.size() })
+            // not sure this is the wisest thing
+            tList.add(newTriples.max { 
+              countParents(it.subject) + countParents(it.object)
+            })
           }
         }
       } else {

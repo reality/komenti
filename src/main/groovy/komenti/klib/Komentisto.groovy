@@ -131,15 +131,10 @@ public class Komentisto {
     // Loop over sentences in the document
     aDocument.get(CoreAnnotations.SentencesAnnotation.class).each { sentence ->
       sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class).each{ triple ->
-        System.out.println(triple.confidence + "\t" +
-            triple.subjectLemmaGloss() + "\t" +
-            triple.relationLemmaGloss() + "\t" +
-            triple.objectLemmaGloss())
-
         def subject = triple.subjectLemmaGloss().toString()
         def relation = triple.relationLemmaGloss().toString().replace('be ','')
         def object = triple.objectLemmaGloss().toString()
-        println "$subject,$relation,$object"
+        //println "$subject,$relation,$object"
 
         // we take the text, annotate it, turn it into Terms
         def consume = { entity, group ->
@@ -174,10 +169,10 @@ public class Komentisto {
         def relationTerm = consume(relation, 'object-properties')
         def objectTerm = consume(object, 'terms')
 
-        println subjectTerm
+        /*println subjectTerm
         println relationTerm
         println objectTerm
-        println ''
+        println ''*/
 
         if(subjectTerm && relationTerm && objectTerm) {
           allTriples << new TermTriple(

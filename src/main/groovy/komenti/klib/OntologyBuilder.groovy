@@ -20,7 +20,6 @@ class OntologyBuilder {
 
     def partOf = factory.getOWLObjectProperty(IRI.create("http://purl.obolibrary.org/obo/BFO_0000050"))
     def hasPart = factory.getOWLObjectProperty(IRI.create("http://purl.obolibrary.org/obo/BFO_0000051"))
-     
     
     OWLOntology ontology = manager.createOntology(IRI.create(oIRI))
 
@@ -106,7 +105,7 @@ class OntologyBuilder {
 
           if(type != 'rl') { // TODO add subrelationof
             def parent = makeOrGetClass(t.parentTerm, type)
-            manager.addAxiom(ontology, factory.getOWLEquivalentClassesAxiom(
+            manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
               oClass, factory.getOWLObjectIntersectionOf(
                 parent,
                 factory.getOWLObjectSomeValuesFrom(

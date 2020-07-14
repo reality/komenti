@@ -107,13 +107,16 @@ public class Komenti {
         }
       }
 
-      queries.eachWithIndex { q, i ->
-        if(o['verbose']) { println "Executing query ${i}/${queries.size()}" }
-        def ont = o.o
-        if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') } // not sure what this is for...
-        KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
-          KomentLib.buildEntityNames(vocabulary, q, o, classes)
-        })
+      GParsPool.withPool(o['threads'] ?: 1) { p -> 
+        def i = 0
+        queries.eachParallel { q ->
+          if(o['verbose']) { println "Executing query ${++i}/${queries.size()}" }
+          def ont = o.o
+          //if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') } // not sure what this is for :| ...
+          KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
+            KomentLib.buildEntityNames(vocabulary, q, o, classes)
+          })
+        }
       }
     }
 
@@ -213,10 +216,13 @@ public class Komenti {
         annotations = komentisto.annotate(name, text)
       }
 
+      // TODO save inferred axioms? I know you can do it with robot but I think it's a pain with pure OWLAPI
       if(o['extract-triples']) {
         annotations.groupBy { it.sentenceId }.each { sid, sAnns ->
-          def termAnns = sAnns.findAll { it.group == 'terms' }
-          def rAnns = sAnns.find { it.group == 'object-properties' }
+          // Note: if you don't want to remove negated annotations, you can simply --disable-modifiers, and the negated tags won't be there!!
+          // dunno yet if i like this mode of indentation
+          def termAnns = sAnns.findAll { it.group == 'terms' && !it.tags.contains('negated') }
+          def rAnns    = sAnns.find    { it.group == 'object-properties' && !it.tags.contains('negated') }
 
           // check the rAnns are between the termAnns??
           if(termAnns.size() >= 2 && (rAnns || o['allow-unmatched-relations'])) {

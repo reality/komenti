@@ -221,6 +221,7 @@ public class Komenti {
           c++
           t = t.parentTerm
         }
+        c
       }
 
       // TODO save inferred axioms? I know you can do it with robot but I think it's a pain with pure OWLAPI

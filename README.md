@@ -18,7 +18,7 @@ We are working on papers discussing the novel components. I will post them here:
 
 ## Installation
 
-You can find the latest stable-ish release here: https://github.com/reality/komenti/releases/tag/0.1.0
+You can find the latest stable-ish release here: https://github.com/reality/komenti/releases/tag/0.1.1
 
 You can add the bin/ directory to your PATH, to be able to use it easily from anywhere. It should also work on Windows, but I haven't tested that.
 

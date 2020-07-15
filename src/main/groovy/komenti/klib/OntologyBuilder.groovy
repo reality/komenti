@@ -90,12 +90,31 @@ class OntologyBuilder {
     def komentisto = new Komentisto(false, true, false, false, false, false, o['threads'] ?: 1)
       
     triples.each { 
-      def relation = makeOrGetClass(it.relation, 'rl') 
-      komentisto.reduceToVerbPrep(it.relation.label)
+      if(it.iri == 'UNMATCHED_CONCEPT') {
+        def vp = komentisto.reduceToVerbPrep(it.relation.label)
+        if(vp.verb) {
+          def verb = makeOrGetClass(it.relation, 'rl')
+        }
+        if(vp.prep) {
+          def prep = makeOrGetClass(it.relation, 'rl') 
+        }
+
+        if(verb) {
+          if(prep) { // basically we add a parentTerm, so we can create a hierarchy like associate->with,in,against etc etc
+            def parent = it.relation.copy()
+            parent.label = verb
+            parent.specificLabel = verb
+            it.relation.parentTerm = parent
+          }
+
+          it.relation = makeOrGetClass(it.relation, 'rl') 
+        }
+      } else {
+        it.relation = makeOrGetClass(it.relation, 'rl') 
+      }
     } // so we can make RLs exclusive
-    triples.each { 
+    triples.each {  // relation is already there from last time. i know it's naughty to mutate the object like that but i'm a LaZy BaBy
       def subject = makeOrGetClass(it.subject, 'cl')
-      def relation = makeOrGetClass(it.relation, 'rl')
       def object = makeOrGetClass(it.object, 'cl')
 
       if(subject && object && relation) { // this wouldn't occur if one of our classes has been booted for a relation

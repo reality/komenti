@@ -239,13 +239,24 @@ public class Komentisto {
 
   def reduceToVerbPrep(label) {
     println 'annotating ' + label
-    def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
-    [ "tokenize", "pos", "lemma" ].each {
+    def aDocument = new edu.stanford.nlp.pipeline.Annotation(label)
+    [ "tokenize", "ssplit", "pos", "lemma" ].each {
       coreNLP.getExistingAnnotator(it).annotate(aDocument)
     }
-    aDocument.tokens().each { t ->
-      println t
+
+    def out = [
+      verb: false,
+      prep: false
+    ]
+    aDocument.get(CoreAnnotations.TokensAnnotation.class).collect { t ->
+      // erm, ok
+      def posTag = t.get(CoreAnnotations.PartOfSpeechAnnotation.class).collect().join('')
+      println t.lemma()+':'+posTag
+      if(posTag[0] == 'V') { out.verb = t.lemma() }
+      if(posTag == 'IN') { out.prep = t.lemma() }
     }
+
+    out
   }
 
   // TODO normalise the it size 3 stuff, it appears in multiple places

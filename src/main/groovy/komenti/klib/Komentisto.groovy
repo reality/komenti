@@ -50,6 +50,9 @@ public class Komentisto {
     if(!disableModifiers) {
       aList << "depparse"
     }
+    if(!vocabulary) { 
+      aList.removeAll(["ner", "regexner", "entitymentions"])
+    }
     if(enableIE) { aList += ["depparse", "natlog", "openie"] }
     println aList
     props.put("annotators", aList.join(', '))
@@ -57,14 +60,15 @@ public class Komentisto {
     props.put("ner.useSUTime", "false")
     props.put("parse.maxtime", "5000")
 
-    props.put("regexner.mapping", new File(vocabulary.labelPath).getAbsolutePath())
-    props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
-    props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
-    props.put("regexner.mapping.field.ontology", 
-      'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
-    props.put("regexner.ignorecase", "true")
+    if(vocabulary) {
+      props.put("regexner.mapping", new File(vocabulary.labelPath).getAbsolutePath())
+      props.put("regexner.mapping.header", "pattern,ner,q,ontology,priority") // wtf
+      props.put("regexner.mapping.field.q", 'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
+      props.put("regexner.mapping.field.ontology", 
+        'edu.stanford.nlp.ling.CoreAnnotations$NormalizedNamedEntityTagAnnotation') // wtf
+      props.put("regexner.ignorecase", "true")
+    }
 
-    props.put("regexner.ignorecase", "true")
     props.put("depparse.nthreads", threads)
     props.put("ner.nthreads", threads)
     props.put("parse.nthreads", threads)
@@ -231,6 +235,17 @@ public class Komentisto {
     newText = newText.replaceAll(' \\.', '.')
 
     newText
+  } // TODO: only run the tokens annotation! god dammit!
+
+  def reduceToVerbPrep(label) {
+    println 'annotating ' + label
+    def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
+    [ "tokenize", "pos", "lemma" ].each {
+      coreNLP.getExistingAnnotator(it).annotate(aDocument)
+    }
+    aDocument.tokens().each { t ->
+      println t
+    }
   }
 
   // TODO normalise the it size 3 stuff, it appears in multiple places

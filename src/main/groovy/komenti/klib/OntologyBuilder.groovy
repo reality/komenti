@@ -86,8 +86,13 @@ class OntologyBuilder {
 
       return oClass
     }
+
+    def komentisto = new Komentisto(false, true, false, false, false, false, o['threads'] ?: 1)
       
-    triples.each { def relation = makeOrGetClass(it.relation, 'rl') } // so we can make RLs exclusive
+    triples.each { 
+      def relation = makeOrGetClass(it.relation, 'rl') 
+      komentisto.reduceToVerbPrep(it.relation.label)
+    } // so we can make RLs exclusive
     triples.each { 
       def subject = makeOrGetClass(it.subject, 'cl')
       def relation = makeOrGetClass(it.relation, 'rl')

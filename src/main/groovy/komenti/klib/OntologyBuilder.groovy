@@ -32,112 +32,59 @@ class OntologyBuilder {
       cl: [:],
       rl: [:]
     ]
-    def addClass = { iri, label, relation, parent ->
+    def addClass = { iri, label, type, parent ->
       def cClass = factory.getOWLClass(IRI.create(iri))
-      if(relation) {
+      if(type == 'rl') {
         cClass = factory.getOWLObjectProperty(IRI.create(iri))
       }
-      println "adding $label with $iri"
 
-      def anno = factory.getOWLAnnotation(
-           factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI()),
-           factory.getOWLLiteral(label))
-      def axiom =  factory.getOWLAnnotationAssertionAxiom(cClass.getIRI(), anno)
-      manager.addAxiom(ontology, axiom)
+      if(!addedTerms[type][label]) {
+        println "adding $label with $iri"
 
-      if(!relation && parent) {
-        manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
-          cClass, parent))
+        def anno = factory.getOWLAnnotation(
+             factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI()),
+             factory.getOWLLiteral(label))
+        def axiom =  factory.getOWLAnnotationAssertionAxiom(cClass.getIRI(), anno)
+        manager.addAxiom(ontology, axiom)
+
+        if(type != 'rl' && parent) {
+          manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
+            cClass, parent))
+        }
       }
 
       return cClass
     }
 
-    def hasSpecifier = addClass(prefix + (++tCount), 'has_specifier', true, factory.getOWLThing())
-    def specifierParent = addClass(prefix + (++tCount), 'observation specifier', false, factory.getOWLThing())
-    def observedParent = addClass(prefix + (++tCount), 'observed entity', false, factory.getOWLThing())
-
     def lookupIRI = { label -> vocabulary.labelIri(label) ?: prefix + (++tCount) }
-
     def makeOrGetClass
     makeOrGetClass = { t, type ->
-      println "processing $t"
       def label = preProcessLabel(t.getLabel())
-      println 'preprocessed label: ' + label
+      def newIRI = addedTerms[type][label]
+      if(!newIRI) { newIRI = lookupIRI(label) }
 
-      // don't overwrite relations with classes
-      if(type == 'cl' && addedTerms['rl'][label]) { return; }
-
-      def oClass
-      if(t.iri == 'UNMATCHED_CONCEPT') {
-        if(addedTerms[type].containsKey(label)) {
-          t.iri = addedTerms[type][label]
+      def oClass 
+      if(type == 'rl') {
+        oClass = addClass(newIRI, label, type, false)
+        addedTerms[type][label] = newIRI
+      } else {
+        if(t.iri == 'UNMATCHED_CONCEPT') { // add completely new class
+          oClass = addClass(newIRI, label, type, false)
+        } else if(t.label != t.specificLabel) {
+          def specParent = addClass(t.iri, t.specificLabel, type, false) // add this to adedTerms?
+          oClass = addClass(newIRI, t.label, type, specParent)  
         } else {
-          t.iri = lookupIRI(label)
+          oClass = addClass(t.iri, t.label, type, false)  
         }
-
-        if(!t.parentTerm) {
-          addClass(t.iri, label, type == 'rl', observedParent)
-        } else {
-          addClass(t.iri, label, type == 'rl', false)
-        }
-        addedTerms[type][label] = t.iri         
-
-        if(type == 'rl') {
-          oClass = factory.getOWLObjectProperty(IRI.create(t.iri))
-        } else {
-          oClass = factory.getOWLClass(IRI.create(t.iri))
-        }
+        addedTerms[type][label] = newIRI
 
         if(t.parentTerm) {
-          // we also have to create specifier
-
-          // TODO if a relation exists, we can just add an axiom with taht!!! i.e. x and role in some y
-
-          def specificLabel = preProcessLabel(t.getSpecificLabel())
-          println "Processed $specificLabel"
-          if(!addedTerms[type][specificLabel]) {
-            addedTerms[type][specificLabel] = lookupIRI(specificLabel)
-            addClass(addedTerms[type][specificLabel], specificLabel, 
-              type == 'rl', specifierParent)
-          }
-          def specifierClass = factory.getOWLClass(IRI.create(addedTerms[type][specificLabel]))
-
-          if(type != 'rl') { // TODO add subrelationof
-            def parent = makeOrGetClass(t.parentTerm, type)
-            manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
-              oClass, factory.getOWLObjectIntersectionOf(
-                parent,
-                factory.getOWLObjectSomeValuesFrom(
-                  hasSpecifier,
-                  specifierClass
-                )
-              )))
-            manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
-              oClass, parent))
-          }
+          def parentClass = makeOrGetClass(t.parentTerm, type)
+          manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(oClass, parentClass))
         }
-      } else {
-        def specificLabel = preProcessLabel(t.getSpecificLabel())
-
-        if(!addedTerms[type].containsKey(specificLabel)) {
-          addClass(t.iri, specificLabel, type == 'rl', observedParent)
-          addedTerms[type][specificLabel] = t.iri         
-        }
-
-        if(type == 'rl') {
-          oClass = factory.getOWLObjectProperty(IRI.create(t.iri))
-        } else {
-          oClass = factory.getOWLClass(IRI.create(t.iri))
-        }
-
-        if(t.parentTerm) { makeOrGetClass(t.parentTerm, type) }
       }
 
-      
-      println ''
-
-      oClass
+      return oClass
     }
       
     triples.each { def relation = makeOrGetClass(it.relation, 'rl') } // so we can make RLs exclusive

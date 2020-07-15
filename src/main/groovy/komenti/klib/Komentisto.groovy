@@ -154,6 +154,9 @@ public class Komentisto {
               t = Term.fromAnnotation(a)
             }
 
+            // TODO if unmatched concepts aren't allowed, we want the result to 
+            //  at least be the match that was available. we should probably write a test for that....
+            // i think we might need to change this bit
             if(result) {
               result = new Term(result, t) // (parent term, specified term) ; in this way we build up a hierarchy of specified terms!
             } else {

@@ -197,7 +197,7 @@ public class Komenti {
     def i = 0
     GParsPool.withPool(o['threads'] ?: 1) { p -> 
     files.eachParallel{ f ->
-      def (name, text) = [f.getName(), f.text]
+      def (name, parent, text) = [f.getName(), f.getParentFile().getName(), f.text]
       if(name =~ /(?i)pdf$/) { 
         text = new PDFReader(f).getText() 
         if(o['write-pdfs-to-dir']) {
@@ -205,6 +205,10 @@ public class Komenti {
           if(!dir.exists()) { dir.mkdir() }
           new File(dir, f.getName() + '.txt').text = text
         }
+      }
+
+      if(o['group-directory-files']) {
+        name = parent
       }
 
       def annotations = []

@@ -36,6 +36,7 @@ class App {
       _ longOpt: 'write-pdfs-to-dir', 'If set, write the converted PDF text into the given directory.', args: 1
       _ longOpt: 'extract-triples', 'Extract triples from text', type: Boolean
       _ longOpt: 'allow-unmatched-relations', 'If there are two terms, output a mocked Annotation in AnnotationTriple, allowing triples without ', type: Boolean
+      _ longOpt: 'group-directory-files', 'Combine all annotations from a directory into one meta-file in the annotation output. Helpful if one entity of interest is described by several files in a subdirectory.', type: Boolean
       // _ longOpt: 'require-full-match', ' require a full match for extraction of tripels'
 
       // summary options

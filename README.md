@@ -89,6 +89,7 @@ komenti annotate -l labels.txt -t text/ --out annotations.txt
 * --per-line Annotate each line of each file seperately. This is useful for field-based data, which doesn't have clear line boundaries.
 * --disable-modifiers Don't evaluate the annotations for modifiers. These can be added to an annotation file later, using the add_modifiers command.
 * --file-list Instead of using --text, you can pass a text file that contains a list of files and directories to annotate, one on each line.
+* --group-directory-files will use the name of the parent directory as the document id in the annotations output, instead of the filenames themselves
 
 ## Summarise Entity Pairs
 

@@ -1,9 +1,10 @@
 package klib
 
-class Term {
+class Term implements Serializable {
   Term parentTerm
   def iri
   def label
+  def specificLabel
   Annotation originalAnnotation
 
   Term(String iri, String label) {
@@ -40,9 +41,9 @@ class Term {
 
   String getLabel() {
     if(parentTerm) {
-      label + " " + parentTerm.getLabel()
+      parentTerm.getLabel() + " " + label.toString()
     } else {
-      label
+      label.toString()
     }
   }
 

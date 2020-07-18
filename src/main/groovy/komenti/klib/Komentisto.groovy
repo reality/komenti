@@ -69,9 +69,9 @@ public class Komentisto {
       props.put("regexner.ignorecase", "true")
     }
 
-    props.put("depparse.nthreads", threads)
-    props.put("ner.nthreads", threads)
-    props.put("parse.nthreads", threads)
+    //props.put("depparse.nthreads", threads)
+    //props.put("ner.nthreads", threads)
+    //props.put("parse.nthreads", threads)
     coreNLP = new StanfordCoreNLP(props)
   }
 

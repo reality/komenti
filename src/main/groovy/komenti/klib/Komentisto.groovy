@@ -58,6 +58,7 @@ public class Komentisto {
     props.put("annotators", aList.join(', '))
 
     props.put("ner.useSUTime", "false")
+    props.put("ner.applyNumericClassifiers", "false")
     props.put("parse.maxtime", "5000")
 
     if(vocabulary) {
@@ -69,9 +70,9 @@ public class Komentisto {
       props.put("regexner.ignorecase", "true")
     }
 
-    //props.put("depparse.nthreads", threads)
-    //props.put("ner.nthreads", threads)
-    //props.put("parse.nthreads", threads)
+    props.put("depparse.nthreads", threads)
+    props.put("ner.nthreads", threads)
+    props.put("parse.nthreads", threads)
     coreNLP = new StanfordCoreNLP(props)
   }
 

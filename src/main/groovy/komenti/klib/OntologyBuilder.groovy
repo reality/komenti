@@ -48,7 +48,7 @@ class OntologyBuilder {
         def axiom =  factory.getOWLAnnotationAssertionAxiom(cClass.getIRI(), anno)
         manager.addAxiom(ontology, axiom)
 
-        if(type == parent) {
+        if(parent) { // may have to check iff owlclass==parent or whatever
           if(type == 'cl') {
             manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
               cClass, parent))
@@ -70,10 +70,10 @@ class OntologyBuilder {
       if(!newIRI) { newIRI = lookupIRI(label) }
 
       def oClass 
-      if(type == 'rl') {
+      /*if(type == 'rl') {
         oClass = addClass(newIRI, label, type, false)
         addedTerms[type][label] = newIRI
-      } else {
+      } else {*/
         if(t.iri == 'UNMATCHED_CONCEPT') { // add completely new class
           oClass = addClass(newIRI, label, type, false)
         } else if(t.label != t.specificLabel) {
@@ -86,9 +86,13 @@ class OntologyBuilder {
 
         if(t.parentTerm) {
           def parentClass = makeOrGetClass(t.parentTerm, type)
-          manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(oClass, parentClass))
+          if(type == 'rl') {
+            manager.addAxiom(ontology, factory.getOWLSubObjectPropertyOfAxiom(oClass, parentClass))
+          } else {
+            manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(oClass, parentClass))
+          }
         }
-      }
+      //}
 
       return oClass
     }

@@ -64,37 +64,29 @@ class OntologyBuilder {
 
     def lookupIRI = { label -> vocabulary.labelIri(label) ?: prefix + (++tCount) }
     def makeOrGetClass
-    makeOrGetClass = { t, type, pmid ->
+    makeOrGetClass = { t, type ->
       def label = preProcessLabel(t.getLabel())
       def newIRI = addedTerms[type][label]
       if(!newIRI) { newIRI = lookupIRI(label) }
 
       def oClass 
-      /*if(type == 'rl') {
+      if(t.iri == 'UNMATCHED_CONCEPT') { // add completely new class
         oClass = addClass(newIRI, label, type, false)
-        addedTerms[type][label] = newIRI
-      } else {*/
-        if(t.iri == 'UNMATCHED_CONCEPT') { // add completely new class
-          oClass = addClass(newIRI, label, type, false)
-        } else if(t.label != t.specificLabel) {
-          def specParent = addClass(t.iri, t.specificLabel, type, false) // add this to adedTerms?
-          oClass = addClass(newIRI, t.label, type, specParent)  
+      } else if(t.label != t.specificLabel) {
+        def specParent = addClass(t.iri, t.specificLabel, type, false) // add this to adedTerms?
+        oClass = addClass(newIRI, t.label, type, specParent)  
+      } else {
+        oClass = addClass(t.iri, t.label, type, false)  
+      }
+      addedTerms[type][label] = newIRI
+
+      if(t.parentTerm) {
+        def parentClass = makeOrGetClass(t.parentTerm, type)
+        if(type == 'rl') {
+          manager.addAxiom(ontology, factory.getOWLSubObjectPropertyOfAxiom(oClass, parentClass))
         } else {
-          oClass = addClass(t.iri, t.label, type, false)  
+          manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(oClass, parentClass))
         }
-        addedTerms[type][label] = newIRI
-
-        if(t.parentTerm) {
-          def parentClass = makeOrGetClass(t.parentTerm, type, pmid)
-          if(type == 'rl') {
-            manager.addAxiom(ontology, factory.getOWLSubObjectPropertyOfAxiom(oClass, parentClass))
-          } else {
-            manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(oClass, parentClass))
-          }
-        } //}
-
-      if(type == 'cl') {
-        println pmid + "\t" + newIRI
       }
 
       return oClass
@@ -149,19 +141,21 @@ class OntologyBuilder {
       //println it.relation
 
       // so we can make RLs exclusive
-      makeOrGetClass(it.relation, 'rl', null)
+      makeOrGetClass(it.relation, 'rl')
     } 
     triples.eachWithIndex { it, i ->  // relation is already there from last time. i know it's naughty to mutate the object like that but i'm a LaZy BaBy
 
-    println "proctrip: $i/${triples.size()}"
+      println "proctrip: $i/${triples.size()}"
       def pmid = getPID(it)
       if(!pmid) { return; }
-      def subject = makeOrGetClass(it.subject, 'cl', pmid)
-      def relation = makeOrGetClass(it.relation, 'rl', pmid)
-      def object = makeOrGetClass(it.object, 'cl', pmid)
-
+      def subject = makeOrGetClass(it.subject, 'cl')
+      def relation = makeOrGetClass(it.relation, 'rl')
+      def object = makeOrGetClass(it.object, 'cl')
 
       if(subject && object && relation) { // this wouldn't occur if one of our classes has been booted for a relation
+        println subject + "\t" + pmid
+        println object+ "\t" + pmid
+
         manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
           subject, factory.getOWLObjectSomeValuesFrom(
             relation, object)

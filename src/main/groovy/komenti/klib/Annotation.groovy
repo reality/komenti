@@ -1,6 +1,6 @@
 package klib
 
-class Annotation {
+class Annotation implements Serializable {
   def documentId
   def termIri
   def conceptLabel

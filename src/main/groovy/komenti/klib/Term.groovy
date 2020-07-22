@@ -22,6 +22,12 @@ class Term implements Serializable {
     this.parentTerm = parentTerm
   }
 
+  Term(Term parentTerm, String iri, String label, Annotation originalAnnotation) {
+    this(iri, label)
+    this.parentTerm = parentTerm
+    this.originalAnnotation = originalAnnotation
+  }
+
   Term(String iri, String label, Annotation originalAnnotation) {
     this(iri, label)
     this.originalAnnotation = originalAnnotation

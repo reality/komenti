@@ -239,22 +239,29 @@ public class Komentisto {
   } // TODO: only run the tokens annotation! god dammit!
 
   def reduceToVerbPrep(label) {
-    println 'annotating ' + label
+    //println 'annotating ' + label
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(label)
     [ "tokenize", "ssplit", "pos", "lemma" ].each {
       coreNLP.getExistingAnnotator(it).annotate(aDocument)
     }
 
     def out = [
+      noun: false,
       verb: false,
       prep: false
     ]
     aDocument.get(CoreAnnotations.TokensAnnotation.class).collect { t ->
       // erm, ok
       def posTag = t.get(CoreAnnotations.PartOfSpeechAnnotation.class).collect().join('')
-      println t.lemma()+':'+posTag
+
       if(posTag[0] == 'V') { out.verb = t.lemma() }
+      if(posTag[0] == 'N') { out.noun = t.lemma() }
       if(posTag == 'IN') { out.prep = t.lemma() }
+    }
+
+    // shouldn't really do this here because it breaks contract with dstruc
+    if(!out.verb) {
+      out.verb = out.noun 
     }
 
     out

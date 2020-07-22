@@ -40,7 +40,7 @@ class OntologyBuilder {
       }
 
       if(!addedTerms[type][label]) {
-        println "adding $label with $iri"
+        //println "adding $label with $iri"
 
         def anno = factory.getOWLAnnotation(
              factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI()),
@@ -64,7 +64,7 @@ class OntologyBuilder {
 
     def lookupIRI = { label -> vocabulary.labelIri(label) ?: prefix + (++tCount) }
     def makeOrGetClass
-    makeOrGetClass = { t, type ->
+    makeOrGetClass = { t, type, pmid ->
       def label = preProcessLabel(t.getLabel())
       def newIRI = addedTerms[type][label]
       if(!newIRI) { newIRI = lookupIRI(label) }
@@ -85,19 +85,50 @@ class OntologyBuilder {
         addedTerms[type][label] = newIRI
 
         if(t.parentTerm) {
-          def parentClass = makeOrGetClass(t.parentTerm, type)
+          def parentClass = makeOrGetClass(t.parentTerm, type, pmid)
           if(type == 'rl') {
             manager.addAxiom(ontology, factory.getOWLSubObjectPropertyOfAxiom(oClass, parentClass))
           } else {
             manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(oClass, parentClass))
           }
-        }
-      //}
+        } //}
+
+      if(type == 'cl') {
+        println pmid + "\t" + newIRI
+      }
 
       return oClass
     }
 
     def komentisto = new Komentisto(false, true, false, false, false, false, o['threads'] ?: 1)
+
+    def getPID = { e ->
+      def oAnn
+      if(e.object.originalAnnotation) {
+        oAnn = e.object.originalAnnotation
+      }
+      if(!oAnn && e.object.parentTerm && e.object.parentTerm.originalAnnotation) {
+        oAnn = e.object.parentTerm.originalAnnotation
+      }
+
+      if(!oAnn && e.subject.originalAnnotation) {
+        oAnn = e.subject.originalAnnotation
+      }
+      if(!oAnn && e.subject.parentTerm && e.subject.parentTerm.originalAnnotation) {
+        oAnn = e.subject.parentTerm.originalAnnotation
+      }
+
+      if(!oAnn && e.relation.originalAnnotation) {
+        oAnn = e.relation.originalAnnotation
+      }
+      if(!oAnn && e.relation.parentTerm && e.relation.parentTerm.originalAnnotation) {
+        oAnn = e.relation.parentTerm.originalAnnotation
+      }
+
+      if(!oAnn) { println 'FUCK' } else {
+        return oAnn.documentId.tokenize('.')[0]
+      }
+    }
       
     triples.each { 
       if(it.relation.iri == 'UNMATCHED_CONCEPT') {
@@ -115,15 +146,20 @@ class OntologyBuilder {
         }
       }
 
-      println it.relation
+      //println it.relation
 
       // so we can make RLs exclusive
-      makeOrGetClass(it.relation, 'rl')
+      makeOrGetClass(it.relation, 'rl', null)
     } 
-    triples.each {  // relation is already there from last time. i know it's naughty to mutate the object like that but i'm a LaZy BaBy
-      def subject = makeOrGetClass(it.subject, 'cl')
-      def relation = makeOrGetClass(it.relation, 'rl')
-      def object = makeOrGetClass(it.object, 'cl')
+    triples.eachWithIndex { it, i ->  // relation is already there from last time. i know it's naughty to mutate the object like that but i'm a LaZy BaBy
+
+    println "proctrip: $i/${triples.size()}"
+      def pmid = getPID(it)
+      if(!pmid) { return; }
+      def subject = makeOrGetClass(it.subject, 'cl', pmid)
+      def relation = makeOrGetClass(it.relation, 'rl', pmid)
+      def object = makeOrGetClass(it.object, 'cl', pmid)
+
 
       if(subject && object && relation) { // this wouldn't occur if one of our classes has been booted for a relation
         manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(

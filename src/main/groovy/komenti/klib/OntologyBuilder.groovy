@@ -153,8 +153,8 @@ class OntologyBuilder {
       def object = makeOrGetClass(it.object, 'cl')
 
       if(subject && object && relation) { // this wouldn't occur if one of our classes has been booted for a relation
-        println subject + "\t" + pmid
-        println object+ "\t" + pmid
+        println pmid + "\t" + subject.getIRI().toString()
+        println pmid + "\t" + object.getIRI().toString()
 
         manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
           subject, factory.getOWLObjectSomeValuesFrom(

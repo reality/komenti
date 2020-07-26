@@ -357,7 +357,7 @@ public class Komenti {
       if(o['id-list-only']) {
         writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
       } else {
-        def komentisto = new Komentisto(o.l, true, o['family-modifier'], o['exclude'], o['threads'] ?: 1)
+        def komentisto = new Komentisto(false, true, o['family-modifier'], o['allergy-modifier'], false,  o['exclude'], o['threads'] ?: 1)
         def abstracts = []
         aids.each { pmcid ->
           KomentLib.PMCGetAbstracts(pmcid, { a -> 

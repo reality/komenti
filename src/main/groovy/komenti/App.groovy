@@ -76,6 +76,8 @@ class App {
 
       // ontologise options
       _ longOpt: 'triples', 'Triples file to turn into --ontolog', args: 1
+      _ longOpt: 'output-associations', 'Print associations betwen new classes and to stdout', type: Boolean
+      _ longOpt: 'output-vocabulary', 'Print komenti-compatible vocabulary to given file', args: 1
 
       // all options
       _ longOpt: 'out', 'Where to write the annotation results.', args: 1

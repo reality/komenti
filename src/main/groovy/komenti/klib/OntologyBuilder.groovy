@@ -57,6 +57,14 @@ class OntologyBuilder {
               cClass, parent))
           }
         }
+
+        if(type == 'cl') {
+          vocabulary.add(iri, KomentLib.AOExtractNames([
+            class: iri,
+            label: [label],
+            ontology: 'LOO'
+          ], 'ext', 1))
+        }
       }
 
       return cClass
@@ -68,6 +76,7 @@ class OntologyBuilder {
       def label = preProcessLabel(t.getLabel())
       def newIRI = addedTerms[type][label]
       if(!newIRI) { newIRI = lookupIRI(label) }
+      if(type == 'cl' && addedTerms['rl'][label]) { return; }
 
       def oClass 
       if(t.iri == 'UNMATCHED_CONCEPT') { // add completely new class
@@ -82,6 +91,7 @@ class OntologyBuilder {
 
       if(t.parentTerm) {
         def parentClass = makeOrGetClass(t.parentTerm, type)
+        if(!parentClass) { return; }
         if(type == 'rl') {
           manager.addAxiom(ontology, factory.getOWLSubObjectPropertyOfAxiom(oClass, parentClass))
         } else {
@@ -145,7 +155,9 @@ class OntologyBuilder {
     } 
     triples.eachWithIndex { it, i ->  // relation is already there from last time. i know it's naughty to mutate the object like that but i'm a LaZy BaBy
 
-      println "proctrip: $i/${triples.size()}"
+      if(o.verbose) {
+        println "proctrip: $i/${triples.size()}"
+      }
       def pmid = getPID(it)
       if(!pmid) { return; }
       def subject = makeOrGetClass(it.subject, 'cl')
@@ -153,8 +165,10 @@ class OntologyBuilder {
       def object = makeOrGetClass(it.object, 'cl')
 
       if(subject && object && relation) { // this wouldn't occur if one of our classes has been booted for a relation
-        println pmid + "\t" + subject.getIRI().toString()
-        println pmid + "\t" + object.getIRI().toString()
+        if(o['output-associations']) {
+          println pmid + "\t" + subject.getIRI().toString()
+          println pmid + "\t" + object.getIRI().toString()
+        }
 
         manager.addAxiom(ontology, factory.getOWLSubClassOfAxiom(
           subject, factory.getOWLObjectSomeValuesFrom(
@@ -164,6 +178,11 @@ class OntologyBuilder {
     }
 
     manager.saveOntology(ontology, IRI.create(new File(o['out']).toURI()))
+    
+    if(o['output-vocabulary']) {
+      vocabulary.labelPath = o['output-vocabulary']
+      vocabulary.write(false)
+    }
   }
 
   static def preProcessLabel(label) {

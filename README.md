@@ -16,6 +16,8 @@ We are working on papers discussing the novel components. I will post them here:
 * [Improved characterisation of clinical text through ontology-based vocabulary expansion](https://www.biorxiv.org/content/10.1101/2020.07.10.197541v1)
   * You can use this feature by passing the *--expand-synonyms* flag to the query command.
 
+You can also find some guides on how to use Komenti in different ways [here](https://github.com/reality/komenti_guide).
+
 ## Installation
 
 You can find the latest stable-ish release here: https://github.com/reality/komenti/releases/tag/0.2.0-SNAPSHOT-1

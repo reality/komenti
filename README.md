@@ -24,6 +24,8 @@ You can find the latest stable-ish release here: https://github.com/reality/kome
 
 You can add the bin/ directory to your PATH, to be able to use it easily from anywhere. It should also work on Windows, but I haven't tested that.
 
+See [here](https://github.com/reality/komenti_guide/blob/master/installation.md) for more information.
+
 ## Query
 
 ### Semantic

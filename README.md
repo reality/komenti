@@ -12,7 +12,7 @@ It enables querying multiple ontologies with complex class descriptions using Ab
 We are working on papers discussing the novel components. I will post them here:
 
 * [Komenti: A semantic text mining framework](https://www.biorxiv.org/content/10.1101/2020.08.04.233049v1)
- * A general description of the tool and a use case with a practical application. Please cite this paper if you use Komenti.
+  * A general description of the tool and a use case with a practical application. Please cite this paper if you use Komenti.
 * [A fast, accurate, and generalisable heuristic-based negation detection algorithm for clinical text](https://www.biorxiv.org/content/10.1101/2020.07.03.187054v1)
   * When you use *komenti annotate*, annotations will automatically be marked for negation and uncertainty using the algorithm described.
 * [Improved characterisation of clinical text through ontology-based vocabulary expansion](https://www.biorxiv.org/content/10.1101/2020.07.10.197541v1)

@@ -197,7 +197,10 @@ public class Komenti {
     def i = 0
     GParsPool.withPool(o['threads'] ?: 1) { p -> 
     files.eachParallel{ f ->
-      def (name, parent, text) = [f.getName(), f.getParentFile().getName(), f.text]
+      def (name, text) = [f.getName(), f.text]
+      def parent = ''
+      if(f.getParentFile()) { parent = f.getParentFile().getName }
+
       if(name =~ /(?i)pdf$/) { 
         text = new PDFReader(f).getText() 
         if(o['write-pdfs-to-dir']) {

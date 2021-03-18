@@ -199,7 +199,7 @@ public class Komenti {
     files.eachParallel{ f ->
       def (name, text) = [f.getName(), f.text]
       def parent = ''
-      if(f.getParentFile()) { parent = f.getParentFile().getName }
+      if(f.getParentFile()) { parent = f.getParentFile().getName() }
 
       if(name =~ /(?i)pdf$/) { 
         text = new PDFReader(f).getText() 

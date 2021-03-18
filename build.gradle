@@ -21,6 +21,7 @@ repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
@@ -70,6 +71,10 @@ gradle.taskGraph.whenReady { taskGraph ->
     } else {
         version = '0.2.0-SNAPSHOT'
     }
+}
+
+jacoco {
+  toolVersion = '0.8.7-SNAPSHOT'
 }
 
 test {

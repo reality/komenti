@@ -17,14 +17,25 @@ class ElasticSearch {
   static def searchDocuments(String fieldName, Vocabulary v) {
     def client = new RestHighLevelClient(RestClient.builder(new HttpHost("localhost", 9200, "http")))
 
-    def query = new MatchQueryBuilder(fieldName, v.entities.collect { k, l -> l.label })
+    def query = new BoolQueryBuilder()
+    v.entities.each { k, l -> 
+      l.label.each {
+        query.should(QueryBuilders.matchQuery(fieldName, it))
+      }
+    }
+
     def search = new SearchRequest()
       .source(new SearchSourceBuilder()
+        .trackTotalHits(true)
         .query(query))
 
     def response = client.search(search, RequestOptions.DEFAULT)
 
-    println response
+    def hits = response.getHits()
+
+    println "Total documents: ${hits.getTotalHits().value}"
+
+    client.close()
   }
 
   static def searchDocuments(Vocabulary v) {

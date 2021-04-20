@@ -1,6 +1,7 @@
 package klib
 
 import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.HttpResponseException
 import groovyx.gpars.GParsPool
 
 class KomentLib {
@@ -21,10 +22,24 @@ class KomentLib {
     s[0] == '<' && s[-1] == '>'
   }
 
+  static def AOAPIErrorHandler(HttpResponseException err) {
+    println "Fatal AberOWL API Error!"
+    if(err.getStatusCode() == 403) {
+      println "Error was 403 forbidden. Please try again in 5-10 minutes - there is currently a bug with the firewall on the AberOWL server, which causes it to occasionally reject requests as forbidden at the start of a new 'session.' It may take a few tries for it to work. Apologies for the inconvenience."
+    } else {
+      println "Error code: ${err.getStatusCode()}" 
+    }
+    System.exit(1)
+  }
+
   static def AOQueryNames(query, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
-    http.get(path: '/api/class/_find', query: [ query: query ]) { resp, json ->
-      cb(json.result)
+    try {
+      http.get(path: '/api/class/_find', query: [ query: query ]) { resp, json ->
+        cb(json.result)
+      }
+    } catch(e) {
+      AOAPIErrorHandler(e)
     }
   }
 
@@ -44,16 +59,24 @@ class KomentLib {
     ] 
     if(!ontology) { params.remove('ontology') }
     if(isIRI(query)) { params.remove('labels') }
-    http.get(path: '/api/dlquery', query: params) { r, json ->
-      cb(json.result) 
+    try {
+      http.get(path: '/api/dlquery', query: params) { r, json ->
+        cb(json.result) 
+      }
+    } catch(e) {
+      AOAPIErrorHandler(e)
     }
   }
 
   static def AOGetObjectProperties(ontology, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
     def params = [ script: 'getObjectProperties.groovy', rootObjectProperty: ROOT_OBJECT_PROPERTY, ontology: ontology ]
-    http.get(path: '/api/backend/', query: params) { r, json ->
-      cb(json.result)
+    try {
+      http.get(path: '/api/backend/', query: params) { r, json ->
+        cb(json.result)
+      }
+    } catch(e) {
+      AOAPIErrorHandler(e)
     }
   }
 

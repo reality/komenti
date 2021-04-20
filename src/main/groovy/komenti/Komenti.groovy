@@ -267,6 +267,11 @@ public class Komenti {
     println "Annotation complete"
   }
 
+  static def es(o) {
+    def v = Vocabulary.loadFile(o.l) 
+    ElasticSearch.searchDocuments(v)
+  }
+
   // TODO needs to use Annotation class
   static def add_modifier(o) {
     def komentisto = new Komentisto(o.l, false)

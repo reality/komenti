@@ -166,6 +166,11 @@ class App {
         println "Must pass label file" 
         success = false
       }
+    } else if (command == 'es') {
+      if(!o.l) {
+        println "Must pass label file" 
+        success = false
+      } 
     } else if(command == 'annotate') {
       if(!o.t && !o['file-list']) {
         println "Must either pass texts to parse, or a --file-list containing paths of texts to analyse."

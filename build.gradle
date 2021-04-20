@@ -6,6 +6,7 @@
  * User Manual available at https://docs.gradle.org/6.3/userguide/tutorial_groovy_projects.html
  */
 
+
 plugins {
     // Apply the groovy plugin to add support for Groovy
     id 'groovy'
@@ -28,24 +29,49 @@ dependencies {
     // Use the latest Groovy version for building this library
     implementation 'org.codehaus.groovy:groovy-all:2.5.10'
 
-    compile 'commons-cli:commons-cli:1.4'
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'edu.stanford.nlp:stanford-corenlp:3.9.2'
-    compile 'edu.stanford.nlp:stanford-corenlp:3.9.2:models'
-    compile 'edu.stanford.nlp:stanford-parser:3.9.2'
-    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
-    compile 'org.apache.pdfbox:pdfbox:2.0.15'
-    compile 'org.codehaus.gpars:gpars:1.2.1'
 
-    compile 'net.sourceforge.owlapi:owlapi-api:5.1.4'
-    compile 'net.sourceforge.owlapi:owlapi-apibinding:5.1.4'
-    compile 'net.sourceforge.owlapi:owlapi-impl:5.1.4'
-    compile 'net.sourceforge.owlapi:owlapi-parsers:5.1.4'
-    compile 'org.apache.commons:commons-rdf-api:0.5.0'
+    implementation 'commons-cli:commons-cli:1.4'
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'edu.stanford.nlp:stanford-corenlp:3.9.2'
+    implementation 'edu.stanford.nlp:stanford-corenlp:3.9.2:models'
+    implementation 'edu.stanford.nlp:stanford-parser:3.9.2'
+    implementation('org.codehaus.groovy.modules.http-builder:http-builder:0.7.1')
+    implementation 'org.apache.pdfbox:pdfbox:2.0.15'
+    implementation 'org.codehaus.gpars:gpars:1.2.1'
+
+    implementation 'net.sourceforge.owlapi:owlapi-api:5.1.4'
+    implementation 'net.sourceforge.owlapi:owlapi-apibinding:5.1.4'
+    implementation 'net.sourceforge.owlapi:owlapi-impl:5.1.4'
+    implementation 'net.sourceforge.owlapi:owlapi-parsers:5.1.4'
+
+    implementation 'org.apache.commons:commons-rdf-api:0.5.0'
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.12.0'
+
+    implementation('org.apache.httpcomponents:httpclient') {
+      version {
+        strictly '4.5.10'
+      } 
+    }
+    implementation('org.apache.httpcomponents:httpmime') {
+      version {
+        strictly '4.5.10'
+      } 
+    }
+    implementation('org.apache.httpcomponents:httpcore') {
+      version {
+        strictly '4.4.12'
+      } 
+    }
+implementation('org.apache.httpcomponents:httpcore-osgi') {
+      version {
+        strictly '4.4.12'
+      } 
+    }
 
     // Use the awesome Spock testing and specification framework
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
 }
+
 
 application {
     // Define the main class for the application.

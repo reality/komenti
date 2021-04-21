@@ -269,7 +269,7 @@ public class Komenti {
 
   static def es(o) {
     def v = Vocabulary.loadFile(o.l) 
-    ElasticSearch.searchDocuments(v)
+    ElasticSearch.searchDocuments(o, v)
   }
 
   // TODO needs to use Annotation class

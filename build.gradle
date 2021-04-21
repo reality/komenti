@@ -62,7 +62,7 @@ dependencies {
         strictly '4.4.12'
       } 
     }
-implementation('org.apache.httpcomponents:httpcore-osgi') {
+    implementation('org.apache.httpcomponents:httpcore-osgi') {
       version {
         strictly '4.4.12'
       } 

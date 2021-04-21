@@ -39,6 +39,13 @@ class App {
       _ longOpt: 'group-directory-files', 'Combine all annotations from a directory into one meta-file in the annotation output. Helpful if one entity of interest is described by several files in a subdirectory.', type: Boolean
       // _ longOpt: 'require-full-match', ' require a full match for extraction of tripels'
 
+      // es options
+      h longOpt: 'host', 'ES instance hostname to query', args: 1
+      p longOpt: 'port', 'ES instance port to query', args: 1
+      f longOpt: 'field', 'Name of the document field to make vocabulary-based text matches in.', args: 1
+      gb longOpt: 'group-by', 'Group returned documents by value of the given field in each ES hit.', args: 1
+
+
       // summary options
       a longOpt: 'annotation-file', 'Annotation file to summarise', args: 1
 

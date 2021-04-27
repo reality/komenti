@@ -44,10 +44,10 @@ class KomentLib {
   }
 
   static def AOSemanticQuery(query, type, cb) {
-    AOSemanticQuery(query, null, type, cb)
+    AOSemanticQuery(query, null, false, type, cb)
   }
 
-  static def AOSemanticQuery(query, ontology, type, cb) {
+  static def AOSemanticQuery(query, ontology, direct, type, cb) {
     def http = new HTTPBuilder(ABEROWL_ROOT)
     if(!isIRI(query)) { query = query.toLowerCase() }
     def params = [
@@ -55,7 +55,7 @@ class KomentLib {
       type: type, 
       ontology: ontology,
       query: query,
-      direct: false 
+      direct: direct 
     ] 
     if(!ontology) { params.remove('ontology') }
     if(isIRI(query)) { params.remove('labels') }

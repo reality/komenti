@@ -113,7 +113,7 @@ public class Komenti {
           if(o['verbose']) { println "Executing query ${++i}/${queries.size()}" }
           def ont = o.o
           //if(q.indexOf('\t') != -1) { (q, ont) = q.split('\t') } // not sure what this is for :| ...
-          KomentLib.AOSemanticQuery(q, ont, o['query-type'], { classes ->
+          KomentLib.AOSemanticQuery(q, ont, o['direct'], o['query-type'], { classes ->
             KomentLib.buildEntityNames(vocabulary, q, o, classes)
           })
         }
@@ -148,7 +148,7 @@ public class Komenti {
     if(!o['decompose-entities']) { entityLabels = [] }
 
     classLabels.each { iri, l ->
-      KomentLib.AOSemanticQuery("<$iri>", l.o, "equivalent", { classes ->
+      KomentLib.AOSemanticQuery("<$iri>", l.o, false, "equivalent", { classes ->
         // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
         def c = classes.find { it.class == iri }
         def metadata = KomentLib.AOExtractMetadata(c, entityLabels)

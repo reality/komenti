@@ -57,6 +57,7 @@ komenti query -q "<http://www.w3.org/2002/07/owl#Thing>" --ontology HP
 * The labels can be extended by the power of lemmatisation, by passing --lemmatise
 * Synonyms can be expanded used name and semantic matching over AberOWL by passing --expand-synonyms
 * --query-type allows you to run either subclass, equivalent, subeq, or superclass queries (the default is subeq)
+* You can pass --direct to only retrieve direct (non-transitive) super/subclasses pertaining to your query.
 
 ## Get Abstracts
 

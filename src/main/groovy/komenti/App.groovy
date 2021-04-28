@@ -24,6 +24,7 @@ class App {
       _ longOpt: 'expand-synonyms', 'Expand synonyms using AberOWL', type: Boolean
       _ longOpt: 'label-extension', 'Run a named label extension, e.g. cmo', args: 1
       _ longOpt: 'direct', 'Receive only direct super/subclasses from the DL query. Default is false.', type: Boolean
+      _ longOpt: 'class-mode', 'Return only one label per matching IRI.', type: Boolean
 
       // annotation options
       t longOpt: 'text', 'A file or directory of files to annotate.', args: 1

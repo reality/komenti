@@ -120,7 +120,7 @@ public class Komenti {
       }
     }
 
-    vocabulary.write(o['append'])
+    vocabulary.write(o['append'], o['class-mode'])
     if(o.out) {
       println "Saved ${vocabulary.labelSize()} labels for ${vocabulary.size()} terms to ${o.out}"
     }

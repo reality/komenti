@@ -58,8 +58,13 @@ class Vocabulary implements Iterable<Label> {
   }
 
   def write(append) {
+    write(append, false)
+  }
+
+  def write(append, classMode) {
     def newText = entities.collect { iri, labels ->
-      labels.collect { l -> l.toString() }
+      def ls = labels.collect { l -> l.toString() }
+      classMode ? ls.subList(0, 1) : ls
     }.flatten().join('\n')
 
     if(labelPath) {

@@ -52,12 +52,26 @@ You can get all classes in an ontology by running a subclass query on owl#Thing:
 komenti query -q "<http://www.w3.org/2002/07/owl#Thing>" --ontology HP
 ```
 
+### Class mode
+
+If you're interested in querying the ontology classes rather than in creating a text-mining vocabulary,
+you can run query with *--class-mode*, which will return one entry per IRI matching the query, 
+with the 'first' label. Note: it currently does not care to identify preferred label by annotation 
+property. For example:
+
+```bash
+komenti query -q "'Phenotypic abnormality'" --class-mode --direct --ontology HP
+```
+
 ### Parameters
 
 * The labels can be extended by the power of lemmatisation, by passing --lemmatise
 * Synonyms can be expanded used name and semantic matching over AberOWL by passing --expand-synonyms
 * --query-type allows you to run either subclass, equivalent, subeq, or superclass queries (the default is subeq)
 * You can pass --direct to only retrieve direct (non-transitive) super/subclasses pertaining to your query.
+* --class-mode returns only one entry per matching IRI.
+* --object-properties allows you to query object properties. If no -q is given, all object properties are returned.
+* --override-group will override the group in the output. By default, the value of the group column is the query.
 
 ## Get Abstracts
 

@@ -17,6 +17,8 @@ We are working on papers discussing the novel components. I will post them here:
   * When you use *komenti annotate*, annotations will automatically be marked for negation and uncertainty using the algorithm described.
 * [Improved characterisation of clinical text through ontology-based vocabulary expansion](https://jbiomedsem.biomedcentral.com/articles/10.1186/s13326-021-00241-5)
   * You can use this feature by passing the *--expand-synonyms* flag to the query command.
+* [Exploring Binary Relations for Ontology Extension and Improved Adaptation to Clinical Text](https://www.biorxiv.org/content/10.1101/2020.12.04.411751v1)
+  * These features are available in the *--extract-triples* mode of annotate, and in the ontologise command. This is not currently documented, but documentation + a guide is planned for the near future. 
 
 You can also find some guides on how to use Komenti in different ways [here](https://github.com/reality/komenti_guide).
 

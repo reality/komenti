@@ -22,7 +22,7 @@ You can also find some guides on how to use Komenti in different ways [here](htt
 
 ## Installation
 
-You can find the latest stable-ish release here: https://github.com/reality/komenti/releases/tag/0.2.0-SNAPSHOT-1
+You can find the latest stable-ish release here: https://github.com/reality/komenti/releases/tag/0.2.0-SNAPSHOT-4
 
 You can add the bin/ directory to your PATH, to be able to use it easily from anywhere. It should also work on Windows, but I haven't tested that.
 

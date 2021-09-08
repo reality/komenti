@@ -25,6 +25,13 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
+
+java {
+    toolchain {
+            languageVersion = JavaLanguageVersion.of(15)
+                }
+                }
+
 dependencies {
     // Use the latest Groovy version for building this library
     implementation 'org.codehaus.groovy:groovy-all:2.5.10'
@@ -100,7 +107,7 @@ gradle.taskGraph.whenReady { taskGraph ->
 }
 
 jacoco {
-  toolVersion = '0.8.7-SNAPSHOT'
+  toolVersion = '0.8.7'
 }
 
 test {

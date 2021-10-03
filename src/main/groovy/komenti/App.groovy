@@ -25,6 +25,7 @@ class App {
       _ longOpt: 'label-extension', 'Run a named label extension, e.g. cmo', args: 1
       _ longOpt: 'direct', 'Receive only direct super/subclasses from the DL query. Default is false.', type: Boolean
       _ longOpt: 'class-mode', 'Return only one label per matching IRI.', type: Boolean
+      _ longOpt: 'field', 'Return only this metadata field', args: 1
 
       // annotation options
       t longOpt: 'text', 'A file or directory of files to annotate.', args: 1
@@ -33,6 +34,7 @@ class App {
       _ longOpt: 'per-line', 'Process each line of each file seperately (useful for field-based data e.g. downloaded with get_metadata)', type: Boolean
       _ longOpt: 'disable-modifiers', 'Don\'t evaluate negation and uncertainty. The reason for this is: it takes a lot of time!', type: Boolean
       _ longOpt: 'family-modifier', 'Evaluate sentences for whether or not they mention a family member.', type: Boolean
+      _ longOpt: 'sentiment', 'Get sentiment score for annotations', type: Boolean
       _ longOpt: 'allergy-modifier', 'Evaluate sentences for whether or not they mention an allergy', type: Boolean
       _ longOpt: 'exclude', 'A list of phrases, which when matched in a sentence, will cause that sentence not to be annotated. One phrase per line.', args: 1
       _ longOpt: 'write-pdfs-to-dir', 'If set, write the converted PDF text into the given directory.', args: 1

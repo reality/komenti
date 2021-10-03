@@ -6,6 +6,8 @@ import edu.stanford.nlp.semgraph.*
 import edu.stanford.nlp.ie.util.RelationTriple 
 import edu.stanford.nlp.util.*
 import edu.stanford.nlp.naturalli.*
+import edu.stanford.nlp.sentiment.*
+import edu.stanford.nlp.neural.rnn.*
 
 public class Komentisto {
   def REP_TOKEN = 'biscuit'
@@ -23,8 +25,9 @@ public class Komentisto {
   def enableIE
   def vocabulary
   def threads
+  def sentiment
 
-  def Komentisto(vocabulary, disableModifiers, familyModifier, allergyModifier, enableIE, excludeFile, threads) {
+  def Komentisto(vocabulary, disableModifiers, familyModifier, sentiment, allergyModifier, enableIE, excludeFile, threads) {
     this.vocabulary = vocabulary
  
     uncertainTerms = UNC_WORDS_FILE.getText().split('\n')
@@ -39,6 +42,7 @@ public class Komentisto {
     this.allergyModifier = allergyModifier
     this.enableIE = enableIE
     this.threads = threads
+    this.sentiment = sentiment
 
     initialiseCoreNLP()
   }
@@ -54,6 +58,7 @@ public class Komentisto {
       aList.removeAll(["ner", "regexner", "entitymentions"])
     }
     if(enableIE) { aList += ["depparse", "natlog", "openie"] }
+    if(sentiment) { aList += [ "parse", "sentiment" ] }
     println aList
     props.put("annotators", aList.join(', '))
 
@@ -84,7 +89,7 @@ public class Komentisto {
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
 
     // TODO I think we may be able to use the 'Annotator.Requirement' class to determine what needs to be run
-    [ "tokenize", "ssplit", "ner", "regexner", "entitymentions" ].each {
+    [ "tokenize", "ssplit", "ner", "regexner", "entitymentions", "parse", "sentiment" ].each {
       coreNLP.getExistingAnnotator(it).annotate(aDocument)
     }
 
@@ -114,6 +119,20 @@ public class Komentisto {
           if(!disableModifiers) {
             def tags = evaluateSentenceConcept(sentence, ner) // add all tags that returned true
             a.tags = tags.findAll { it.getValue() }.collect { it.getKey() }
+
+            // Thanks for helping me figure this out!! <3 https://github.com/Ruthwik/Sentiment-Analysis/
+            if(sentiment) {
+                def tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
+                def sm = RNNCoreAnnotations.getPredictions(tree);
+                def sentimentType = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
+                
+                a.tags << "SentimentClass:$sentimentType"
+                a.tags << "S:VP:${(double)Math.round(sm.get(4) * 100d)}"
+                a.tags << "S:P:${(double)Math.round(sm.get(3) * 100d)}"
+                a.tags << "S:NEUT:${(double)Math.round(sm.get(2) * 100d)}"
+                a.tags << "S:N:${(double)Math.round(sm.get(1) * 100d)}"
+                a.tags << "S:VN:${(double)Math.round(sm.get(0) * 100d)}"
+            }
           }
 
           results << a
@@ -216,9 +235,7 @@ public class Komentisto {
 
     if(allergyModifier) {
       out.allergy = text =~ ALLERGY_PATTERN
-    }
-
-    out
+    } 
   }
 
   def lemmatise(text) {

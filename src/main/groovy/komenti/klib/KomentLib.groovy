@@ -29,7 +29,7 @@ class KomentLib {
     } else {
       println "Error code: ${err.getStatusCode()}" 
     }
-    System.exit(1)
+    //System.exit(1)
   }
 
   static def AOQueryNames(query, cb) {
@@ -39,6 +39,7 @@ class KomentLib {
         cb(json.result)
       }
     } catch(e) {
+      println "Error query: $query"
       AOAPIErrorHandler(e)
     }
   }
@@ -115,32 +116,44 @@ class KomentLib {
   }
 
   // metadata to text
-  static def AOExtractMetadata(c, dLabels) {
+  static def AOExtractMetadata(c, dLabels, field) {
     def out = ''
     c.each { k, v ->
-      if(k == 'SubClassOf') { return; }
-      if(k.length() > 30) { return; } // try to remove some of the bugprops
-      if(v instanceof Collection) {
-        out += "$k:\n"
-        v.unique(false).each {
-          out += "  $it\n"
-          
-          def dec = dLabels.findAll { l -> "$it".indexOf(l) != -1 }
-          if(dec) {
-            dec.each { d ->
-              out += "  (decomposed) ${it.replace(d, '')}\n"
-              out += "  (decomposed): ${d}\n" 
+      if(field) {
+        if(k == field) {
+          if(v instanceof Collection) {
+            v.unique(false).each {
+              out += "$it\n"
+            }
+          } else {
+            out += "$v\n" 
+          }
+        } 
+      } else {
+        if(k == 'SubClassOf') { return; }
+        if(k.length() > 30) { return; } // try to remove some of the bugprops
+        if(v instanceof Collection) {
+          out += "$k:\n"
+          v.unique(false).each {
+            out += "  $it\n"
+            
+            def dec = dLabels.findAll { l -> "$it".indexOf(l) != -1 }
+            if(dec) {
+              dec.each { d ->
+                out += "  (decomposed) ${it.replace(d, '')}\n"
+                out += "  (decomposed): ${d}\n" 
+              }
             }
           }
-        }
-      } else {
-        out += "$k: $v\n" 
+        } else {
+          out += "$k: $v\n" 
 
-        def dec = dLabels.findAll { l -> "$v".indexOf(l) != -1 }
-        if(dec) {
-          dec.each { d ->
-            out += "$k (decomposed): ${v.replace(d, '')}\n" 
-            out += "$k (decomposed): ${d}\n" 
+          def dec = dLabels.findAll { l -> "$v".indexOf(l) != -1 }
+          if(dec) {
+            dec.each { d ->
+              out += "$k (decomposed): ${v.replace(d, '')}\n" 
+              out += "$k (decomposed): ${d}\n" 
+            }
           }
         }
       }

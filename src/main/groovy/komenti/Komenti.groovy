@@ -128,12 +128,13 @@ public class Komenti {
 
   static def get_metadata(o) {
     def outDir = getOutDir(o)
-    def files = [:]
+    ConcurrentHashMap files = [:]
 
     def vocab = Vocabulary.loadFile(o.l) 
     def komentisto = new Komentisto(vocab, 
       o['disable-modifiers'], 
       o['family-modifier'], 
+      o['sentiment'], 
       o['allergy-modifier'],
       false,
       o['exclude'], 
@@ -155,16 +156,21 @@ public class Komenti {
 
     if(!o['decompose-entities']) { entityLabels = [] }
 
-    classLabels.each { iri, l ->
+    def i = 0
+    GParsPool.withPool(o['threads'] ?: 1) { p -> 
+    classLabels.eachParallel{ iri, l ->
+      println "(${++i}/${classLabels.size()})"
       KomentLib.AOSemanticQuery("<$iri>", l.o, false, "equivalent", { classes ->
         // we want the actual class, not just semantically equivalent ones. although tbh it might be better to get the metadata from those too. it has to be semantically equivalent to this class, after all
         def c = classes.find { it.class == iri }
-        def metadata = KomentLib.AOExtractMetadata(c, entityLabels)
+        def metadata = KomentLib.AOExtractMetadata(c, entityLabels, o['field'])
         if(o['lemmatise']) { // we do it per line here, since it's a field based document
           metadata = metadata.split('\n').collect { komentisto.lemmatise(it) }.join('\n')
         }
-        files[l.l[0]] = metadata
+        // TODO this is bad and lazy 
+        files[iri.tokenize('/').last()] = metadata
       })
+    }
     }
 
     println "Writing metadata files for ${files.size()} classes."
@@ -196,6 +202,7 @@ public class Komenti {
     def komentisto = new Komentisto(vocab, 
       o['disable-modifiers'], 
       o['family-modifier'], 
+      o['sentiment'], 
       o['allergy-modifier'],
       o['extract-triples'],
       o['exclude'], 
@@ -373,7 +380,7 @@ public class Komenti {
       if(o['id-list-only']) {
         writeOutput(aids.join('\n'), o, "Saved pmcids to $o.out!")
       } else {
-        def komentisto = new Komentisto(false, true, o['family-modifier'], o['allergy-modifier'], false,  o['exclude'], o['threads'] ?: 1)
+        def komentisto = new Komentisto(false, true, o['family-modifier'], o['sentiment'], o['allergy-modifier'], false,  o['exclude'], o['threads'] ?: 1)
         def abstracts = []
         aids.each { pmcid ->
           KomentLib.PMCGetAbstracts(pmcid, { a -> 

@@ -225,17 +225,26 @@ public class Komentisto {
       uncertain: klSentence.isUncertain([REP_TOKEN], uncertainTerms)
     ]
 
+    def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
+
+    [ "tokenize", "ssplit", "pos", "lemma" ].each {
+      coreNLP.getExistingAnnotator(it).annotate(aDocument)
+    }
+
     if(familyModifier) {
-      out.family = sentence.get(CoreAnnotations.TokensAnnotation.class).collect {
-        [it.toString(), it.lemma()]
+      out.family = aDocument.get(CoreAnnotations.TokensAnnotation.class).collect {
+        def l = it.get(CoreAnnotations.LemmaAnnotation.class)
+        [it.word(), l.toString()]
       }.flatten().any {
-        familyTerms.contains(it) 
+        familyTerms.contains(it)
       }
     }
 
     if(allergyModifier) {
       out.allergy = text =~ ALLERGY_PATTERN
     } 
+
+    return out
   }
 
   def lemmatise(text) {

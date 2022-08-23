@@ -289,7 +289,8 @@ public class Komenti {
 
   // TODO needs to use Annotation class
   static def add_modifier(o) {
-    def komentisto = new Komentisto(o.l, false)
+    def vocab = Vocabulary.loadFile(o.l) 
+    def komentisto = new Komentisto(vocab, false, true, false, false, false, false, o['threads'] ?: 1)
 
     def newAnnotations = []
     def i = 0
@@ -298,17 +299,18 @@ public class Komenti {
     def annoFile = []
     new File(o.a).splitEachLine('\t') { annoFile << it }
 
-    def cache = []
-    new File(o.out).splitEachLine('\t') { cache << it[0] }
+    /*def cache = []
+    new File(o.out).splitEachLine('\t') { cache << it[0] }*/
 
     def outWriter = new BufferedWriter(new FileWriter(o.out, true));
 
     GParsPool.withPool(o['threads'] ?: 1) { p -> 
     annoFile.eachParallel {
-      if(!cache.contains(it[0]) && it[1] && it[5]) {
-        def res = komentisto.evaluateSentenceConcept(it[5], it[1])
-        def tags = res.findAll { it.getValue() }.collect { it.getValue() }.join(',')
+      if(/*!cache.contains(it[0]) && */it[1] && it[7]) {
+        def res = komentisto.evaluateSentenceConcept(it[7], it[1])
+        def tags = res.findAll { it.getValue() }.collect { it.getKey() }.join(',')
 
+        it[5] = tags
         outWriter.write(it.join('\t') + '\n')
         if(o.verbose) { println "Adding modifiers (${++i}/$aSize)" }
       } else {

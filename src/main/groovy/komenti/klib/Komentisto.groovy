@@ -26,6 +26,7 @@ public class Komentisto {
   def vocabulary
   def threads
   def sentiment
+  def aList
 
   def Komentisto(vocabulary, disableModifiers, familyModifier, sentiment, allergyModifier, enableIE, excludeFile, threads) {
     this.vocabulary = vocabulary
@@ -50,7 +51,7 @@ public class Komentisto {
   def initialiseCoreNLP() {
     def props = new Properties()
 
-    def aList = ["tokenize", "ssplit", "pos", "lemma", "ner", "regexner", "entitymentions"]
+    aList = ["tokenize", "ssplit", "pos", "lemma", "ner", "regexner", "entitymentions"]
     if(!disableModifiers) {
       aList << "depparse"
     }
@@ -89,7 +90,7 @@ public class Komentisto {
     def aDocument = new edu.stanford.nlp.pipeline.Annotation(text.toLowerCase())
 
     // TODO I think we may be able to use the 'Annotator.Requirement' class to determine what needs to be run
-    [ "tokenize", "ssplit", "ner", "regexner", "entitymentions", "parse", "sentiment" ].each {
+    aList.each {
       coreNLP.getExistingAnnotator(it).annotate(aDocument)
     }
 
